@@ -2,124 +2,137 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr Service Terminal</title>
+    <title>vktr Service</title>
     <style>
-        /* Основа дизайна */
         body {
-            background-color: #121212; /* Глубокий черный */
-            color: white;
+            background-color: #0a0a0a; /* Почти черный */
+            color: #ffffff;
             font-family: 'Tahoma', sans-serif;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
             overflow: hidden;
         }
 
-        /* Контейнер сервиса */
-        .terminal {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+        /* Экран регистрации */
+        #auth-screen {
+            background: #ffffff; /* Белый блок в стиле Чомика */
+            color: #000;
             padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-width: 600px;
+            width: 300px;
+            transition: 0.5s;
+        }
+
+        #auth-screen h2 { margin-bottom: 20px; letter-spacing: 2px; }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Твоя кнопка регистрации (в стиле Чомик-лайт) */
+        .login-btn {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
             width: 100%;
+            font-weight: bold;
         }
 
-        h1 {
-            font-size: 24px;
-            letter-spacing: 5px;
-            margin-bottom: 30px;
-            color: #ff4d4d;
-            text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+        /* ОСНОВНОЙ САЙТ (Скрыт по умолчанию) */
+        #main-site {
+            display: none;
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+            animation: fadeIn 0.8s;
         }
 
-        /* Твой стиль кнопок из скриншота */
-        .nav-btn, .sub-btn {
-            padding: 12px 25px;
-            margin: 10px;
+        .desktop {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px;
+            border-radius: 20px;
+        }
+
+        /* ТВОИ КНОПКИ-ФАРЫ (из твоего CSS) */
+        .nav-btn {
+            padding: 15px 30px;
+            margin: 15px;
             border-radius: 8px;
             border: 1px solid #700000;
             cursor: pointer;
             font-weight: bold;
             color: white;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
             background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
-            box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.3);
             transition: 0.2s;
+            text-decoration: none;
             display: inline-block;
-            min-width: 140px;
         }
 
         .nav-btn:hover {
-            background: linear-gradient(to bottom, #ff6666 0%, #cc0000 100%);
-            box-shadow: 0px 0px 15px #ff0000; /* Эффект включенных фар */
-            transform: translateY(-2px);
+            box-shadow: 0px 0px 20px #ff0000; /* Фары светят */
+            transform: scale(1.05);
         }
 
-        /* Элитная подписка vktrDream */
-        .dream {
-            border: 2px solid #ffd700 !important;
-            background: linear-gradient(to bottom, #ff0000 0%, #660000 100%) !important;
-            box-shadow: 0px 0px 10px #ff0000, 0px 0px 20px rgba(255, 215, 0, 0.3);
-        }
+        .dream { border: 2px solid #ffd700 !important; }
 
-        .dream:hover {
-            box-shadow: 0px 0px 25px #ffd700 !important;
-        }
-
-        /* Информатор */
-        #status-display {
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 5px;
-            font-size: 14px;
-            color: #aaa;
-            min-height: 20px;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="terminal">
-    <h1>VKTR CORE SYSTEM</h1>
-    
-    <div class="button-grid">
-        <button class="nav-btn" onclick="runService('Новости')">Новости</button>
-        <button class="nav-btn" onclick="runService('vktrBook')">vktrBook</button>
-        <button class="nav-btn" onclick="runService('Форум')">Форум</button>
-        <br>
-        <button class="nav-btn" onclick="runService('vktrExplorer')">Explorer</button>
-        <button class="nav-btn" onclick="runService('vktrMini')">vktrMini</button>
-        <button class="sub-btn dream" onclick="runService('vktrDream')">vktrDream</button>
+    <div id="auth-screen">
+        <h2>VKTR LOGIN</h2>
+        <input type="text" id="username" placeholder="Логин">
+        <input type="password" placeholder="Пароль">
+        <button class="login-btn" onclick="login()">ВОЙТИ</button>
     </div>
 
-    <div id="status-display">Ожидание команды...</div>
-</div>
+    <div id="main-site">
+        <div class="desktop">
+            <h1 style="color: #fff; letter-spacing: 5px;">ДОБРО ПОЖАЛОВАТЬ, <span id="user-name">USER</span></h1>
+            <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 30px 0;">
+            
+            <div class="grid">
+                <button class="nav-btn" onclick="alert('Новости vktr загружены')">НОВОСТИ</button>
+                <button class="nav-btn" onclick="alert('vktrBook активен')">vktrBook</button>
+                <button class="nav-btn" onclick="alert('Форум в разработке')">ФОРУМ</button>
+                <br>
+                <button class="nav-btn" onclick="alert('Explorer запущен')">vktrExplorer</button>
+                <button class="nav-btn dream" onclick="alert('Элитный доступ vktrDream!')">vktrDream</button>
+            </div>
+        </div>
+    </div>
 
-<script>
-    function runService(name) {
-        const display = document.getElementById('status-display');
-        
-        // Логика работы кнопок
-        display.style.color = "#fff";
-        
-        if (name === 'vktrDream') {
-            display.innerHTML = "Запуск элитного модуля <span style='color:#ffd700'>vktrDream</span>... Доступ разрешен.";
-        } else if (name === 'Новости') {
-            display.innerHTML = "Загрузка ленты... Соединение через WARP активно.";
-        } else {
-            display.innerHTML = "Сервис " + name + " запущен. Проверка пульса системы...";
+    <script>
+        function login() {
+            const user = document.getElementById('username').value;
+            if (user.length < 2) {
+                alert("Введите логин!");
+                return;
+            }
+            
+            // Прячем вход, показываем сайт
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-site').style.display = 'block';
+            document.getElementById('user-name').innerText = user.toUpperCase();
+            
+            console.log("Авторизация успешна: " + user);
         }
-        
-        console.log("Система vktr: активен модуль " + name);
-    }
-</script>
-
+    </script>
 </body>
 </html>
