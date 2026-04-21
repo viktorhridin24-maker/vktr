@@ -1,38 +1,125 @@
-<nav class="vktr-nav">
-    <button class="nav-btn">Новости</button>
-    <button class="nav-btn">vktrBook</button>
-    <button class="nav-btn">Форум</button>
-    <button class="nav-btn">Параметры</button>
-</nav>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>vktr Service Terminal</title>
+    <style>
+        /* Основа дизайна */
+        body {
+            background-color: #121212; /* Глубокий черный */
+            color: white;
+            font-family: 'Tahoma', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
 
-<div class="subscriptions-container">
-    <button class="sub-btn explorer">vktrExplorer</button>
-    <button class="sub-btn mini">vktrMini</button>
-    <button class="sub-btn dream">vktrDream</button>
+        /* Контейнер сервиса */
+        .terminal {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            color: #ff4d4d;
+            text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+        }
+
+        /* Твой стиль кнопок из скриншота */
+        .nav-btn, .sub-btn {
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            border: 1px solid #700000;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
+            box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 2px 4px rgba(0,0,0,0.3);
+            transition: 0.2s;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(to bottom, #ff6666 0%, #cc0000 100%);
+            box-shadow: 0px 0px 15px #ff0000; /* Эффект включенных фар */
+            transform: translateY(-2px);
+        }
+
+        /* Элитная подписка vktrDream */
+        .dream {
+            border: 2px solid #ffd700 !important;
+            background: linear-gradient(to bottom, #ff0000 0%, #660000 100%) !important;
+            box-shadow: 0px 0px 10px #ff0000, 0px 0px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .dream:hover {
+            box-shadow: 0px 0px 25px #ffd700 !important;
+        }
+
+        /* Информатор */
+        #status-display {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            font-size: 14px;
+            color: #aaa;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal">
+    <h1>VKTR CORE SYSTEM</h1>
+    
+    <div class="button-grid">
+        <button class="nav-btn" onclick="runService('Новости')">Новости</button>
+        <button class="nav-btn" onclick="runService('vktrBook')">vktrBook</button>
+        <button class="nav-btn" onclick="runService('Форум')">Форум</button>
+        <br>
+        <button class="nav-btn" onclick="runService('vktrExplorer')">Explorer</button>
+        <button class="nav-btn" onclick="runService('vktrMini')">vktrMini</button>
+        <button class="sub-btn dream" onclick="runService('vktrDream')">vktrDream</button>
+    </div>
+
+    <div id="status-display">Ожидание команды...</div>
 </div>
-/* Общий стиль кнопок с градиентом и объемом */
-.nav-btn, .sub-btn {
-    padding: 10px 20px;
-    border-radius: 8px; /* Скругление */
-    border: 1px solid #700000;
-    cursor: pointer;
-    font-family: 'Tahoma', sans-serif;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.5); /* Тень текста */
-    background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%); /* Красный градиент */
-    box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 2px 4px rgba(0,0,0,0.3);
-    transition: 0.2s;
-}
 
-/* Эффект при наведении (как фары машины) */
-.nav-btn:hover, .sub-btn:hover {
-    background: linear-gradient(to bottom, #ff6666 0%, #cc0000 100%);
-    box-shadow: 0px 0px 10px #ff0000; /* Свечение */
-}
+<script>
+    function runService(name) {
+        const display = document.getElementById('status-display');
+        
+        // Логика работы кнопок
+        display.style.color = "#fff";
+        
+        if (name === 'vktrDream') {
+            display.innerHTML = "Запуск элитного модуля <span style='color:#ffd700'>vktrDream</span>... Доступ разрешен.";
+        } else if (name === 'Новости') {
+            display.innerHTML = "Загрузка ленты... Соединение через WARP активно.";
+        } else {
+            display.innerHTML = "Сервис " + name + " запущен. Проверка пульса системы...";
+        }
+        
+        console.log("Система vktr: активен модуль " + name);
+    }
+</script>
 
-/* Спецэффект для элитной подписки vktrDream */
-.dream {
-    border: 2px solid #ffd700; /* Золотая рамка */
-    background: linear-gradient(to bottom, #ff0000 0%, #660000 100%);
-}
+</body>
+</html>
