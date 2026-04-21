@@ -1,119 +1,38 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktr Portal | Beta</title>
-    <style>
-        :root {
-            --vktr-red: #e31e24;
-            --vktr-dark: #1a1a1a;
-        }
+<nav class="vktr-nav">
+    <button class="nav-btn">Новости</button>
+    <button class="nav-btn">vktrBook</button>
+    <button class="nav-btn">Форум</button>
+    <button class="nav-btn">Параметры</button>
+</nav>
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            background: #fdfdfd; 
-            color: var(--vktr-dark);
-        }
-        
-        /* Улучшенная шапка */
-        header {
-            background: linear-gradient(90deg, var(--vktr-red) 0%, #ff4d4d 100%);
-            display: flex;
-            align-items: center;
-            padding: 15px 5%;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo-container {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        nav { display: flex; gap: 25px; margin-left: auto; margin-right: auto; }
-        
-        nav a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-
-        nav a:hover { background: rgba(255,255,255,0.2); color: white; }
-
-        /* Баннер как на макете */
-        .hero-section {
-            padding: 60px 20px;
-            max-width: 1000px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 24px;
-            border: 1px solid rgba(227, 30, 36, 0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        .hero-section h1 {
-            font-size: 42px;
-            color: var(--vktr-red);
-            margin-bottom: 10px;
-        }
-
-        .btn-main {
-            background: var(--vktr-red);
-            color: white;
-            padding: 14px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 20px;
-        }
-
-        .btn-main:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(227, 30, 36, 0.3);
-        }
-
-        .toduk-img {
-            width: 180px;
-            margin-top: 30px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="logo-container" onclick="location.reload()">vktr</div>
-    <nav>
-        <a href="#">Форум</a>
-        <a href="#">Новости</a>
-        <a href="#">Скачивания</a>
-    </nav>
-    <div style="font-size: 20px; cursor: pointer;">👤</div>
-</header>
-
-<div class="hero-section">
-    <h1>vktr X Meowl.Social</h1>
-    <p style="font-size: 1.2rem; color: #666;">Скачай Vkype и проводи коллаборацию нового уровня!</p>
-    <button class="btn-main">Все новости</button>
-    <br>
-    <img src="Тодук.png" alt="Тодук" class="toduk-img">
+<div class="subscriptions-container">
+    <button class="sub-btn explorer">vktrExplorer</button>
+    <button class="sub-btn mini">vktrMini</button>
+    <button class="sub-btn dream">vktrDream</button>
 </div>
+/* Общий стиль кнопок с градиентом и объемом */
+.nav-btn, .sub-btn {
+    padding: 10px 20px;
+    border-radius: 8px; /* Скругление */
+    border: 1px solid #700000;
+    cursor: pointer;
+    font-family: 'Tahoma', sans-serif;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5); /* Тень текста */
+    background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%); /* Красный градиент */
+    box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 2px 4px rgba(0,0,0,0.3);
+    transition: 0.2s;
+}
 
-</body>
-</html>
+/* Эффект при наведении (как фары машины) */
+.nav-btn:hover, .sub-btn:hover {
+    background: linear-gradient(to bottom, #ff6666 0%, #cc0000 100%);
+    box-shadow: 0px 0px 10px #ff0000; /* Свечение */
+}
+
+/* Спецэффект для элитной подписки vktrDream */
+.dream {
+    border: 2px solid #ffd700; /* Золотая рамка */
+    background: linear-gradient(to bottom, #ff0000 0%, #660000 100%);
+}
