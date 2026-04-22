@@ -1,173 +1,1258 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>vktr</title>
-    <style>
-        /* ГРАДИЕНТНЫЙ ФОН */
-        body {
-            background: linear-gradient(135deg, #ff0080 0%, #ff0000 100%);
-            background-attachment: fixed;
-            margin: 0;
-            font-family: 'Tahoma', sans-serif;
-            color: #fff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VKTR — Портал услуг</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Trebuchet+MS&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red-dark: #b30000;
+    --red-mid: #e60000;
+    --red-light: #ff4444;
+    --pink: #ff6680;
+    --pink-light: #ffb3c1;
+    --glass-bg: rgba(255,255,255,0.15);
+    --glass-border: rgba(255,255,255,0.4);
+    --glass-shadow: rgba(180,0,0,0.3);
+    --aero-blue: rgba(255,255,255,0.22);
+    --text-light: #fff;
+    --text-dark: #1a0000;
+    --taskbar-h: 44px;
+  }
 
-        /* HEADER С ПОДПИСКАМИ */
-        header {
-            background: rgba(0, 0, 0, 0.9);
-            height: 45px;
-            display: none; /* Скрыт до входа */
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            border-bottom: 2px solid #ffd700;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background: white;
-            min-width: 150px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 5px;
-            top: 30px;
-        }
-        .dropdown-content a { color: black; padding: 10px; text-decoration: none; display: block; font-size: 12px; }
-        .dropdown:hover .dropdown-content { display: block; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ff6680 0%, #e60000 40%, #b30000 70%, #ff4444 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--text-light);
+    overflow-x: hidden;
+  }
 
-        /* ФОРМЫ И КАРТОЧКИ */
-        .vktr-card {
-            background: white;
-            color: black;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 800px;
-            margin: 40px auto;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            display: none;
-        }
+  /* ===== DESKTOP WALLPAPER NOISE ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
 
-        /* КНОПКИ-ФАРЫ */
-        .vktr-btn {
-            background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
-            color: white;
-            padding: 10px 20px;
-            border: 1px solid #700000;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 0 #800000;
-        }
+  /* ===== TASKBAR ===== */
+  #taskbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--taskbar-h);
+    background: linear-gradient(to bottom,
+      rgba(200,0,0,0.85) 0%,
+      rgba(140,0,0,0.95) 50%,
+      rgba(80,0,0,1) 100%);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,100,100,0.5);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    gap: 6px;
+    z-index: 1000;
+    box-shadow: 0 -2px 16px rgba(0,0,0,0.5);
+  }
 
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+  .taskbar-start {
+    background: linear-gradient(to bottom, #ff6666, #cc0000);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 14px;
+    padding: 4px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px rgba(255,255,255,0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .taskbar-start:hover { background: linear-gradient(to bottom, #ff8888, #dd2222); }
+  .taskbar-start img { width: 20px; height: 20px; }
 
-        #auth-screen { display: block; width: 350px; text-align: center; }
-    </style>
+  .taskbar-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); margin: 0 4px; }
+
+  .taskbar-btn {
+    background: linear-gradient(to bottom, rgba(255,100,100,0.3), rgba(180,0,0,0.5));
+    border: 1px solid rgba(255,150,150,0.4);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .taskbar-btn:hover, .taskbar-btn.active {
+    background: linear-gradient(to bottom, rgba(255,150,150,0.5), rgba(220,0,0,0.6));
+    border-color: rgba(255,200,200,0.6);
+  }
+
+  .taskbar-clock {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    text-align: right;
+    line-height: 1.4;
+    padding-right: 8px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  #app {
+    position: relative;
+    z-index: 1;
+    padding: 0 0 calc(var(--taskbar-h) + 10px) 0;
+  }
+
+  /* ===== AERO TOPBAR ===== */
+  #topbar {
+    background: linear-gradient(to bottom,
+      rgba(255,80,80,0.7) 0%,
+      rgba(200,0,0,0.8) 60%,
+      rgba(150,0,0,0.9) 100%);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,150,150,0.4);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-img { height: 40px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    margin-left: 16px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-size: 13px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .nav-link:hover, .nav-link.active {
+    background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+    border-color: rgba(255,255,255,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 12px 4px 6px;
+    cursor: pointer;
+  }
+  .user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffb3c1, #e60000);
+    border: 2px solid rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* ===== WINDOWS / PANELS ===== */
+  .page { display: none; animation: fadeIn 0.25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== HERO SECTION ===== */
+  .hero {
+    padding: 40px 24px 20px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.5), 0 0 40px rgba(255,150,150,0.3);
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+
+  /* ===== AERO WINDOW ===== */
+  .aero-window {
+    background: linear-gradient(135deg,
+      rgba(255,255,255,0.18) 0%,
+      rgba(255,200,200,0.1) 50%,
+      rgba(255,255,255,0.12) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 8px;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.3),
+      0 2px 8px rgba(0,0,0,0.2),
+      inset 0 1px rgba(255,255,255,0.4);
+    overflow: hidden;
+    margin: 16px 24px;
+  }
+
+  .window-titlebar {
+    background: linear-gradient(to bottom,
+      rgba(255,120,120,0.6) 0%,
+      rgba(200,20,20,0.7) 100%);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,150,150,0.3);
+  }
+  .window-controls { display: flex; gap: 5px; }
+  .wc {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .wc:hover { opacity: 0.8; }
+  .wc-close { background: #ff5f57; }
+  .wc-min { background: #ffbd2e; }
+  .wc-max { background: #28c940; }
+
+  .window-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    flex: 1;
+    text-align: center;
+  }
+
+  .window-body { padding: 20px; }
+
+  /* ===== GRID LAYOUTS ===== */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,200,200,0.08));
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px rgba(255,255,255,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .card-icon { font-size: 32px; margin-bottom: 10px; }
+  .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+  .card p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+
+  /* ===== SUBSCRIPTION CARDS ===== */
+  .sub-card {
+    background: linear-gradient(160deg, rgba(255,255,255,0.2), rgba(200,0,0,0.15));
+    border: 1px solid rgba(255,200,200,0.4);
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25), inset 0 1px rgba(255,255,255,0.35);
+    transition: transform 0.2s;
+  }
+  .sub-card:hover { transform: translateY(-4px); }
+  .sub-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px;
+    height: 80px;
+    background: radial-gradient(ellipse, rgba(255,150,150,0.25), transparent 70%);
+  }
+  .sub-name {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    margin-bottom: 4px;
+  }
+  .sub-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+  .sub-features { list-style: none; margin: 14px 0; text-align: left; }
+  .sub-features li { padding: 5px 0; font-size: 13px; color: rgba(255,255,255,0.88); }
+  .sub-features li::before { content: '✦ '; color: #ffb3c1; }
+  .sub-price {
+    font-size: 22px;
+    font-weight: 900;
+    margin-top: 14px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+  .sub-price small { font-size: 13px; font-weight: 400; opacity: 0.8; }
+
+  .sub-options { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .sub-opt-btn {
+    background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 5px;
+    padding: 7px 12px;
+    font-size: 12px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sub-opt-btn:hover { background: rgba(255,255,255,0.3); }
+  .sub-opt-icon { font-size: 16px; }
+
+  .badge-popular {
+    position: absolute;
+    top: 10px; right: -8px;
+    background: linear-gradient(to right, #ff4444, #cc0000);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 16px 3px 10px;
+    border-radius: 10px 0 0 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(to bottom, #ff6666, #cc0000);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px rgba(255,255,255,0.3);
+    transition: all 0.15s;
+  }
+  .btn:hover {
+    background: linear-gradient(to bottom, #ff8888, #dd2222);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.2); }
+
+  /* ===== FORUM ===== */
+  .forum-post {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 10px;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .forum-post:hover { background: rgba(255,255,255,0.18); }
+  .post-header { display: flex; align-items: center; gap:10px; margin-bottom: 8px; }
+  .post-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffb3c1, #cc0000);
+    border: 2px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .post-meta { flex: 1; }
+  .post-author { font-size: 13px; font-weight: 700; }
+  .post-time { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .post-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .post-preview { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .post-footer { display: flex; gap: 14px; margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.65); }
+
+  /* ===== CABINET / PROFILE ===== */
+  .profile-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .profile-ava {
+    width: 90px; height: 90px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ffb3c1, #cc0000);
+    border: 3px solid rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 900;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .profile-ava:hover { transform: scale(1.04); }
+  .profile-info h2 { font-size: 22px; font-weight: 900; }
+  .profile-tag { color: rgba(255,255,255,0.6); font-size: 13px; margin: 2px 0 8px; }
+  .profile-status {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+  }
+
+  .field-group { margin-bottom: 16px; }
+  .field-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .field-input {
+    width: 100%;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: white;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .field-input:focus { border-color: rgba(255,150,150,0.7); box-shadow: 0 0 0 2px rgba(255,100,100,0.2); }
+  .field-input::placeholder { color: rgba(255,255,255,0.3); }
+
+  /* ===== BUBBLES WALLET ===== */
+  .bubbles-card {
+    background: linear-gradient(135deg, rgba(255,180,180,0.2), rgba(180,0,0,0.2));
+    border: 1px solid rgba(255,200,200,0.35);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .bubbles-icon { font-size: 48px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); margin-bottom: 8px; }
+  .bubbles-amount { font-size: 42px; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+  .bubbles-label { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+  .supports-bar {
+    display: flex; gap: 8px; justify-content: center; margin-top: 16px; flex-wrap: wrap;
+  }
+  .support-orb {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,180,180,0.9), rgba(200,0,0,0.8));
+    border: 2px solid rgba(255,200,200,0.5);
+    box-shadow: 0 4px 12px rgba(200,0,0,0.4), inset 0 1px rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .support-orb:hover { transform: scale(1.15); box-shadow: 0 6px 18px rgba(200,0,0,0.6); }
+  .support-orb.empty {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: none;
+  }
+
+  /* ===== IDEAS FORM ===== */
+  .idea-box {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    width: 100%;
+    min-height: 100px;
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+  }
+  .idea-box:focus { border-color: rgba(255,150,150,0.6); }
+  .idea-box::placeholder { color: rgba(255,255,255,0.3); }
+
+  /* ===== MONOBANK NOTICE ===== */
+  .notice {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-left: 3px solid #ffb3c1;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin: 12px 0;
+    line-height: 1.5;
+  }
+  .notice strong { color: white; }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,100,100,0.5); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,100,100,0.8); }
+
+  /* ===== TOOLTIP / TAG BADGES ===== */
+  .tag-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ===== SOCIAL LINKS ===== */
+  .social-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .social-chip {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .social-chip:hover { background: rgba(255,255,255,0.28); }
+
+  /* ===== START MENU POPUP ===== */
+  #start-menu {
+    display: none;
+    position: fixed;
+    bottom: var(--taskbar-h);
+    left: 8px;
+    width: 280px;
+    background: linear-gradient(135deg,
+      rgba(200,0,0,0.9) 0%,
+      rgba(140,0,0,0.95) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,150,150,0.4);
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+    z-index: 999;
+    overflow: hidden;
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  #start-menu.open { display: block; }
+
+  .start-header {
+    background: linear-gradient(to right, rgba(255,100,100,0.4), transparent);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,150,150,0.3);
+  }
+  .start-header .user-avatar { width: 40px; height: 40px; font-size: 18px; }
+  .start-header span { font-weight: 700; font-size: 14px; }
+
+  .start-items { padding: 8px; }
+  .start-item {
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 10px;
+    transition: background 0.1s;
+  }
+  .start-item:hover { background: rgba(255,255,255,0.2); }
+  .start-item .si-icon { font-size: 18px; width: 24px; text-align: center; }
+
+  /* ===== SEPARATOR ===== */
+  .sep { height: 1px; background: rgba(255,255,255,0.15); margin: 8px 0; }
+
+  /* Mobile friendly */
+  @media (max-width: 600px) {
+    .aero-window { margin: 10px 12px; }
+    .nav-links { display: none; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
 
-    <div id="auth-screen" class="vktr-card" style="display:block;">
-        <div id="login-fields">
-            <h2 style="color:#b30000">ВХОД vktr</h2>
-            <input type="email" id="email" placeholder="E-mail">
-            <input type="password" placeholder="Пароль">
-            <button class="vktr-btn" onclick="showStep2()">Войти</button>
-            <p style="font-size:12px; cursor:pointer; color:#666" onclick="toggleAuth()">Вы тут новички? Перейдите на регистрацию</p>
-        </div>
-        <div id="name-field" style="display:none">
-            <h2 style="color:#ff0080">Кто это?</h2>
-            <input type="text" id="user-nick" placeholder="Ваш Тэг (Ник)">
-            <button class="vktr-btn" onclick="completeLogin()">Завершить вход</button>
-        </div>
+<!-- ===== TOP BAR ===== -->
+<div id="topbar">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Ctext x='0' y='70' font-family='Arial Black' font-weight='900' font-size='72' fill='white' opacity='0.95'%3EVKTR%3C/text%3E%3C/svg%3E" class="logo-img" alt="VKTR" style="height:34px; cursor:pointer;" onclick="showPage('home')">
+  <nav class="nav-links">
+    <a class="nav-link active" onclick="showPage('home')" id="nav-home">🏠 Главная</a>
+    <a class="nav-link" onclick="showPage('forum')" id="nav-forum">💬 Форум</a>
+    <a class="nav-link" onclick="showPage('subscriptions')" id="nav-subscriptions">⭐ Подписки</a>
+    <a class="nav-link" onclick="showPage('cabinet')" id="nav-cabinet">👤 Кабинет</a>
+    <a class="nav-link" onclick="showPage('ideas')" id="nav-ideas">💡 Идеи</a>
+  </nav>
+  <div class="topbar-right">
+    <div class="user-badge" onclick="showPage('cabinet')">
+      <div class="user-avatar">V</div>
+      <span style="font-size:13px;">Гость</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+
+  <!-- ============================== HOME ============================== -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <h1>Добро пожаловать в VKTR</h1>
+      <p>Портал услуг нового поколения — форумы, подписки, сообщество</p>
     </div>
 
-    <header id="main-header">
-        <div>
-            <span onclick="showPage('main')" style="cursor:pointer">Главная</span> | 
-            <div class="dropdown">
-                <span style="color:#ffd700; cursor:pointer">Все подписки ▼</span>
-                <div class="dropdown-content">
-                    <a href="#">vktrMini</a>
-                    <a href="#">vktrDream</a>
-                    <a href="#">vktrPro </a>
-                </div>
-            </div> |
-            <span onclick="showPage('forum')" style="cursor:pointer">💬 Форум</span>
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div>
+          <div class="wc wc-min"></div>
+          <div class="wc wc-max"></div>
         </div>
-        <div>
-            <span onclick="showPage('cabinet')" style="cursor:pointer">⚙️ Кабинет</span>
-            <span id="header-nick" style="margin-left:15px; font-weight:bold; color:#ffd700;"></span>
+        <div class="window-title">📌 Быстрый доступ</div>
+      </div>
+      <div class="window-body">
+        <div class="grid-2">
+          <div class="card" onclick="showPage('forum')">
+            <div class="card-icon">💬</div>
+            <h3>Форум</h3>
+            <p>Обсуждения, новости, помощь — всё в одном месте.</p>
+          </div>
+          <div class="card" onclick="showPage('subscriptions')">
+            <div class="card-icon">⭐</div>
+            <h3>Подписки</h3>
+            <p>vktrMini, vktrExplorer, vktrManiac — выбери свой уровень.</p>
+          </div>
+          <div class="card" onclick="showPage('cabinet')">
+            <div class="card-icon">👤</div>
+            <h3>Кабинет</h3>
+            <p>Настрой профиль, аватар, статус и соцсети.</p>
+          </div>
+          <div class="card" onclick="showPage('ideas')">
+            <div class="card-icon">💡</div>
+            <h3>Идеи</h3>
+            <p>Поделись идеями с командой VKTR напрямую.</p>
+          </div>
         </div>
-    </header>
-
-    <div id="page-main" class="vktr-card">
-        <h1>vktr Feed</h1>
-        <p>Ваш статус: <b id="status-val">Новичок</b></p>
-        <button class="vktr-btn">vktrBook</button>
-        <hr>
-        <h3>Отправьте вашу идею в vktr!:</h3>
-        <textarea id="ideaInput" placeholder="Опишите идею..."></textarea>
-        <button class="vktr-btn" onclick="sendIdea()">Отправить</button>
+      </div>
     </div>
 
-    <div id="page-cabinet" class="vktr-card">
-        <h2>Настройки Профиля</h2>
-        <label>Смена Тэга:</label>
-        <input type="text" id="new-tag" placeholder="Новый ник">
-        <label>Смена Статуса:</label>
-        <input type="text" id="new-status" placeholder="Ваш статус...">
-        <hr>
-        <h3>💵 Монетизация</h3>
-        <p>Баланс: <b>1000 Пузырей</b></p>
-        <button class="vktr-btn" style="background:green;">Вывод в Гривны</button>
-        <br><br>
-        <button class="vktr-btn" onclick="updateProfile()">Сохранить изменения</button>
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">🫧 Пузыри & Суппорты</div>
+      </div>
+      <div class="window-body">
+        <div class="grid-2">
+          <div class="bubbles-card">
+            <div class="bubbles-icon">🫧</div>
+            <div class="bubbles-amount">0</div>
+            <div class="bubbles-label">Пузырей на балансе</div>
+            <div style="margin-top:14px;">
+              <button class="btn" onclick="showPage('subscriptions')">Пополнить</button>
+            </div>
+          </div>
+          <div style="padding: 10px 0;">
+            <h3 style="margin-bottom: 10px; font-size: 15px;">⚡ Суппорты</h3>
+            <p style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 14px; line-height: 1.5;">
+              Суппорты — это заряд поддержки для другого пользователя.<br>
+              Каждый заряд укрепляет аккаунт получателя. Получи <strong>5 суппортов</strong> с любой подпиской!
+            </p>
+            <div class="supports-bar">
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+            </div>
+            <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 8px; text-align:center;">Оформи подписку, чтобы получить суппорты</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="page-messages" class="vktr-card">
-        <h2>Идеи</h2>
-        <div id="admin-inbox">Входящих нет.</div>
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">🔥 Популярные темы форума</div>
+      </div>
+      <div class="window-body">
+        <div class="forum-post" onclick="showPage('forum')">
+          <div class="post-header">
+            <div class="post-avatar">М</div>
+            <div class="post-meta">
+              <div class="post-author">Максим <span class="tag-badge">vktrManiac</span></div>
+              <div class="post-time">2 часа назад</div>
+            </div>
+          </div>
+          <div class="post-title">Как начать работать с VKTR?</div>
+          <div class="post-preview">Привет всем! Недавно зарегистрировался и хочу разобраться с функционалом...</div>
+          <div class="post-footer">
+            <span>💬 14 ответов</span>
+            <span>👁 128 просмотров</span>
+            <span>❤️ 9</span>
+          </div>
+        </div>
+        <div class="forum-post" onclick="showPage('forum')">
+          <div class="post-header">
+            <div class="post-avatar" style="background: linear-gradient(135deg,#ff8888,#880000);">А</div>
+            <div class="post-meta">
+              <div class="post-author">Аліна <span class="tag-badge">vktrExplorer</span></div>
+              <div class="post-time">5 часов назад</div>
+            </div>
+          </div>
+          <div class="post-title">Идеи для новых функций 🚀</div>
+          <div class="post-preview">Собираю идеи от пользователей — давайте сделаем VKTR лучше вместе!</div>
+          <div class="post-footer">
+            <span>💬 31 ответ</span>
+            <span>👁 204 просмотра</span>
+            <span>❤️ 25</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost" onclick="showPage('forum')" style="margin-top:4px;">Все темы →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== FORUM ============================== -->
+  <div class="page" id="page-forum">
+    <div class="hero" style="padding-bottom:10px;">
+      <h1 style="font-size:clamp(22px,4vw,38px);">💬 Форум VKTR</h1>
+      <p>Обсуждения, вопросы, анонсы — всё здесь</p>
     </div>
 
-    <script>
-        function showStep2() { 
-            document.getElementById('login-fields').style.display = 'none';
-            document.getElementById('name-field').style.display = 'block';
-        }
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">📋 Темы</div>
+      </div>
+      <div class="window-body">
+        <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+          <button class="btn">✏️ Новая тема</button>
+          <button class="btn btn-ghost">🔥 Популярное</button>
+          <button class="btn btn-ghost">🆕 Новые</button>
+          <button class="btn btn-ghost">📌 Закреплённые</button>
+        </div>
 
-        function completeLogin() {
-            const nick = document.getElementById('user-nick').value || "User";
-            localStorage.setItem('vktr_user', nick);
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-header').style.display = 'flex';
-            showPage('main');
-            document.getElementById('header-nick').innerText = nick;
-        }
+        <div id="forum-list">
+          <!-- посты генерируются JS -->
+        </div>
+      </div>
+    </div>
 
-        function showPage(id) {
-            document.querySelectorAll('.vktr-card').forEach(c => c.style.display = 'none');
-            document.getElementById('page-' + id).style.display = 'block';
-            if (id === 'messages') loadAdminInbox();
-        }
+    <!-- Новая тема -->
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">✏️ Написать в форум</div>
+      </div>
+      <div class="window-body">
+        <div class="field-group">
+          <div class="field-label">Заголовок темы</div>
+          <input type="text" class="field-input" placeholder="О чём хочешь поговорить?">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Сообщение</div>
+          <textarea class="idea-box" placeholder="Напиши своё сообщение..."></textarea>
+        </div>
+        <button class="btn" onclick="addForumPost()">📨 Опубликовать</button>
+      </div>
+    </div>
+  </div>
 
-        function updateProfile() {
-            const tag = document.getElementById('new-tag').value;
-            const stat = document.getElementById('new-status').value;
-            if(tag) document.getElementById('header-nick').innerText = tag;
-            if(stat) document.getElementById('status-val').innerText = stat;
-            alert("Данные сохранены.");
-        }
+  <!-- ============================== SUBSCRIPTIONS ============================== -->
+  <div class="page" id="page-subscriptions">
+    <div class="hero" style="padding-bottom:10px;">
+      <h1 style="font-size:clamp(22px,4vw,38px);">⭐ Подписки VKTR</h1>
+      <p>Выбери свой уровень доступа</p>
+    </div>
 
-        function sendIdea() {
-            const idea = document.getElementById('ideaInput').value;
-            let inbox = JSON.parse(localStorage.getItem('vktr_inbox') || "[]");
-            inbox.push({ from: localStorage.getItem('vktr_user'), text: idea });
-            localStorage.setItem('vktr_inbox', JSON.stringify(inbox));
-            alert("Идея отправлена Виктору!");
-            document.getElementById('ideaInput').value = "";
-        }
+    <div class="notice" style="margin: 0 24px 4px;">
+      <strong>💳 Оплата через Monobank</strong> — в разработке. После подтверждения от Monobank будет доступна оплата частями или реальными деньгами.
+    </div>
 
-        function loadAdminInbox() {
-            if(localStorage.getItem('vktr
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">🎁 Планы подписки</div>
+      </div>
+      <div class="window-body">
+        <div class="grid-3">
+          <!-- vktrMini -->
+          <div class="sub-card">
+            <div class="sub-name">vktrMini</div>
+            <div class="sub-tag">Базовый</div>
+            <ul class="sub-features">
+              <li>Доступ к форуму</li>
+              <li>Тег «Mini» на профиле</li>
+              <li>5 суппортов в месяц</li>
+              <li>50 🫧 Пузырей</li>
+              <li>Настройка профиля</li>
+            </ul>
+            <div class="sub-price">FREE <small>/ мес</small></div>
+            <div class="sub-options">
+              <button class="sub-opt-btn"><span class="sub-opt-icon">📱</span> SMS-подписка</button>
+              <button class="sub-opt-btn"><span class="sub-opt-icon">⭐</span> Подписка</button>
+              <button class="sub-opt-btn"><span class="sub-opt-icon">⚡</span> Пополнение (Суппорт)</button>
+            </div>
+          </div>
+
+          <!-- vktrExplorer -->
+          <div class="sub-card" style="border-color: rgba(255,220,220,0.5);">
+            <div class="badge-popular">ПОПУЛЯРНО</div>
+            <div class="sub-name">vktrExplorer</div>
+            <div class="sub-tag" style="background:rgba(255,150,150,0.25);">Продвинутый</div>
+            <ul class="sub-features">
+              <li>Всё из Mini</li>
+              <li>Тег «Explorer» ✦</li>
+              <li>5 суппортов + бонус</li>
+              <li>200 🫧 Пузырей</li>
+              <li>Приоритет в форуме</li>
+              <li>Кастомный статус</li>
+            </ul>
+            <div class="sub-price">⏳ <small>скоро</small></div>
+            <div class="sub-options">
+              <button class="sub-opt-btn"><span class="sub-opt-icon">📱</span> SMS-подписка</button>
+              <button class="sub-opt-btn"><span class="sub-opt-icon">⭐</span> Подписка</button>
+              <button class="sub-opt-btn"><span class="sub-opt-icon">⚡</span> Пополнение (Суппорт)</button>
+            </div>
+          </div>
+
+          <!-- vktrManiac -->
+          <div class="sub-card" style="background: linear-gradient(160deg, rgba(255,100,100,0.25), rgba(180,0,0,0.25));">
+            <div class="sub-name">vktrManiac</div>
+            <div class="sub-tag" style="background:rgba(255,80,80,0.3);">🔥 Макс</div>
+            <ul class="sub-features">
+              <li>Всё из Explorer</li>
+              <li>Тег «Maniac» 🔥</li>
+              <li>5 суппортов × 2</li>
+              <li>500 🫧 Пузырей</li>
+              <li>Бета-функции</li>
+              <li>Ранний доступ к апдейтам</li>
+              <li>Значок на профиле</li>
+            </ul>
+            <div class="sub-price">⏳ <small>скоро</small></div>
+            <div class="sub-options">
+              <button class="sub-opt-btn"><span class="sub-opt-icon">📱</span> SMS-подписка</button>
+              <button class="sub-opt-btn"><span class="sub-opt-icon">⭐</span> Подписка</button>
+              <button class="sub-opt-btn"><span class="sub-opt-icon">⚡</span> Пополнение (Суппорт)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">🫧 Пузыри — внутренняя валюта</div>
+      </div>
+      <div class="window-body">
+        <div class="grid-2">
+          <div>
+            <p style="font-size:14px; line-height:1.7; color:rgba(255,255,255,0.88);">
+              <strong>🫧 Пузыри</strong> — официальная валюта платформы VKTR.<br>
+              Используй их для поддержки авторов, приоритетных постов и покупки внутренних товаров.
+            </p>
+            <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+              <div style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:12px 18px; text-align:center;">
+                <div style="font-size:22px; font-weight:900;">50</div>
+                <div style="font-size:11px; opacity:0.7;">Mini</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:12px 18px; text-align:center;">
+                <div style="font-size:22px; font-weight:900;">200</div>
+                <div style="font-size:11px; opacity:0.7;">Explorer</div>
+              </div>
+              <div style="background:rgba(255,100,100,0.2); border:1px solid rgba(255,150,150,0.3); border-radius:8px; padding:12px 18px; text-align:center;">
+                <div style="font-size:22px; font-weight:900;">500</div>
+                <div style="font-size:11px; opacity:0.7;">Maniac</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="margin-bottom:10px; font-size:15px;">⚡ Суппорты</h3>
+            <p style="font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6; margin-bottom:12px;">
+              Суппорт — это персональный заряд поддержки для другого пользователя.
+              Ты «заряжаешь» его аккаунт, давая видимость и признание.
+            </p>
+            <p style="font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6;">
+              📦 <strong>5 суппортов</strong> включены в каждую подписку автоматически.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== CABINET ============================== -->
+  <div class="page" id="page-cabinet">
+    <div class="hero" style="padding-bottom:10px;">
+      <h1 style="font-size:clamp(22px,4vw,38px);">👤 Личный кабинет</h1>
+      <p>Настройки профиля и аккаунта</p>
+    </div>
+
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">✏️ Редактировать профиль</div>
+      </div>
+      <div class="window-body">
+        <div class="profile-header">
+          <div class="profile-ava" title="Нажми, чтобы сменить аватар" onclick="alert('Загрузка аватара — скоро!')">V</div>
+          <div class="profile-info">
+            <h2>Гость <span class="tag-badge" style="background:rgba(255,100,100,0.3);">vktrMini</span></h2>
+            <div class="profile-tag">@guest#0001</div>
+            <div class="profile-status">✨ Нет статуса</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <div class="field-group">
+              <div class="field-label">Имя пользователя</div>
+              <input type="text" class="field-input" placeholder="Твоё имя" value="Гость">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Тег (уникальный)</div>
+              <input type="text" class="field-input" placeholder="@tag#0000" value="@guest#0001">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Статус</div>
+              <input type="text" class="field-input" placeholder="Что у тебя сейчас...">
+            </div>
+          </div>
+          <div>
+            <div class="field-group">
+              <div class="field-label">О себе</div>
+              <textarea class="idea-box" style="min-height:80px;" placeholder="Расскажи о себе..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <h3 style="font-size:14px; margin-bottom:12px;">🔗 Ссылки на соцсети</h3>
+        <div class="grid-2">
+          <div class="field-group">
+            <div class="field-label">TikTok</div>
+            <input type="text" class="field-input" placeholder="@username">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Instagram</div>
+            <input type="text" class="field-input" placeholder="@username">
+          </div>
+          <div class="field-group">
+            <div class="field-label">YouTube</div>
+            <input type="text" class="field-input" placeholder="ссылка на канал">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Telegram</div>
+            <input type="text" class="field-input" placeholder="@username">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Twitter / X</div>
+            <input type="text" class="field-input" placeholder="@username">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Другое</div>
+            <input type="text" class="field-input" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <button class="btn" onclick="saveProfile()">💾 Сохранить изменения</button>
+      </div>
+    </div>
+
+    <!-- Wallet -->
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">🫧 Кошелёк</div>
+      </div>
+      <div class="window-body">
+        <div class="grid-2">
+          <div class="bubbles-card">
+            <div class="bubbles-icon">🫧</div>
+            <div class="bubbles-amount">0</div>
+            <div class="bubbles-label">Пузырей</div>
+            <button class="btn" style="margin-top:12px;" onclick="showPage('subscriptions')">Пополнить</button>
+          </div>
+          <div class="bubbles-card">
+            <div class="bubbles-icon">⚡</div>
+            <div class="bubbles-amount" id="support-count">0</div>
+            <div class="bubbles-label">Суппортов</div>
+            <div class="supports-bar" style="margin-top:12px;">
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+              <div class="support-orb empty">·</div>
+            </div>
+            <p style="font-size:11px; opacity:0.6; margin-top:8px;">Оформи подписку для получения</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== IDEAS ============================== -->
+  <div class="page" id="page-ideas">
+    <div class="hero" style="padding-bottom:10px;">
+      <h1 style="font-size:clamp(22px,4vw,38px);">💡 Идеи для VKTR</h1>
+      <p>Твои идеи напрямую попадают к создателям портала</p>
+    </div>
+
+    <div class="aero-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="wc wc-close"></div><div class="wc wc-min"></div><div class="wc wc-max"></div>
+        </div>
+        <div class="window-title">📨 Отправить идею команде VKTR</div>
+      </div>
+      <div class="window-body">
+        <div class="notice">
+          <strong>📬 Прямая связь</strong> — твоя идея будет рассмотрена командой VKTR. Мы читаем всё!
+        </div>
+        <div class="field-group" style="margin-top:14px;">
+          <div class="field-label">Категория идеи</div>
+          <select class="field-input">
+            <option value="">Выбери категорию...</option>
+            <option>🎨 Дизайн / интерфейс</option>
+            <option>💬 Форум</option>
+            <option>⭐ Подписки / монетизация</option>
+            <option>🫧 Пузыри / суппорты</option>
+            <option>⚙️ Общие улучшения</option>
+            <option>🐛 Баг / проблема</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Заголовок идеи</div>
+          <input type="text" class="field-input" id="idea-title" placeholder="Кратко опиши идею...">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Описание</div>
+          <textarea class="idea-box" id="idea-body" placeholder="Опиши подробнее — чем это поможет пользователям? Как это должно работать?"></textarea>
+        </div>
+        <button class="btn" onclick="sendIdea()">🚀 Отправить команде VKTR</button>
+
+        <div class="sep" style="margin: 20px 0;"></div>
+        <h3 style="font-size:14px; margin-bottom:12px;">📋 Последние идеи сообщества</h3>
+        <div id="ideas-list"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ===== TASKBAR ===== -->
+<div id="taskbar">
+  <button class="taskbar-start" onclick="toggleStart()">
+    <span style="font-size:16px;">🔴</span> VKTR
+  </button>
+  <div class="taskbar-divider"></div>
+  <button class="taskbar-btn active" onclick="showPage('home')" id="tb-home">🏠 Главная</button>
+  <button class="taskbar-btn" onclick="showPage('forum')" id="tb-forum">💬 Форум</button>
+  <button class="taskbar-btn" onclick="showPage('subscriptions')" id="tb-subscriptions">⭐ Подписки</button>
+  <button class="taskbar-btn" onclick="showPage('cabinet')" id="tb-cabinet">👤 Кабинет</button>
+  <button class="taskbar-btn" onclick="showPage('ideas')" id="tb-ideas">💡 Идеи</button>
+  <div class="taskbar-clock" id="clock">00:00<br>01.01.2025</div>
+</div>
+
+<!-- ===== START MENU ===== -->
+<div id="start-menu">
+  <div class="start-header">
+    <div class="user-avatar" style="width:40px;height:40px;font-size:18px;">V</div>
+    <span>Гость</span>
+  </div>
+  <div class="start-items">
+    <div class="start-item" onclick="showPage('home'); toggleStart()"><span class="si-icon">🏠</span> Главная</div>
+    <div class="start-item" onclick="showPage('forum'); toggleStart()"><span class="si-icon">💬</span> Форум</div>
+    <div class="start-item" onclick="showPage('subscriptions'); toggleStart()"><span class="si-icon">⭐</span> Подписки</div>
+    <div class="start-item" onclick="showPage('cabinet'); toggleStart()"><span class="si-icon">👤</span> Кабинет</div>
+    <div class="start-item" onclick="showPage('ideas'); toggleStart()"><span class="si-icon">💡</span> Идеи</div>
+    <div class="sep"></div>
+    <div class="start-item" onclick="alert('VKTR v1.0 — Портал услуг\nДизайн: Windows Vista/7\n© 2025 VKTR')"><span class="si-icon">ℹ️</span> О VKTR</div>
+  </div>
+</div>
+
+<script>
+  // ===== PAGE NAVIGATION =====
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.taskbar-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const nav = document.getElementById('nav-' + name);
+    const tb = document.getElementById('tb-' + name);
+    if (nav) nav.classList.add('active');
+    if (tb) tb.classList.add('active');
+  }
+
+  // ===== START MENU =====
+  function toggleStart() {
+    document.getElementById('start-menu').classList.toggle('open');
+  }
+  document.addEventListener('click', function(e) {
+    const sm = document.getElementById('start-menu');
+    if (!e.target.closest('#start-menu') && !e.target.closest('.taskbar-start')) {
+      sm.classList.remove('open');
+    }
+  });
+
+  // ===== CLOCK =====
+  function updateClock() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    const date = now.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    document.getElementById('clock').innerHTML = time + '<br>' + date;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // ===== FORUM DATA =====
+  const forumPosts = [
+    { author: 'Максим', tag: 'vktrManiac', time: '2 часа назад', title: 'Как начать работать с VKTR?', preview: 'Привет всем! Недавно зарегистрировался и хочу разобраться с функционалом...', replies: 14, views: 128, likes: 9, initial: 'М' },
+    { author: 'Аліна', tag: 'vktrExplorer', time: '5 часов назад', title: 'Идеи для новых функций 🚀', preview: 'Собираю идеи от пользователей — давайте сделаем VKTR лучше вместе!', replies: 31, views: 204, likes: 25, initial: 'А' },
+    { author: 'Дмитро', tag: 'vktrMini', time: '1 день назад', title: 'Когда будет мобильное приложение?', preview: 'Очень жду мобилки, сайт классный но хочется на телефоне удобнее', replies: 7, views: 89, likes: 12, initial: 'Д' },
+    { author: 'Sofiya', tag: 'vktrManiac', time: '2 дня назад', title: 'Обзор подписки vktrManiac — стоит ли?', preview: 'Купила Maniac 2 недели назад, рассказываю что даёт на практике...', replies: 44, views: 310, likes: 38, initial: 'S' },
+    { author: 'Ivan_dev', tag: 'vktrExplorer', time: '3 дня назад', title: 'Как работают Суппорты подробнее?', preview: 'Не совсем понял механику суппортов, объясните пожалуйста', replies: 12, views: 97, likes: 6, initial: 'I' },
+  ];
+
+  function renderForum() {
+    const list = document.getElementById('forum-list');
+    list.innerHTML = forumPosts.map(p => `
+      <div class="forum-post">
+        <div class="post-header">
+          <div class="post-avatar">${p.initial}</div>
+          <div class="post-meta">
+            <div class="post-author">${p.author} <span class="tag-badge">${p.tag}</span></div>
+            <div class="post-time">${p.time}</div>
+          </div>
+        </div>
+        <div class="post-title">${p.title}</div>
+        <div class="post-preview">${p.preview}</div>
+        <div class="post-footer">
+          <span>💬 ${p.replies} ответов</span>
+          <span>👁 ${p.views} просмотров</span>
+          <span>❤️ ${p.likes}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addForumPost() {
+    const titleEl = document.querySelector('#page-forum .field-input');
+    const bodyEl = document.querySelector('#page-forum .idea-box');
+    const title = titleEl.value.trim();
+    const body = bodyEl.value.trim();
+    if (!title || !body) { alert('Заполни заголовок и сообщение!'); return; }
+    forumPosts.unshift({ author: 'Вы', tag: 'vktrMini', time: 'только что', title, preview: body.slice(0,100) + (body.length>100?'...':''), replies:0, views:1, likes:0, initial:'Ты' });
+    renderForum();
+    titleEl.value = '';
+    bodyEl.value = '';
+    alert('✅ Тема опубликована!');
+  }
+
+  renderForum();
+
+  // ===== IDEAS =====
+  const ideas = [
+    { author: 'Максим', title: 'Тёмный режим для ночи', body: 'Хотелось бы переключатель тёмной темы', time: '1 день назад', votes: 23 },
+    { author: 'Аліна', title: 'Реакции на посты', body: 'Как в ВК или Telegram — было бы круто', time: '3 дня назад', votes: 15 },
+  ];
+
+  function renderIdeas() {
+    const list = document.getElementById('ideas-list');
+    list.innerHTML = ideas.map(i => `
+      <div class="forum-post">
+        <div class="post-title">${i.title}</div>
+        <div class="post-preview">${i.body}</div>
+        <div class="post-footer">
+          <span>👤 ${i.author}</span>
+          <span>🕐 ${i.time}</span>
+          <span>👍 ${i.votes}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function sendIdea() {
+    const title = document.getElementById('idea-title').value.trim();
+    const body = document.getElementById('idea-body').value.trim();
+    if (!title || !body) { alert('Заполни заголовок и описание!'); return; }
+    ideas.unshift({ author: 'Вы', title, body, time: 'только что', votes: 0 });
+    renderIdeas();
+    document.getElementById('idea-title').value = '';
+    document.getElementById('idea-body').value = '';
+    alert('✅ Идея отправлена команде VKTR! Спасибо!');
+  }
+
+  renderIdeas();
+
+  // ===== PROFILE SAVE =====
+  function saveProfile() {
+    alert('✅ Профиль сохранён!');
+  }
+</script>
+</body>
+</html>
