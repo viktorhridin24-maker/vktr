@@ -2,130 +2,156 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr Service - Redesign</title>
+    <title>vktr Service - Core</title>
     <style>
+        /* 1. ФОН: ГРАДИЕНТ (Розовый и Красный) */
         body {
-            background-color: #f0f0f0; /* Светло-серый/белый фон */
+            background: linear-gradient(135deg, #ff0080 0%, #ff0000 100%); /* Розовый в красный */
+            background-attachment: fixed;
             margin: 0;
             font-family: 'Tahoma', sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            color: #fff;
         }
 
-        /* 1. HEADER В СТИЛЕ 2010 (Красно-черный) */
+        /* 2. HEADER: ВСЁ СВЕРХУ (Chomikuj Style) */
         header {
-            background: linear-gradient(to bottom, #444, #111);
-            height: 40px;
-            display: none; /* Скрыт до логина */
+            background: rgba(0, 0, 0, 0.8);
+            height: 45px;
+            display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            color: white;
-            border-bottom: 3px solid #ff4d4d;
+            border-bottom: 2px solid #ffd700;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* 2. ЭКРАНЫ РЕГИСТРАЦИИ (Красно-белый стиль) */
-        .auth-container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2); /* Красная тень */
-            text-align: center;
-            width: 350px;
-            margin: auto;
-            border-top: 5px solid #ff4d4d;
+        .nav-links span {
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
         }
 
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
+        .nav-links span:hover { color: #ff0080; }
+
+        /* Выпадающий список подписок */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #fff;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
             border-radius: 5px;
         }
+        .dropdown-content a {
+            color: #000;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 12px;
+        }
+        .dropdown:hover .dropdown-content { display: block; }
 
-        /* ТВОИ КНОПКИ-ФАРЫ */
+        /* 3. ОСНОВНОЙ КОНТЕНТ */
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* КНОПКИ-ФАРЫ */
         .vktr-btn {
             background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
             color: white;
+            padding: 10px 20px;
             border: 1px solid #700000;
-            padding: 12px 20px;
             border-radius: 8px;
-            font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            font-weight: bold;
             box-shadow: 0 4px 0 #800000;
+            margin: 5px;
         }
 
-        .vktr-btn:hover { background: #ff6666; box-shadow: 0 0 15px #ff4d4d; }
+        .vktr-btn:hover { box-shadow: 0 0 15px #ff4d4d; }
 
-        /* 3. ОСНОВНОЙ САЙТ */
-        #main-content { display: none; padding: 20px; }
-        
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 5px solid #ff4d4d;
-        }
+        /* РАЗДЕЛЫ (Кабинет, Форум и т.д.) */
+        .section { display: none; }
+        .active { display: block; }
     </style>
 </head>
 <body>
 
-    <header id="site-header">
-        <div id="header-user">👤 User</div>
-        <div>💰 <span id="bubbles">1000</span> Пузырей</div>
-        <div style="color: #ffd700; font-weight: bold;">vktrDream Active</div>
+    <header>
+        <div class="nav-links">
+            <span onclick="showSection('main')">🏠 Главная</span>
+            <div class="dropdown">
+                <span style="color: #ffd700;">⭐ Подписки ▼</span>
+                <div class="dropdown-content">
+                    <a href="#">vktrMini</a>
+                    <a href="#" style="font-weight:bold; color:#b30000;">vktrDream</a>
+                    <a href="#">vktrPro (Гривны)</a>
+                </div>
+            </div>
+            <span onclick="showSection('forum')">💬 Форум</span>
+            <span onclick="showSection('ideas')">💡 Предложения</span>
+        </div>
+        <div class="nav-links">
+            <span>💰 1000 Пузырей</span>
+            <span onclick="showSection('profile')" style="font-weight:bold;">⚙️ Кабинет</span>
+        </div>
     </header>
 
-    <div id="step1" class="auth-container">
-        <h2 style="color: #b30000;">VKTR: ВХОД</h2>
-        <p style="font-size: 12px; color: #666;">Шаг 1: Безопасность</p>
-        <input type="email" id="email" placeholder="E-mail">
-        <input type="password" id="pass" placeholder="Пароль">
-        <button class="vktr-btn" onclick="nextStep()">ДАЛЕЕ</button>
-    </div>
+    <div class="main-card">
+        <div id="main" class="section active">
+            <h1>vktr: Панель Управления</h1>
+            <p>Добро пожаловать в систему. Ваши данные в безопасности.</p>
+            <button class="vktr-btn">vktrBook</button>
+            <button class="vktr-btn">vktrExplorer</button>
+        </div>
 
-    <div id="step2" class="auth-container" style="display:none;">
-        <h2 style="color: #b30000;">ПРЕДСТАВЬТЕСЬ</h2>
-        <p style="font-size: 12px; color: #666;">Шаг 2: Личные данные</p>
-        <input type="text" id="nickname" placeholder="Ваше Имя / Ник">
-        <button class="vktr-btn" onclick="finishAuth()">ЗАВЕРШИТЬ</button>
-    </div>
+        <div id="profile" class="section">
+            <h2>⚙️ Настройки Профиля</h2>
+            <p>Логин: <b>viktorhridin24</b></p>
+            <hr>
+            <label>Сменить имя:</label><br>
+            <input type="text" placeholder="Новое имя"><br><br>
+            <button class="vktr-btn">Сохранить изменения</button>
+            <button class="vktr-btn" style="background: #444;">Выйти</button>
+        </div>
 
-    <div id="main-content">
-        <div class="card">
-            <h3 id="welcome-msg">Добро пожаловать!</h3>
-            <p>Ваша сессия сохранена в БД. Теперь вы в системе vktr.</p>
-            <button class="vktr-btn" style="width: auto;">vktrBook</button>
-            <button class="vktr-btn" style="width: auto; border-color: #ffd700;">vktrDream</button>
+        <div id="forum" class="section">
+            <h2>💬 Форум vktr</h2>
+            <div style="background:#f0f0f0; padding:10px; border-radius:5px;">
+                <p><b>Система:</b> Добро пожаловать на форум. Обсуждайте идеи здесь.</p>
+            </div>
+            <br>
+            <button class="vktr-btn">Создать тему</button>
+        </div>
+
+        <div id="ideas" class="section">
+            <h2>💡 Предложения и Идеи</h2>
+            <p>У вас есть идея для vktr? Напишите её ниже:</p>
+            <textarea style="width:100%; height:100px; border-radius:5px;"></textarea><br><br>
+            <button class="vktr-btn">Отправить Виктору</button>
         </div>
     </div>
 
     <script>
-        function nextStep() {
-            const email = document.getElementById('email').value;
-            if(!email.includes('@')) { alert("Введите корректную почту!"); return; }
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        }
-
-        function finishAuth() {
-            const nick = document.getElementById('nickname').value;
-            if(nick.length < 2) { alert("Имя слишком короткое!"); return; }
-            
-            // Сохранение в имитацию БД (localStorage)
-            localStorage.setItem('vktr_user', nick);
-            localStorage.setItem('vktr_status', 'Active');
-
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('site-header').style.display = 'flex';
-            document.getElementById('main-content').style.display = 'block';
-            document.getElementById('welcome-msg').innerText = "Привет, " + nick + "!";
-            document.getElementById('header-user').innerText = "👤 " + nick;
+        function showSection(id) {
+            // Скрываем все разделы
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Показываем нужный
+            document.getElementById(id).classList.add('active');
         }
     </script>
+
 </body>
 </html>
