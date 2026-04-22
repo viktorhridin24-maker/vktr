@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr - Profile & Settings</title>
+    <title>vktr </title>
     <style>
         body {
             background: linear-gradient(135deg, #ff0080 0%, #ff0000 100%);
@@ -77,7 +77,7 @@
 
     <div id="auth-screen" class="auth-container">
         <div id="login-form">
-            <h2 style="color:#b30000">ВХОД vktr</h2>
+            <h2 style="color:#b30000">Вход в vktr</h2>
             <input type="text" id="login-email" placeholder="E-mail">
             <input type="password" placeholder="Пароль">
             <button class="vktr-btn" style="width:100%" onclick="login()">Войти</button>
@@ -96,11 +96,11 @@
 
     <header id="site-header" style="display:none">
         <div class="nav-links">
-            <span class="nav-link" onclick="showPage('main')">🏠 Главная</span>
-            <span class="nav-link" onclick="showPage('messages')">✉️ Сообщения</span>
+            <span class="nav-link" onclick="showPage('main')">Главная</span>
+            <span class="nav-link" onclick="showPage('messages')">Сообщения</span>
         </div>
         <div>
-            <span class="nav-link" onclick="showPage('cabinet')">⚙️ Кабинет</span>
+            <span class="nav-link" onclick="showPage('cabinet')">Кабинет</span>
             <span id="header-nick" style="font-weight:bold; color:#ffd700"></span>
         </div>
     </header>
@@ -115,7 +115,7 @@
             </div>
             
             <label>Ваш Тэг (Ник):</label>
-            <input type="text" id="set-nick" placeholder="viktorhridin24">
+            <input type="text" id="set-nick" placeholder="Тут будет ваш тэг...">
             
             <label>Ваш Статус:</label>
             <input type="text" id="set-status" placeholder="Впишите свой статус...">
@@ -123,7 +123,7 @@
             <hr>
             <h3>💵 Монетизация</h3>
             <p>Баланс: <b>1000 Пузырей</b></p>
-            <button class="vktr-btn" style="background:#4a6d1a">Вывести в Гривны</button>
+            <button class="vktr-btn" style="background:#4a6d1a">Почитать статью о Пузырях</button>
             
             <br><br>
             <button class="vktr-btn" onclick="saveSettings()">Сохранить всё</button>
@@ -132,14 +132,14 @@
         <div id="page-messages" class="page" style="display:none">
             <h2>✉️ Личные сообщения</h2>
             <div id="msg-box" style="background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #ddd">
-                <p style="color:#666">У вас пока нет новых сообщений от <b>viktorhridin24</b>.</p>
+                <p style="color:#666">У вас нету новых сообщений.</p>
             </div>
         </div>
 
         <div id="page-main" class="page" style="display:none">
             <h1>vktr Feed</h1>
-            <p>Привет, <span id="user-display"></span>! Твой статус: <i id="status-display">...</i></p>
-            <button class="vktr-btn">vktrBook</button>
+            <p>Добро пожаловать, <span id="user-display"></span> Твой статус: <i id="status-display">...</i></p>
+            <button class="vktr-btn">Форум</button>
         </div>
     </div>
 
@@ -174,7 +174,7 @@
             if(newNick) document.getElementById('header-nick').innerText = newNick;
             if(newStatus) document.getElementById('status-display').innerText = newStatus;
             
-            alert("Настройки успешно обновлены в базе vktr!");
+            alert("Все настройки сохранены.");
         }
 
         function previewFile() {
