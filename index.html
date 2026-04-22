@@ -2,8 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr </title>
+    <title>vktr Legacy - Pro System</title>
     <style>
+        /* ГРАДИЕНТНЫЙ ФОН */
         body {
             background: linear-gradient(135deg, #ff0080 0%, #ff0000 100%);
             background-attachment: fixed;
@@ -12,174 +13,161 @@
             color: #fff;
         }
 
+        /* HEADER С ПОДПИСКАМИ */
         header {
             background: rgba(0, 0, 0, 0.9);
             height: 45px;
-            display: flex;
+            display: none; /* Скрыт до входа */
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             border-bottom: 2px solid #ffd700;
         }
 
-        .auth-container {
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
             background: white;
-            color: #000;
+            min-width: 150px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            top: 30px;
+        }
+        .dropdown-content a { color: black; padding: 10px; text-decoration: none; display: block; font-size: 12px; }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* ФОРМЫ И КАРТОЧКИ */
+        .vktr-card {
+            background: white;
+            color: black;
             padding: 30px;
             border-radius: 15px;
-            width: 350px;
-            margin: 100px auto;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 800px;
+            margin: 40px auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            display: none;
         }
 
-        .main-card {
-            background: rgba(255, 255, 255, 0.95);
-            color: #000;
-            max-width: 900px;
-            margin: 30px auto;
-            border-radius: 15px;
-            padding: 25px;
-            display: none; /* Скрыто до входа */
-        }
-
+        /* КНОПКИ-ФАРЫ */
         .vktr-btn {
             background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
             color: white;
-            padding: 10px 18px;
+            padding: 10px 20px;
             border: 1px solid #700000;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            margin: 5px;
+            box-shadow: 0 4px 0 #800000;
         }
 
-        .nav-link { cursor: pointer; margin-right: 15px; font-size: 13px; }
-        
-        input, select, textarea {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
 
-        .status-badge {
-            background: #000;
-            color: #ffd700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
+        #auth-screen { display: block; width: 350px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen" class="auth-container">
-        <div id="login-form">
-            <h2 style="color:#b30000">Вход в vktr</h2>
-            <input type="text" id="login-email" placeholder="E-mail">
+    <div id="auth-screen" class="vktr-card" style="display:block;">
+        <div id="login-fields">
+            <h2 style="color:#b30000">ВХОД vktr</h2>
+            <input type="email" id="email" placeholder="E-mail">
             <input type="password" placeholder="Пароль">
-            <button class="vktr-btn" style="width:100%" onclick="login()">Войти</button>
-            <p style="font-size:12px; cursor:pointer" onclick="toggleAuth(true)">Вы тут новички? Перейдите на регистрацию</p>
+            <button class="vktr-btn" onclick="showStep2()">Войти</button>
+            <p style="font-size:12px; cursor:pointer; color:#666" onclick="toggleAuth()">Вы тут новички? Перейдите на регистрацию</p>
         </div>
-        
-        <div id="reg-form" style="display:none">
-            <h2 style="color:#ff0080">РЕГИСТРАЦИЯ</h2>
-            <input type="text" id="reg-email" placeholder="E-mail">
-            <input type="text" id="reg-nick" placeholder="Придумайте Тэг (Ник)">
-            <input type="password" placeholder="Пароль">
-            <button class="vktr-btn" style="width:100%" onclick="login()">Создать аккаунт</button>
-            <p style="font-size:12px; cursor:pointer" onclick="toggleAuth(false)">Есть аккаунт? Войти</p>
+        <div id="name-field" style="display:none">
+            <h2 style="color:#ff0080">Кто это?</h2>
+            <input type="text" id="user-nick" placeholder="Ваш Тэг (Ник)">
+            <button class="vktr-btn" onclick="completeLogin()">Завершить вход</button>
         </div>
     </div>
 
-    <header id="site-header" style="display:none">
-        <div class="nav-links">
-            <span class="nav-link" onclick="showPage('main')">Главная</span>
-            <span class="nav-link" onclick="showPage('messages')">Сообщения</span>
+    <header id="main-header">
+        <div>
+            <span onclick="showPage('main')" style="cursor:pointer">Главная</span> | 
+            <div class="dropdown">
+                <span style="color:#ffd700; cursor:pointer">Все подписки ▼</span>
+                <div class="dropdown-content">
+                    <a href="#">vktrMini</a>
+                    <a href="#">vktrDream</a>
+                    <a href="#">vktrPro </a>
+                </div>
+            </div> |
+            <span onclick="showPage('forum')" style="cursor:pointer">💬 Форум</span>
         </div>
         <div>
-            <span class="nav-link" onclick="showPage('cabinet')">Кабинет</span>
-            <span id="header-nick" style="font-weight:bold; color:#ffd700"></span>
+            <span onclick="showPage('cabinet')" style="cursor:pointer">⚙️ Кабинет</span>
+            <span id="header-nick" style="margin-left:15px; font-weight:bold; color:#ffd700;"></span>
         </div>
     </header>
 
-    <div id="main-site" class="main-card">
-        
-        <div id="page-cabinet" class="page">
-            <h2>⚙️ Настройки Профиля</h2>
-            <div style="display:flex; gap:20px; align-items:center">
-                <div id="avatar-preview" style="width:80px; height:80px; background:#ddd; border-radius:50%; border:2px solid #ff4d4d"></div>
-                <input type="file" id="avatar-input" style="width:auto" onchange="previewFile()">
-            </div>
-            
-            <label>Ваш Тэг (Ник):</label>
-            <input type="text" id="set-nick" placeholder="Тут будет ваш тэг...">
-            
-            <label>Ваш Статус:</label>
-            <input type="text" id="set-status" placeholder="Впишите свой статус...">
-            
-            <hr>
-            <h3>💵 Монетизация</h3>
-            <p>Баланс: <b>1000 Пузырей</b></p>
-            <button class="vktr-btn" style="background:#4a6d1a">Почитать статью о Пузырях</button>
-            
-            <br><br>
-            <button class="vktr-btn" onclick="saveSettings()">Сохранить всё</button>
-        </div>
+    <div id="page-main" class="vktr-card">
+        <h1>vktr Feed</h1>
+        <p>Ваш статус: <b id="status-val">Новичок</b></p>
+        <button class="vktr-btn">vktrBook</button>
+        <hr>
+        <h3>Отправьте вашу идею в vktr!:</h3>
+        <textarea id="ideaInput" placeholder="Опишите идею..."></textarea>
+        <button class="vktr-btn" onclick="sendIdea()">Отправить</button>
+    </div>
 
-        <div id="page-messages" class="page" style="display:none">
-            <h2>✉️ Личные сообщения</h2>
-            <div id="msg-box" style="background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #ddd">
-                <p style="color:#666">У вас нету новых сообщений.</p>
-            </div>
-        </div>
+    <div id="page-cabinet" class="vktr-card">
+        <h2>Настройки Профиля</h2>
+        <label>Смена Тэга:</label>
+        <input type="text" id="new-tag" placeholder="Новый ник">
+        <label>Смена Статуса:</label>
+        <input type="text" id="new-status" placeholder="Ваш статус...">
+        <hr>
+        <h3>💵 Монетизация</h3>
+        <p>Баланс: <b>1000 Пузырей</b></p>
+        <button class="vktr-btn" style="background:green;">Вывод в Гривны</button>
+        <br><br>
+        <button class="vktr-btn" onclick="updateProfile()">Сохранить изменения</button>
+    </div>
 
-        <div id="page-main" class="page" style="display:none">
-            <h1>vktr Feed</h1>
-            <p>Добро пожаловать, <span id="user-display"></span> Твой статус: <i id="status-display">...</i></p>
-            <button class="vktr-btn">Форум</button>
-        </div>
+    <div id="page-messages" class="vktr-card">
+        <h2>Идеи</h2>
+        <div id="admin-inbox">Входящих нет.</div>
     </div>
 
     <script>
-        function toggleAuth(isReg) {
-            document.getElementById('login-form').style.display = isReg ? 'none' : 'block';
-            document.getElementById('reg-form').style.display = isReg ? 'block' : 'none';
+        function showStep2() { 
+            document.getElementById('login-fields').style.display = 'none';
+            document.getElementById('name-field').style.display = 'block';
         }
 
-        function login() {
-            const nick = document.getElementById('reg-nick').value || "User";
-            localStorage.setItem('vktr_nick', nick);
-            
+        function completeLogin() {
+            const nick = document.getElementById('user-nick').value || "User";
+            localStorage.setItem('vktr_user', nick);
             document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('site-header').style.display = 'flex';
-            document.getElementById('main-site').style.display = 'block';
-            
+            document.getElementById('main-header').style.display = 'flex';
             showPage('main');
             document.getElementById('header-nick').innerText = nick;
-            document.getElementById('user-display').innerText = nick;
         }
 
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-            document.getElementById('page-' + pageId).style.display = 'block';
+        function showPage(id) {
+            document.querySelectorAll('.vktr-card').forEach(c => c.style.display = 'none');
+            document.getElementById('page-' + id).style.display = 'block';
+            if (id === 'messages') loadAdminInbox();
         }
 
-        function saveSettings() {
-            const newNick = document.getElementById('set-nick').value;
-            const newStatus = document.getElementById('set-status').value;
-            
-            if(newNick) document.getElementById('header-nick').innerText = newNick;
-            if(newStatus) document.getElementById('status-display').innerText = newStatus;
-            
-            alert("Все настройки сохранены.");
+        function updateProfile() {
+            const tag = document.getElementById('new-tag').value;
+            const stat = document.getElementById('new-status').value;
+            if(tag) document.getElementById('header-nick').innerText = tag;
+            if(stat) document.getElementById('status-val').innerText = stat;
+            alert("Данные сохранены.");
         }
 
-        function previewFile() {
-            alert("Аватарка будет загружена в репозиторий после подтверждения!");
+        function sendIdea() {
+            const idea = document.getElementById('ideaInput').value;
+            let inbox = JSON.parse(localStorage.getItem('vktr_inbox') || "[]");
+            inbox.push({ from: localStorage.getItem('vktr_user'), text: idea });
+            localStorage.setItem('vktr_inbox', JSON.stringify(inbox));
+            alert("Идея отправлена Виктору!");
+            document.getElementById('ideaInput').value = "";
         }
-    </script>
-</body>
-</html>
+
+        function loadAdminInbox() {
+            if(localStorage.getItem('vktr
