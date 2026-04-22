@@ -2,138 +2,130 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr - Профессиональный Сервис</title>
+    <title>vktr Service - Redesign</title>
     <style>
         body {
-            background-color: #d9e1a9; /* Тот самый светлый фон как у Чомика */
-            background-image: linear-gradient(#c5d185 1px, transparent 1px);
-            background-size: 100% 40px; /* Полоски как в 2010-х */
+            background-color: #f0f0f0; /* Светло-серый/белый фон */
             margin: 0;
             font-family: 'Tahoma', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
-        /* 1. HEADER (Верхняя панель) */
+        /* 1. HEADER В СТИЛЕ 2010 (Красно-черный) */
         header {
-            background: #4a6d1a; /* Тёмно-зеленый градиент как в оригинале */
-            background: linear-gradient(to bottom, #729633, #4a6d1a);
-            height: 35px;
-            display: flex;
+            background: linear-gradient(to bottom, #444, #111);
+            height: 40px;
+            display: none; /* Скрыт до логина */
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             color: white;
-            font-size: 12px;
-            border-bottom: 2px solid #3d5a15;
+            border-bottom: 3px solid #ff4d4d;
         }
 
-        .user-panel span { margin-right: 15px; cursor: pointer; }
-        .user-panel span:hover { text-decoration: underline; }
-
-        /* 2. ПОДПИСКИ В ПУЗЫРЯХ (в Header) */
-        .subs-dropdown {
-            position: relative;
-            display: inline-block;
+        /* 2. ЭКРАНЫ РЕГИСТРАЦИИ (Красно-белый стиль) */
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2); /* Красная тень */
+            text-align: center;
+            width: 350px;
+            margin: auto;
+            border-top: 5px solid #ff4d4d;
         }
-        .subs-trigger { font-weight: bold; color: #ffeb3b; cursor: pointer; }
 
-        /* 3. ОСНОВНОЙ БЛОК (Сайт как на картинке) */
-        .container {
-            max-width: 1000px;
-            margin: 20px auto;
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* ТВОИ КНОПКИ-ФАРЫ */
+        .vktr-btn {
+            background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
+            color: white;
+            border: 1px solid #700000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 0 #800000;
+        }
+
+        .vktr-btn:hover { background: #ff6666; box-shadow: 0 0 15px #ff4d4d; }
+
+        /* 3. ОСНОВНОЙ САЙТ */
+        #main-content { display: none; padding: 20px; }
+        
+        .card {
             background: white;
             border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            min-height: 80vh;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #ff4d4d;
         }
-
-        .hero-banner {
-            background: #9ab92d; /* Зеленый фон баннера */
-            padding: 40px;
-            text-align: left;
-            border-bottom: 5px solid #ffeb3b;
-            color: white;
-        }
-
-        /* 4. ТВОИ КНОПКИ-ФАРЫ (Интеграция стиля) */
-        .nav-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: 1px solid #700000;
-            cursor: pointer;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(to bottom, #ff4d4d 0%, #b30000 100%);
-            box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 2px 4px rgba(0,0,0,0.3);
-            margin: 5px;
-            transition: 0.2s;
-        }
-
-        .nav-btn:hover {
-            box-shadow: 0px 0px 15px #ff0000; /* Эффект фар */
-        }
-
-        .content-area { padding: 20px; display: grid; grid-template-columns: 200px 1fr; gap: 20px; }
-        
-        .sidebar { border-right: 1px dashed #ccc; padding-right: 10px; }
-        .sidebar h3 { font-size: 14px; color: #4a6d1a; }
-        
-        /* vktrDream в золоте */
-        .dream { border: 2px solid #ffd700 !important; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="user-panel">
-            <span>👤 <b>viktorhridin24</b></span>
-            <span>✉️ Сообщения</span>
-            <span>💰 <b id="balance">1000 Пузырей</b></span>
-        </div>
-        <div class="subs-dropdown">
-            <span class="subs-trigger" onclick="toggleSubs()">⭐ Все подписки ▼</span>
-        </div>
-        <div>⚙️ Параметры</div>
+    <header id="site-header">
+        <div id="header-user">👤 User</div>
+        <div>💰 <span id="bubbles">1000</span> Пузырей</div>
+        <div style="color: #ffd700; font-weight: bold;">vktrDream Active</div>
     </header>
 
-    <div class="container">
-        <div class="hero-banner">
-            <h1 style="margin:0; font-size: 40px;">vktr Service</h1>
-            <p>Ваши данные сохранены. Добро пожаловать в систему.</p>
-        </div>
+    <div id="step1" class="auth-container">
+        <h2 style="color: #b30000;">VKTR: ВХОД</h2>
+        <p style="font-size: 12px; color: #666;">Шаг 1: Безопасность</p>
+        <input type="email" id="email" placeholder="E-mail">
+        <input type="password" id="pass" placeholder="Пароль">
+        <button class="vktr-btn" onclick="nextStep()">ДАЛЕЕ</button>
+    </div>
 
-        <div class="content-area">
-            <div class="sidebar">
-                <h3>РАЗДЕЛЫ</h3>
-                <button class="nav-btn" onclick="openForum()">ФОРУМ</button>
-                <button class="nav-btn">vktrBook</button>
-                <button class="nav-btn">Explorer</button>
-            </div>
-            
-            <div class="main-content">
-                <h3>Последние обновления</h3>
-                <div id="news-feed">
-                    <p>• Добавлена система регистрации в стиле 2010.</p>
-                    <p>• Подписки перенесены в пузыри (Header).</p>
-                </div>
-                <hr>
-                <button class="nav-btn dream">АКТИВИРОВАТЬ vktrDream</button>
-            </div>
+    <div id="step2" class="auth-container" style="display:none;">
+        <h2 style="color: #b30000;">ПРЕДСТАВЬТЕСЬ</h2>
+        <p style="font-size: 12px; color: #666;">Шаг 2: Личные данные</p>
+        <input type="text" id="nickname" placeholder="Ваше Имя / Ник">
+        <button class="vktr-btn" onclick="finishAuth()">ЗАВЕРШИТЬ</button>
+    </div>
+
+    <div id="main-content">
+        <div class="card">
+            <h3 id="welcome-msg">Добро пожаловать!</h3>
+            <p>Ваша сессия сохранена в БД. Теперь вы в системе vktr.</p>
+            <button class="vktr-btn" style="width: auto;">vktrBook</button>
+            <button class="vktr-btn" style="width: auto; border-color: #ffd700;">vktrDream</button>
         </div>
     </div>
 
     <script>
-        function openForum() {
-            // Переход на новую вкладку vktr
-            window.open('forum.html', '_self'); 
+        function nextStep() {
+            const email = document.getElementById('email').value;
+            if(!email.includes('@')) { alert("Введите корректную почту!"); return; }
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
         }
 
-        function toggleSubs() {
-            alert("Список подписок: \n1. vktrMini\n2. vktrDream (Gold)\n3. vktrPro");
+        function finishAuth() {
+            const nick = document.getElementById('nickname').value;
+            if(nick.length < 2) { alert("Имя слишком короткое!"); return; }
+            
+            // Сохранение в имитацию БД (localStorage)
+            localStorage.setItem('vktr_user', nick);
+            localStorage.setItem('vktr_status', 'Active');
+
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('site-header').style.display = 'flex';
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = "Привет, " + nick + "!";
+            document.getElementById('header-user').innerText = "👤 " + nick;
         }
-        
-        // База данных (имитация сохранения сессии)
-        localStorage.setItem('user', 'viktorhridin24');
     </script>
 </body>
 </html>
