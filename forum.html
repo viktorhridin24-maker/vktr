@@ -2,67 +2,68 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>vktr — форум</title>
+    <title>vktr — идеи</title>
     <style>
-        body { background: #f0f0f0; font-family: sans-serif; margin: 0; }
-        .nav { background: #d90000; padding: 15px; color: #fff; display: flex; justify-content: space-between; }
-        .container { max-width: 800px; margin: 20px auto; padding: 20px; }
-        .post-input { background: #fff; padding: 20px; border-left: 5px solid #d90000; margin-bottom: 20px; }
-        textarea { width: 100%; height: 80px; margin-bottom: 10px; border: 1px solid #ddd; padding: 10px; box-sizing: border-box; }
-        .post { background: #fff; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; position: relative; }
-        .post-id { font-size: 10px; color: #999; position: absolute; top: 5px; right: 10px; }
-        .post-author { color: #d90000; font-weight: bold; font-size: 14px; }
-        .system-msg { background: #fffbe6; border: 1px solid #ffe58f; padding: 10px; margin-bottom: 10px; font-size: 13px; color: #856404; }
+        body { background: #f0f0f0; color: #000; font-family: sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .nav { background: #d90000; padding: 15px 30px; }
+        .nav a { color: #fff; text-decoration: none; font-weight: bold; text-transform: lowercase; }
+        
+        .main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .idea-card { background: #fff; padding: 40px; border-top: 10px solid #d90000; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
+        
+        h1 { text-transform: lowercase; margin-bottom: 10px; }
+        .build-status { color: #d90000; font-weight: bold; margin-bottom: 20px; display: block; }
+        
+        textarea { width: 100%; height: 120px; border: 1px solid #ddd; padding: 15px; box-sizing: border-box; margin-bottom: 20px; resize: none; font-size: 16px; }
+        
+        .btn-send { background: #000; color: #fff; border: none; padding: 15px 30px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn-send:hover { background: #d90000; }
+        
+        .footer { padding: 20px; text-align: center; font-size: 12px; opacity: 0.6; }
     </style>
 </head>
 <body>
 
-<div class="nav">
-    <b style="text-transform: lowercase;">форум</b>
-    <span id="user-display">гость</span>
-</div>
-
-<div class="container">
-    <div id="system-alerts">
-        <div class="system-msg">system: добро пожаловать на форум vktr.</div>
+    <div class="nav">
+        <a href="index.html">vktr</a>
     </div>
 
-    <div class="post-input">
-        <textarea id="postText" placeholder="что нового?"></textarea>
-        <button onclick="addPost()" style="background:#000; color:#fff; border:none; padding:10px 20px; cursor:pointer;">запостить</button>
-    </div>
-
-    <div id="posts-list">
+    <div class="main">
+        <div class="idea-card">
+            <span class="build-status">Эта страница строится.</span>
+            <h1>предложите идею!</h1>
+            <p>мы создаем портал вместе. напиши, что добавить на эту страницу, и админы рассмотрят твое предложение.</p>
+            
+            <textarea id="ideaText" placeholder="опиши свою идею здесь..."></textarea>
+            
+            <button class="btn-send" onclick="sendIdea()">отправить админу</button>
         </div>
-</div>
+    </div>
 
-<script>
-    const user = localStorage.getItem('vktr_user') || 'гость';
-    document.getElementById('user-display').innerText = user;
+    <div class="footer">
+        © 2026 vktr team
+    </div>
 
-    function addPost() {
-        const text = document.getElementById('postText').value;
-        if (!text) return;
+    <script>
+        function sendIdea() {
+            const text = document.getElementById('ideaText').value;
+            if (!text.trim()) {
+                alert('сначала напиши идею.');
+                return;
+            }
 
-        const postId = Math.floor(Math.random() * 900000) + 100000; // Генерация ID
-        const postHtml = `
-            <div class="post">
-                <span class="post-id">ID: #${postId}</span>
-                <div class="post-author">${user}</div>
-                <div class="post-content">${text}</div>
-            </div>
-        `;
-        
-        document.getElementById('posts-list').innerHTML = postHtml + document.getElementById('posts-list').innerHTML;
-        document.getElementById('postText').value = '';
-        
-        // Системное уведомление об успешном посте
-        const alert = document.createElement('div');
-        alert.className = 'system-msg';
-        alert.innerText = `сообщение #${postId} успешно опубликовано.`;
-        document.getElementById('system-alerts').prepend(alert);
-    }
-</script>
+            // Твой ник или ник админа для темы письма
+            const adminName = "viktqr"; 
+            const subject = encodeURIComponent(`Идея для vktr от пользователя`);
+            const body = encodeURIComponent(text);
+
+            // Открывает почтовый клиент с предзаполненным текстом
+            // Замени 'твой-email@example.com' на свой реальный адрес
+            window.location.href = `mailto:твой-email@example.com?subject=${subject}&body=${body}`;
+            
+            alert('открываю почту для отправки идеи!');
+        }
+    </script>
 
 </body>
 </html>
