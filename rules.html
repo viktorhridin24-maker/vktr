@@ -5,92 +5,101 @@
     <title>vktr — правила</title>
     <style>
         body {
-            background: #f0f0f0;
+            background: #fff; /* Чистый белый фон */
             color: #000;
             font-family: sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        .header-red {
-            background: #d90000;
-            color: #fff;
+        .top-bar {
+            background: #d90000; /* Насыщенный красный */
+            height: 10px;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
-            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
             text-transform: lowercase;
-        }
-
-        .content {
-            max-width: 700px;
-            margin: 40px auto;
-            background: #fff;
-            padding: 30px;
-            border-left: 8px solid #d90000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        h1 { text-transform: lowercase; border-bottom: 2px solid #d90000; padding-bottom: 10px; }
-        
-        .rule-item {
-            margin-bottom: 25px;
-            padding-left: 15px;
-        }
-
-        .rule-number {
-            color: #d90000;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-right: 10px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 30px;
-            font-size: 0.9em;
-            opacity: 0.7;
-        }
-
-        .btn-back {
+            border-bottom: 5px solid #d90000;
             display: inline-block;
-            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .rule-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #d90000;
+        }
+
+        .rule-card b {
             color: #d90000;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Та самая кнопка кодекса */
+        .codex-btn {
+            display: block;
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
             text-decoration: none;
             font-weight: bold;
+            margin-top: 40px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .codex-btn:hover {
+            background: #d90000;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-red">
-        <h1>кодекс vktr (раздел 33)</h1>
-    </div>
+    <div class="top-bar"></div>
 
-    <div class="content">
-        <div class="rule-item">
-            <span class="rule-number">33.1</span>
-            <strong>мир без насилия:</strong> на портале vktr строго запрещена пропаганда насилия, терроризма и любых форм агрессии. мы за мир и созидание.
+    <div class="container">
+        <h1>правила</h1>
+
+        <div class="rule-card">
+            <b>никаких накруток</b>
+            не пытайся обмануть счетчики пузырьков или суппортов. мы видим всё.
         </div>
 
-        <div class="rule-item">
-            <span class="rule-number">33.2</span>
-            <strong>уважение:</strong> каждый пользователь, будь то новичок или maniac, обязан уважать других участников. оскорбления ведут к блокировке.
+        <div class="rule-card">
+            <b>без буллинга</b>
+            уважай других пользователей. за травлю и оскорбления — вечный бан.
         </div>
 
-        <div class="rule-item">
-            <span class="rule-number">33.3</span>
-            <strong>честность:</strong> любые попытки обмана платежных систем (alphasms, monobank) или взлома infinity8 караются удалением аккаунта без возврата пузырьков.
+        <div class="rule-card">
+            <b>чистый контент</b>
+            никакого спама и мусора. портал должен быть полезным.
         </div>
 
-        <div class="rule-item">
-            <span class="rule-number">33.4</span>
-            <strong>траур:</strong> в дни официального траура (24.02, 22.03, 11.09) портал работает в ограниченном режиме. развлекательный контент может быть скрыт.
-        </div>
+        <a href="codex.html" class="codex-btn">открыть кодекс vktr (раздел 33)</a>
 
-        <a href="index.html" class="btn-back">← вернуться на главную</a>
-    </div>
-
-    <div class="footer">
-        © 2026 vktr team
+        <a href="index.html" class="back-home">← на главную страницу</a>
     </div>
 
 </body>
