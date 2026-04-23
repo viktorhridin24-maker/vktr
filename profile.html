@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>vktr — кабинет</title>
+    <style>
+        body { background: #f0f0f0; color: #000; font-family: sans-serif; margin: 0; }
+        .nav { background: #d90000; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; font-weight: bold; text-transform: lowercase; }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        
+        /* Карточка профиля */
+        .profile-card { 
+            background: #fff; 
+            padding: 40px; 
+            border-left: 10px solid #d90000; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            background: #eee;
+            border: 4px solid #d90000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+        }
+
+        .user-info h1 { margin: 0; text-transform: lowercase; font-size: 32px; }
+        .status-badge { 
+            display: inline-block; 
+            background: #000; 
+            color: #fff; 
+            padding: 5px 12px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Блок статистики */
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .stat-item { background: #fff; padding: 20px; border: 1px solid #ddd; text-align: center; }
+        .stat-value { display: block; font-size: 24px; font-weight: bold; color: #d90000; }
+        .stat-label { font-size: 12px; color: #666; text-transform: lowercase; }
+
+        .btn-exit { 
+            margin-top: 30px; 
+            display: inline-block; 
+            color: #d90000; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav">
+    <a href="index.html" style="font-size: 24px;">vktr</a>
+    <a href="index.html">на главную</a>
+</div>
+
+<div class="container">
+    <div class="profile-card">
+        <div class="avatar-circle">👤</div>
+        <div class="user-info">
+            <h1 id="user-name">загрузка...</h1>
+            <div id="user-role" class="status-badge">пользователь</div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <span class="stat-value" id="user-id">#000000</span>
+            <span class="stat-label">твой персональный id</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">191</span>
+            <span class="stat-label">пузырьки vktr</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; background: #fff; padding: 20px; border: 1px solid #eee;">
+        <h3>доступные сервисы:</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 10px;">✅ <b>infinity8:</b> активен (нейросети)</li>
+            <li style="margin-bottom: 10px;">✅ <b>форум:</b> доступ разрешен</li>
+        </ul>
+    </div>
+
+    <a href="#" onclick="logout()" class="btn-exit">выход из системы vktr</a>
+</div>
+
+<script>
+    // Получаем данные из памяти
+    const savedName = localStorage.getItem('vktr_user') || 'гость';
+    document.getElementById('user-name').innerText = savedName;
+
+    // Генерируем ID если его нет
+    let userId = localStorage.getItem('vktr_id');
+    if (!userId) {
+        userId = Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('vktr_id', userId);
+    }
+    document.getElementById('user-id').innerText = '#' + userId;
+
+    // Спец. статусы для тебя и Миши
+    if (savedName.toLowerCase() === 'виктор' || savedName.toLowerCase() === 'vktr') {
+        document.getElementById('user-role').innerText = 'разработчик / admin';
+        document.getElementById('user-role').style.background = '#d90000';
+    } else if (savedName.toLowerCase() === 'миша') {
+        document.getElementById('user-role').innerText = 'tester / vip';
+    }
+
+    function logout() {
+        localStorage.removeItem('vktr_user');
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>
