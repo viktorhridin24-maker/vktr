@@ -4,137 +4,69 @@
     <meta charset="UTF-8">
     <title>vktr</title>
     <style>
-        /* Твой фирменный фон */
         body {
             background: linear-gradient(to bottom right, #300000, #ff007f); 
             background-attachment: fixed;
             color: #fff;
             font-family: sans-serif;
             margin: 0;
-            padding: 0;
+            min-height: 100vh;
         }
 
-        /* Шапка без ИИ-шных наворотов */
-        .top-nav {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px 30px;
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
             border-bottom: 2px solid #ff007f;
-            display: flex;
-            align-items: center;
+            text-align: center;
         }
 
-        .top-nav .brand {
-            font-size: 24px;
-            font-weight: 900;
-            text-transform: lowercase;
-            margin-right: 40px;
+        .navbar a {
             color: #fff;
             text-decoration: none;
-        }
-
-        .top-nav a {
-            color: #ccc;
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 16px;
+            margin: 0 15px;
             font-weight: bold;
+            text-transform: lowercase;
         }
 
-        .top-nav a:hover {
-            color: #ff007f;
-        }
-
-        /* Основной блок */
-        .main-block {
-            margin: 50px auto;
-            width: 90%;
-            max-width: 900px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 40px;
-        }
-
-        .status {
-            background: #222;
-            color: #00ff00;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-family: monospace;
-            display: inline-block;
-            margin-bottom: 20px;
-            border: 1px solid #00ff00;
-        }
-
-        h2 { font-size: 32px; margin-top: 0; }
-        
-        /* Кнопки как ты любишь - текстовые */
-        .btn-text {
-            color: #00e1ff;
-            cursor: pointer;
-            text-decoration: underline;
-            font-weight: bold;
-        }
-
-        .btn-text:hover { color: #fff; }
-
-        /* Траурный блок */
-        #mourning {
-            display: none;
-            background: #111;
-            padding: 20px;
-            border: 2px solid #fff;
-            margin-top: 20px;
-        }
-
-        footer {
+        .main-container {
+            padding: 50px;
             text-align: center;
-            padding: 40px;
-            font-size: 14px;
-            opacity: 0.7;
+        }
+
+        .status-box {
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .hamster-fixed {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 100px; /* Настрой размер под своего хомяка */
         }
     </style>
 </head>
 <body>
 
-<div class="top-nav">
-    <a href="index.html" class="brand">vktr</a>
-    <a href="profile.html">кабинет</a>
-    <a href="forum.html">форум</a>
-    <a href="subscriptions.html">подписки</a>
-    <a href="infinity8.html">infinity8</a>
-</div>
-
-<div class="main-block">
-    <div class="status">😇 разработка vktr идет успешно хорошо</div>
-    
-    <h2>добро пожаловать</h2>
-    <p>vktr — это портал услуг нового поколения. здесь ты найдешь всё: от общения до нейросетей.</p>
-
-    <div id="mourning">
-        <h3 style="color: #ff0000;">Сейчас не до радости.</h3>
-        <p>Сегодня в vktr траур.</p>
-        <span class="btn-text" onclick="alert('F')">Press F.</span>
+    <div class="navbar">
+        <a href="index.html" style="font-size: 20px; color: #ff007f;">vktr</a>
+        <a href="profile.html">кабинет</a>
+        <a href="forum.html">форум</a>
+        <a href="subscriptions.html">подписки</a>
+        <a href="infinity8.html">infinity8</a>
     </div>
-</div>
 
-<footer>
-    <a href="rules.html" style="color: #ff007f;">Кодекс vktr (Раздел 33)</a><br><br>
-    © 2026 vktr team
-</footer>
+    <div class="main-container">
+        <div class="status-box">😇 разработка vktr идет успешно хорошо</div>
+        <h1>добро пожаловать</h1>
+        <p>портал услуг нового поколения</p>
+    </div>
 
-<script>
-    // Проверка дат 24.02, 22.03, 11.09
-    const d = new Date();
-    const day = d.getDate();
-    const month = d.getMonth() + 1;
-    
-    const dates = ["24.2", "22.3", "11.9"];
-    if (dates.includes(day + "." + month)) {
-        document.getElementById('mourning').style.display = 'block';
-        document.body.style.filter = 'grayscale(1)';
-    }
-</script>
+    <img src="hamster.png" class="hamster-fixed" alt="mascot">
 
 </body>
 </html>
