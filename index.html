@@ -3,131 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktr — Портал Услуг</title>
+    <title>vktr — портал услуг</title>
     <style>
-        /* Основной стиль vktr (Aero Glass) */
-        body {
-            background: linear-gradient(135deg, #4b0000, #ff007f); /* Твой красно-розовый градиент */
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            display: flex;
-            flex-direction: column;
+        /* Общие настройки */
+        :root {
+            --main-gradient: linear-gradient(135deg, #4b0000 0%, #ff007f 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent: #00e1ff;
         }
 
+        body {
+            background: var(--main-gradient);
+            background-attachment: fixed;
+            color: white;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Шапка сайта */
         header {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
+            padding: 20px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .logo {
-            font-size: 2em;
-            font-weight: bold;
-            letter-spacing: 2px;
-            cursor: pointer;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            font-size: 1.8em;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: lowercase; /* Строго vktr */
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
         }
 
         nav a {
             color: white;
             text-decoration: none;
-            margin-left: 20px;
             font-weight: 500;
+            font-size: 1.1em;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent);
             transition: 0.3s;
         }
 
-        nav a:hover {
-            text-shadow: 0 0 10px #fff;
+        nav a:hover:after {
+            width: 100%;
         }
 
-        .main-content {
-            flex-grow: 1;
+        /* Главный блок */
+        .hero {
+            flex: 1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            text-align: center;
+            padding: 50px 20px;
         }
 
-        .glass-box {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 40px;
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 50px;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { font-size: 2.5em; margin-bottom: 10px; }
+        .status-tag {
+            display: inline-block;
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            padding: 5px 15px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            font-size: 0.9em;
+            margin-bottom: 20px;
         }
 
-        .btn-press-f {
-            background: white;
-            color: black;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            display: none; /* Скрыта по умолчанию */
-        }
-
-        footer {
+        /* Секция траура */
+        #mourning-section {
+            display: none;
+            margin-top: 30px;
             padding: 20px;
-            text-align: center;
-            font-size: 0.8em;
-            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-    </style>
-</head>
-<body>
 
-<header>
-    <div class="logo" id="siteLogo">vktr</div>
-    <nav>
-        <a href="forum.html">Форум</a>
-        <a href="profile.html">Кабинет</a>
-        <a href="subscriptions.html">Подписки</a>
-        <a href="infinity8.html">Infinity8</a>
-    </nav>
-</header>
-
-<div class="main-content">
-    <div class="glass-box">
-        <h1 id="welcomeText">Добро пожаловать в vktr</h1>
-        <p id="subText">Разработка идет успешно хорошо</p>
-        <button id="btnF" class="btn-press-f" onclick="payRespects()">Press F.</button>
-    </div>
-</div>
-
-<footer>
-    <a href="rules.html" style="color: #ccc; text-decoration: none;">Кодекс vktr (Раздел 33)</a>
-</footer>
-
-<script>
-    // Скрипт для траурных дат
-    function checkMourning() {
-        const now = new Date();
-        const d = now.getDate();
-        const m = now.getMonth() + 1;
-        
-        // Даты: 24.02, 22.03, 11.09
-        if ((d==24 && m==2) || (d==22 && m==3) || (d==11 && m==9)) {
-            document.getElementById('siteLogo').innerHTML = "☮ vktr";
-            document.getElementById('welcomeText').innerHTML = "Сейчас не до радости.";
-            document.getElementById('subText').innerHTML = "Сегодня в vktr траур.";
-            document.getElementById('btnF').style.display = "inline-block";
-            document.body.style.filter = "grayscale(0.8)"; // Делает сайт мрачнее
+        .btn-f {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: 0.3s;
         }
-    }
 
-    function payRespects() {
-        alert("Вы почтили память погибших.");
-    }
+        .btn-f:hover { background: #ccc; transform: scale(1.05); }
 
-    checkMourning();
-</script>
-
-</body>
-</html>
+        /* Футер */
+        footer {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px
