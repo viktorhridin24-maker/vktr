@@ -2,39 +2,132 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr - home</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vktr — Портал Услуг</title>
+    <style>
+        /* Основной стиль vktr (Aero Glass) */
+        body {
+            background: linear-gradient(135deg, #4b0000, #ff007f); /* Твой красно-розовый градиент */
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            text-shadow: 0 0 10px #fff;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .glass-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .btn-press-f {
+            background: white;
+            color: black;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none; /* Скрыта по умолчанию */
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8em;
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
-<body onload="checkMourning()"> <header>
-        <div class="logo-container">
-            <img src="logo.png" id="mainLogo" alt="vktR">
-            <h1>vktR: Портал услуг нового поколения</h1>
-        </div>
-        <nav>
-            <a href="profile.html" class="text-link">Кабинет</a>
-            <a href="forum.html" class="text-link">Форум</a>
-            <a href="subscriptions.html" class="text-link">Подписки</a>
-            <a href="infinity8.html" class="text-link">Infinity8</a>
-        </nav>
-    </header>
+<body>
 
-    <main>
-        <section class="glass-panel">
-            <h2>Добро пожаловать</h2>
-            <p>Здесь ты найдешь всё: от общения до нейросетей.</p>
-            <div id="mourning-banner"></div> </section>
+<header>
+    <div class="logo" id="siteLogo">vktr</div>
+    <nav>
+        <a href="forum.html">Форум</a>
+        <a href="profile.html">Кабинет</a>
+        <a href="subscriptions.html">Подписки</a>
+        <a href="infinity8.html">Infinity8</a>
+    </nav>
+</header>
 
-        <aside class="mascot">
-            <img src="hamster.png" alt="Mascot">
-            <p>Разработка идет успешно хорошо!</p>
-        </aside>
-    </main>
+<div class="main-content">
+    <div class="glass-box">
+        <h1 id="welcomeText">Добро пожаловать в vktr</h1>
+        <p id="subText">Разработка идет успешно хорошо</p>
+        <button id="btnF" class="btn-press-f" onclick="payRespects()">Press F.</button>
+    </div>
+</div>
 
-    <footer>
-        <a href="rules.html">Кодекс vktR (Раздел 33)</a>
-        <p>© 2026 vktR Team</p>
-    </footer>
+<footer>
+    <a href="rules.html" style="color: #ccc; text-decoration: none;">Кодекс vktr (Раздел 33)</a>
+</footer>
 
-    <script src="script.js"></script>
+<script>
+    // Скрипт для траурных дат
+    function checkMourning() {
+        const now = new Date();
+        const d = now.getDate();
+        const m = now.getMonth() + 1;
+        
+        // Даты: 24.02, 22.03, 11.09
+        if ((d==24 && m==2) || (d==22 && m==3) || (d==11 && m==9)) {
+            document.getElementById('siteLogo').innerHTML = "☮ vktr";
+            document.getElementById('welcomeText').innerHTML = "Сейчас не до радости.";
+            document.getElementById('subText').innerHTML = "Сегодня в vktr траур.";
+            document.getElementById('btnF').style.display = "inline-block";
+            document.body.style.filter = "grayscale(0.8)"; // Делает сайт мрачнее
+        }
+    }
+
+    function payRespects() {
+        alert("Вы почтили память погибших.");
+    }
+
+    checkMourning();
+</script>
+
 </body>
 </html>
