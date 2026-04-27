@@ -3,72 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktrserver BETA</title>
+    <title>vktrserver | BETA 1.0</title>
     <style>
         body {
-            background-color: #0d0d0d;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', sans-serif;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
-        /* Стиль для твоего нового логотипа */
-        .vktr-logo {
-            width: 200px; /* Размер можно подправить */
-            height: auto;
+        .logo {
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
+            /* Здесь будет твой лого vktr */
         }
 
-        .status-card {
-            background: #1a1a1a;
-            border: 2px solid #333;
+        .promo-container {
+            background: #111;
+            border: 1px solid #333;
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 600px;
         }
 
-        .warning-icon {
-            width: 40px;
-            vertical-align: middle;
+        video {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
-        .holiday-tag {
-            color: #ff9900;
-            font-weight: bold;
-            margin-top: 10px;
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-    </style>
-</head>
-<body>
 
-    <img src="WhiteLogoVKTR.png" alt="VKTR Logo" class="vktr-logo">
+        .vktr-btn {
+            background: #1a1a1a;
+            color: white;
+            border: 1px solid #444;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.1s, background 0.2s;
+        }
 
-    <div class="status-card">
-        <h1><img src="Внимание.png" class="warning-icon"> vktrserver</h1>
-        <p>Статус: <span style="color: #00ff41;">BETA 1.0</span></p>
-        <div class="holiday-tag">ДО КАНИКУЛ ОСТАЛОСЬ СОВСЕМ ЧУТЬ-ЧУТЬ! ☀️</div>
-    </div>
+        /* Эффект нажатия, о котором мы говорили */
+        .vktr-btn:active {
+            transform: scale(0.95);
+            background: #333;
+        }
 
-    <script>
-        // Твоя идея с подтверждением BETA
-        window.onload = function() {
-            const acceptBeta = confirm("Внимание! Это BETA версия и некоторые вкладки могут не прогружатся. Вы уверены, что хотите открыть?");
-            
-            if (acceptBeta) {
-                console.log("Доступ в vktrserver разрешен. Хомяк на посту.");
-            } else {
-                alert("Система перегружена (на диске C всего 655 МБ!). Возвращайтесь позже.");
-                window.location.href = "https://google.com";
-            }
-        };
-    </script>
+        .v-wiki { border-color: #ff4141; }
 
-</body>
-</html>
+        .status-icons {
+            margin-top: 20px;
+            display: flex;
+            gap: 1
