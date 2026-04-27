@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vktr | Технический перерыв</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .vktr-logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+            opacity: 0.5; /* Немного приглушим, так как сервер спит */
+        }
+
+        .maintenance-card {
+            background: #1a1a1a;
+            border: 2px solid #ff9900; /* Оранжевый цвет техобслуживания */
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(255, 153, 0, 0.2);
+        }
+
+        h1 { color: #ff9900; margin-top: 0; }
+
+        .links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tg { background: #0088cc; color: white; }
+        .wa { background: #25d366; color: white; }
+        .btn:hover { opacity: 0.8; transform: scale(1.05); }
+
+        .hamster-work {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="WhiteLogoVKTR.png" alt="VKTR Logo" class="vktr-logo">
+
+    <div class="maintenance-card">
+        <img src="Ошибка.png" style="width: 50px; margin-bottom: 10px;">
+        <h1>vktr недоступен</h1>
+        <p>Мы проводим важные технические работы (чистим кэш и кормим хомяка).</p>
+        <p>Следите за информацией в наших сообществах:</p>
+        
+        <div class="links">
+            <a href="https://t.me/твой_канал" class="btn tg">Telegram</a>
+            <a href="https://wa.me/твой_номер" class="btn wa">WhatsApp</a>
+        </div>
+
+        <div class="hamster-work">
+            🐹 Хомяк: "Я скоро всё починю, честно!"
+        </div>
+    </div>
+
+</body>
+</html>
