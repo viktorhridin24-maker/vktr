@@ -1,121 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vktrserver | Holiday Edition</title>
     <style>
-        /* Красно-белая палитра */
+        /* ПОТУЖНЫЙ ДИЗАЙН 2026 */
         body {
-            background: #f0f0f0; /* Светло-серый/белый фон для контраста */
-            color: #000;
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-
-        /* Верхняя панель - красная */
-        .navbar {
-            background: #d90000; /* Яркий красный */
-            padding: 15px 30px;
+            background-color: #0d0d0d; /* Глубокий черный как твоя башня */
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
 
-        .navbar .brand {
-            font-size: 26px;
-            font-weight: 900;
-            color: #fff;
-            text-decoration: none;
-            text-transform: lowercase;
-        }
-
-        .navbar nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: bold;
-            text-transform: lowercase;
-        }
-
-        /* Главный блок - белый с красной рамкой */
-        .hero {
-            margin: 60px auto;
-            max-width: 800px;
-            background: #fff;
-            border-left: 10px solid #d90000; /* Красный акцент слева */
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-radius: 4px;
-        }
-
-        .status-tag {
-            color: #d90000;
-            border: 2px solid #d90000;
-            display: inline-block;
-            padding: 5px 15px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: lowercase;
+        .status-card {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+            text-align: center;
+            width: 350px;
         }
 
         h1 {
-            font-size: 40px;
-            margin: 0 0 10px 0;
-            text-transform: lowercase;
+            color: #00ff41; /* Цвет хакера/сервера */
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #333;
+        .disk-info {
+            margin: 20px 0;
+            font-size: 14px;
         }
 
-        /* Твой хомяк */
-        .hamster {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 120px;
-            z-index: 100;
+        .progress-bar {
+            background: #333;
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
         }
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            background: #222;
-            color: #fff;
+        .progress-fill {
+            background: #ff4141; /* Красный как твой Диск C */
+            width: 95%; /* Почти полный! */
+            height: 100%;
+            border-radius: 5px;
         }
 
-        footer a { color: #d90000; text-decoration: none; font-weight: bold; }
+        .holiday-badge {
+            background: #ff9900;
+            color: black;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hamster-status {
+            font-style: italic;
+            color: #888;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <a href="index.html" class="brand">vktr</a>
-        <nav>
-            <a href="profile.html">кабинет</a>
-            <a href="forum.html">форум</a>
-            <a href="subscriptions.html">подписки</a>
-            <a href="infinity8.html">infinity8</a>
-        </nav>
+    <div class="holiday-badge">РЕЖИМ: 1 МАЯ / КАНИКУЛЫ</div>
+
+    <div class="status-card">
+        <h1>vktrserver</h1>
+        <p>Состояние: <strong>ПОТУЖНО</strong></p>
+        
+        <div class="disk-info">
+            Локальный диск (C:) - 655 МБ свободно
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="hamster-status">
+            🐹 Хомяк: "Дизайн обновлен, Jackbox съеден!"
+        </div>
     </div>
 
-    <div class="hero">
-        <div class="status-tag">😇 разработка vktr идет успешно хорошо</div>
-        <h1>добро пожаловать</h1>
-        <p><b>vktr</b> — это портал услуг нового поколения. здесь ты найдешь всё: от общения до нейросетей.</p>
-    </div>
-
-    <img src="hamster.png" class="hamster" alt="vktr mascot">
-
-    <footer>
-        <a href="rules.html">кодекс vktr (раздел 33)</a><br><br>
-        © 2026 vktr team
-    </footer>
-
+    <script type="module">
+        console.log("Дизайн через DOCTYPE обновлен успешно!");
+        // Сюда можно вставить код из прошлого шага
+    </script>
 </body>
 </html>
