@@ -2,94 +2,219 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktrserver | Вход</title>
-    <link rel="icon" type="image/png" href="faricon vktr.png"> <style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vktrserver | Официальный портал</title>
+    <link rel="icon" type="image/png" href="faricon vktr.png">
+    <style>
+        :root {
+            --vktr-red: #ff4141;
+            --vktr-black: #050505;
+            --vktr-gray: #111;
+        }
+
         body {
-            background-color: #000;
+            background-color: var(--vktr-black);
             color: #fff;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ВЕРХНЯЯ ПАНЕЛЬ */
+        header {
+            background: var(--vktr-gray);
+            border-bottom: 2px solid var(--vktr-red);
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .logo span { color: var(--vktr-red); }
+
+        .auth-panel {
+            display: flex;
+            gap: 15px;
+        }
+
+        input {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--vktr-red); }
+
+        .btn-main {
+            background: var(--vktr-red);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-main:hover { opacity: 0.9; transform: scale(1.02); }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        main {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            padding: 50px 20px;
         }
 
-        .auth-container {
-            background: #111;
-            border: 2px solid #ff4141; /* Твой красный цвет */
+        .promo-box {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border: 1px solid #222;
             border-radius: 15px;
-            padding: 30px;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(255, 65, 65, 0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
         }
 
-        h2 { margin-bottom: 20px; color: #fff; }
-
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #222;
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: #fff;
+        .explore-section {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
-        input:focus { border-color: #ff4141; outline: none; }
-
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-
-        .vktr-btn {
-            flex: 1;
-            padding: 12px;
-            background: #ff4141;
-            color: white;
-            border: none;
-            border-radius: 8px;
+        .info-card {
+            background: var(--vktr-gray);
+            border: 1px solid #222;
+            padding: 25px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.1s;
+            transition: 0.3s;
         }
 
-        .vktr-btn:active { transform: scale(0.95); }
+        .info-card:hover {
+            border-color: var(--vktr-red);
+            background: #161616;
+        }
 
-        .vktr-btn.secondary { background: #333; border: 1px solid #444; }
+        .info-card h3 { color: var(--vktr-red); margin-top: 0; }
 
-        .footer-logo { margin-top: 20px; width: 40px; }
+        /* СКРИМЕР ТОПОТА */
+        #topot-layer {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000 url('Топот.png') center no-repeat;
+            background-size: contain;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
 
-    <div class="auth-container">
-        <img src="faricon vktr.png" width="60" alt="vktr logo" style="margin-bottom: 10px;">
-        <h2>vktrserver</h2>
+<header>
+    <div class="logo"><span>vktr</span>server</div>
+    <div class="auth-panel">
+        <input type="email" id="email" placeholder="Электронная почта">
+        <input type="text" id="vktr-id" placeholder="ID пользователя">
+        <button class="btn-main" onclick="processAuth()">Вход</button>
+    </div>
+</header>
 
-        <div id="auth-form">
-            <input type="email" placeholder="Электронная почта" id="email">
-            <input type="password" placeholder="Пароль" id="password">
-            <input type="text" placeholder="ID (для входа)" id="user-id">
-            
-            <div class="btn-group">
-                <button class="vktr-btn" onclick="handleAuth('login')">Войти</button>
-                <button class="vktr-btn secondary" onclick="handleAuth('reg')">Регистрация</button>
-            </div>
-        </div>
-        
-        <img src="Топот.png" class="footer-logo" alt="Топот" onclick="playFootstep()">
+<main>
+    <div class="promo-box">
+        <video width="100%" height="100%" controls poster="vktr-poster.jpg">
+            <source src="vktr_promo_new.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
     </div>
 
-    <script>
-        function playFootstep() {
-            new Audio('Топот.wav').play();
+    <div class="explore-section">
+        <div class="info-card" onclick="location.href='wiki.html'">
+            <h3>Система ТОПОТ</h3>
+            <p>Узнайте, как работает анализ активности и кто следит за вашим профилем.</p>
+        </div>
+        <div class="info-card" onclick="location.href='economy.html'">
+            <h3>Викторны и Пузыри</h3>
+            <p>Изучите курс валют и способы заработка в экосистеме vktr.</p>
+        </div>
+        <div class="info-card" onclick="window.open('https://t.me/vktrproducts')">
+            <h3>Сообщество</h3>
+            <p>Прямая связь с разработчиком и последние новости в Telegram.</p>
+        </div>
+    </div>
+</main>
+
+<div id="topot-layer"></div>
+
+<script>
+    // Список существующих пользователей
+    const knownUsers = ["viktorhridin24@gmail.com"];
+
+    function processAuth() {
+        const mail = document.getElementById('email').value.trim();
+        const id = document.getElementById('vktr-id').value.trim();
+
+        // 1. Приоритет входу по ID
+        if (id) {
+            alert("Авторизация по ID...");
+            location.href = 'profile.html';
+            return;
         }
 
-        function handleAuth(type) {
-            // Здесь будет твоя логика 6-значного кода от system
-            alert(type === 'login' ? 'Проверка ID...' : 'Регистрация новой почты...');
+        if (!mail) {
+            alert("Пожалуйста, введите почту или ID.");
+            return;
         }
-    </script>
+
+        // 2. Логика регистрации/входа
+        if (knownUsers.includes(mail)) {
+            alert("Вход выполнен!");
+            location.href = 'profile.html';
+        } else {
+            // Регистрация (почты нет в базе)
+            let code = prompt("Для регистрации введите 6-значный код, отправленный на почту:");
+            
+            if (code && code.length === 6) {
+                alert("Успешно! Настройте ваш новый профиль.");
+                location.href = 'settings.html';
+            } else {
+                runScreamer(); // Ошибка в коде — Топот
+            }
+        }
+    }
+
+    function runScreamer() {
+        const layer = document.getElementById('topot-layer');
+        const audio = new Audio('Топот.wav'); 
+        
+        layer.style.display = 'block';
+        audio.play().catch(() => {});
+        
+        setTimeout(() => {
+            layer.style.display = 'none';
+        }, 800);
+    }
+</script>
+
 </body>
 </html>
