@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>vktrserver | Вход</title>
+    <link rel="icon" type="image/png" href="faricon vktr.png"> <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .auth-container {
+            background: #111;
+            border: 2px solid #ff4141; /* Твой красный цвет */
+            border-radius: 15px;
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 65, 65, 0.2);
+        }
+
+        h2 { margin-bottom: 20px; color: #fff; }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        input:focus { border-color: #ff4141; outline: none; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+
+        .vktr-btn {
+            flex: 1;
+            padding: 12px;
+            background: #ff4141;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+
+        .vktr-btn:active { transform: scale(0.95); }
+
+        .vktr-btn.secondary { background: #333; border: 1px solid #444; }
+
+        .footer-logo { margin-top: 20px; width: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <img src="faricon vktr.png" width="60" alt="vktr logo" style="margin-bottom: 10px;">
+        <h2>vktrserver</h2>
+
+        <div id="auth-form">
+            <input type="email" placeholder="Электронная почта" id="email">
+            <input type="password" placeholder="Пароль" id="password">
+            <input type="text" placeholder="ID (для входа)" id="user-id">
+            
+            <div class="btn-group">
+                <button class="vktr-btn" onclick="handleAuth('login')">Войти</button>
+                <button class="vktr-btn secondary" onclick="handleAuth('reg')">Регистрация</button>
+            </div>
+        </div>
+        
+        <img src="Топот.png" class="footer-logo" alt="Топот" onclick="playFootstep()">
+    </div>
+
+    <script>
+        function playFootstep() {
+            new Audio('Топот.wav').play();
+        }
+
+        function handleAuth(type) {
+            // Здесь будет твоя логика 6-значного кода от system
+            alert(type === 'login' ? 'Проверка ID...' : 'Регистрация новой почты...');
+        }
+    </script>
+</body>
+</html>
