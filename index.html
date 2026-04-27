@@ -3,50 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktr | Portal of Services</title>
-    <link rel="stylesheet" href="style.css">
+    <title>vktrserver BETA</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Стиль для твоего нового логотипа */
+        .vktr-logo {
+            width: 200px; /* Размер можно подправить */
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
+        }
+
+        .status-card {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .warning-icon {
+            width: 40px;
+            vertical-align: middle;
+        }
+
+        .holiday-tag {
+            color: #ff9900;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">vktr<span>Portal</span></div>
-        <nav>
-            <ul>
-                <li><a href="#projects">Проекты</a></li>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#contact">GitHub</a></li>
-            </ul>
-        </nav>
-    </header>
+    <img src="WhiteLogoVKTR.png" alt="VKTR Logo" class="vktr-logo">
 
-    <section class="hero">
-        <h1>Инновационные решения vktr</h1>
-        <p>Разработка экосистем: от vktrSoc до JoyCore Studio.</p>
-    </section>
+    <div class="status-card">
+        <h1><img src="Внимание.png" class="warning-icon"> vktrserver</h1>
+        <p>Статус: <span style="color: #00ff41;">BETA 1.0</span></p>
+        <div class="holiday-tag">ДО КАНИКУЛ ОСТАЛОСЬ СОВСЕМ ЧУТЬ-ЧУТЬ! ☀️</div>
+    </div>
 
-    <main id="projects">
-        <div class="card">
-            <h2>vktrSoc</h2>
-            <p>Социальная сеть нового поколения на Firebase. Виртуальная экономика и уникальные события.</p>
-            <div class="status">Active Development</div>
-        </div>
-
-        <div class="card">
-            <h2>Vkype</h2>
-            <p>Мессенджер на C++ в классическом стиле с современным функционалом и бот-платформой.</p>
-            <div class="status">Beta Testing</div>
-        </div>
-
-        <div class="card">
-            <h2>JoyCore CodelX</h2>
-            <p>IDE будущего. Легкость VS Code, мощь Infinity8 AI.</p>
-            <div class="status">Planned</div>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 vktr Development. Powered by GitHub Pages.</p>
-    </footer>
+    <script>
+        // Твоя идея с подтверждением BETA
+        window.onload = function() {
+            const acceptBeta = confirm("Внимание! Это BETA версия и некоторые вкладки могут не прогружатся. Вы уверены, что хотите открыть?");
+            
+            if (acceptBeta) {
+                console.log("Доступ в vktrserver разрешен. Хомяк на посту.");
+            } else {
+                alert("Система перегружена (на диске C всего 655 МБ!). Возвращайтесь позже.");
+                window.location.href = "https://google.com";
+            }
+        };
+    </script>
 
 </body>
 </html>
