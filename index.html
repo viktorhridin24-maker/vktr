@@ -3,99 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktrserver | Official</title>
+    <title>vktr | Главная</title>
     <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ */
         body {
-            background-color: #000; /* Твой фирменный черный фон */
+            background-color: #000;
             color: #fff;
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
             margin: 0;
-        }
-
-        .promo-video {
-            width: 100%;
-            max-width: 640px;
-            border: 2px solid #333;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .button-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            width: 300px;
+            align-items: center; /* Центрирование по горизонтали */
+            justify-content: center; /* Центрирование по вертикали */
+            min-height: 100vh;
         }
 
-        /* Кнопки с эффектом нажатия */
-        .vktr-btn {
+        /* КОНТЕЙНЕР ДЛЯ ВИДЕО */
+        .video-container {
             background: #111;
-            color: white;
-            border: 1px solid #444;
-            padding: 15px;
+            width: 100%;
+            max-width: 640px; /* Фиксированная ширина плеера */
+            height: 360px;
             border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.1s, background 0.2s;
+            border: 2px solid #333;
+            margin-bottom: 30px; /* Отступ до кнопок */
+            box-shadow: 0 0 20px rgba(255, 65, 65, 0.1);
         }
 
-        .vktr-btn:active {
-            transform: scale(0.95); /* Эффект прожатия */
-            background: #222;
-        }
-
-        .wiki-btn {
-            border-color: #ff4141; /* Выделяем В-кипедию под цвет Топота */
-        }
-
-        .icon-bar {
-            margin-top: 40px;
+        /* КНОПОЧНЫЙ БЛОК (MENU) */
+        .menu-container {
             display: flex;
-            gap: 20px;
+            flex-direction: column; /* Кнопки в столбик */
+            gap: 15px; /* Расстояние между кнопками */
+            width: 100%;
+            max-width: 300px;
         }
 
-        .icon-bar img {
-            width: 40px;
+        /* СТИЛИ КНОПОК */
+        .vktr-button {
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            outline: none;
+            text-align: center;
         }
 
-        .icon-bar img:hover {
-            opacity: 0.8;
+        /* ЭФФЕКТЫ ПРИ НАВЕДЕНИИ */
+        .vktr-button:hover {
+            background-color: #222;
+            border-color: #ff4141; /* Подсветка vktr-красным */
+            transform: translateY(-2px);
         }
+
+        /* КНОПКА В-КИПЕДИЯ (АКТИВНАЯ НА ВИДЕО) */
+        .vktr-button.active {
+            border-color: #ff4141;
+            box-shadow: 0 0 10px rgba(255, 65, 65, 0.3);
+        }
+
     </style>
 </head>
 <body>
 
-    <video class="promo-video" controls>
-        <source src="promo.mp4" type="video/mp4">
-    </video>
-
-    <div class="button-container">
-        <button class="vktr-btn" onclick="playSound('Системное уведомление.wav')">Что это за сервис?</button>
-        <button class="vktr-btn" onclick="playSound('Обычное уведомление.wav')">Зачем?</button>
-        <button class="vktr-btn wiki-btn" onclick="playSound('Заход на сайт.wav')">В-кипедия</button>
+    <div class="video-container">
+        <div style="color: #444; padding: 150px 0;">[Видео-плеер]</div>
     </div>
 
-    <div class="icon-bar">
-        <img src="Success.png" alt="Success" onclick="playSound('Обычное уведомление.wav')">
-        
-        <img src="B.nottext.png" alt="Login" onclick="playSound('Системное уведомление.wav')">
-        
-        <img src="vktrServerFailure.png" alt="Failure" onclick="playSound('Ошибка.wav')">
-        
-        <img src="Топот.png" alt="Топот" onclick="playSound('Топот.wav')">
+    <div class="menu-container">
+        <button class="vktr-button" onclick="playSound1()">Что это за сервис?</button>
+        <button class="vktr-button" onclick="playSound2()">Зачем?</button>
+        <button class="vktr-button active" onclick="playSound3()">В-кипедия</button>
     </div>
 
     <script>
-        function playSound(file) {
-            const audio = new Audio(file);
-            audio.play().catch(error => console.log("Кликни на страницу, чтобы включить звук!"));
-        }
+        // Скрипты для звуков (заглушки)
+        function playSound1() { console.log("Звук 1: Сервис"); }
+        function playSound2() { console.log("Звук 2: Зачем"); }
+        // playSound3() должна издавать тот самый звук "Балда" или vktr music
+        function playSound3() { console.log("Звук 3: В-кипедия"); }
     </script>
 
 </body>
