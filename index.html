@@ -2,101 +2,64 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr | Главная</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <title>vktr | Автономный Портал</title>
+    <link rel="icon" type="image/png" href="faricon_vktr.png">
+    
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; margin: 0; }
-        
-        /* HEADER */
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; }
         header { 
             background: #0a0a0a; border-bottom: 2px solid #ff4141; 
-            padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100;
+            padding: 10px 30px; display: flex; justify-content: space-between; align-items: center;
         }
-        .header-left { display: flex; align-items: center; gap: 20px; }
-        .logo { font-size: 24px; font-weight: bold; color: #ff4141; }
-        .search-bar { background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 5px 15px; border-radius: 20px; outline: none; }
+        .v-logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 900; color: #ff4141; }
+        .v-logo img { width: 30px; } /* Маленькое лого в шапке */
         
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .bubble-count { background: #111; border: 1px solid #ff4141; padding: 5px 12px; border-radius: 15px; font-size: 14px; }
-        .header-btn { background: none; border: 1px solid #333; color: #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        .header-btn:hover { border-color: #ff4141; }
-
-        /* ОСНОВНОЙ КОНТЕНТ */
-        .container { display: grid; grid-template-columns: 200px 1fr 250px; gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .main-grid { display: grid; grid-template-columns: 250px 1fr; gap: 30px; padding: 40px; }
+        .sidebar { border-right: 1px solid #111; }
+        .content-box { background: #050505; border: 1px solid #1a1a1a; padding: 25px; border-radius: 12px; }
         
-        /* ЛЕВАЯ ПАНЕЛЬ (НАВИГАЦИЯ) */
-        nav ul { list-style: none; padding: 0; }
-        nav li { padding: 10px 0; border-bottom: 1px solid #111; cursor: pointer; }
-        nav li:hover { color: #ff4141; }
-
-        /* ЦЕНТР (НОВОСТИ И ФОРУМ) */
-        .news-section, .forum-preview { background: #0a0a0a; border: 1px solid #222; border-radius: 10px; padding: 15px; margin-bottom: 20px; }
-        .post { border-bottom: 1px solid #222; padding: 10px 0; }
-        .post h3 { margin: 0 0 5px 0; font-size: 18px; color: #ff4141; }
-
-        /* ПРАВАЯ ПАНЕЛЬ (РЕКОМЕНДАЦИИ) */
-        .sidebar-title { font-size: 16px; margin-bottom: 15px; border-left: 3px solid #ff4141; padding-left: 10px; }
-        .user-card { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: #111; padding: 8px; border-radius: 8px; }
-        .user-avatar { width: 35px; height: 35px; background: #333; border-radius: 50%; }
+        .nav-link { display: block; padding: 12px; color: #888; text-decoration: none; transition: 0.3s; }
+        .nav-link:hover { color: #ff4141; padding-left: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-left">
-        <div class="logo">vktr</div>
-        <input type="text" class="search-bar" placeholder="Поиск услуг или людей...">
+    <div class="v-logo">
+        <img src="faricon_vktr.png" alt="logo"> vktr
     </div>
-    
-    <div class="header-right">
-        <div class="bubble-count">🫧 <span id="bubbles">7789</span></div> <button class="header-btn">Профиль</button>
-        <button class="header-btn">Кабинет</button>
-        <button class="header-btn">Настройки</button>
+    <div class="user-stats">
+        <span>Баланс: <strong style="color:#ff4141;">7789</strong></span>
     </div>
 </header>
 
-<div class="container">
-    <nav>
-        <ul>
-            <li onclick="alert('Услуги в разработке')">🛒 Услуги</li>
-            <li>💬 Сообщения</li>
-            <li style="color: #ff4141;" onclick="location.href='balda.html'">⚠️ В-кипедия</li>
-        </ul>
-    </nav>
+<div class="main-grid">
+    <aside class="sidebar">
+        <a href="#" class="nav-link">🔒 Безопасность</a>
+        <a href="#" class="nav-link">🛠 Услуги</a>
+        <a href="#" class="nav-link">📁 Файлы</a>
+        <a href="#" class="nav-link" style="color: #ff4141;" onclick="activateEmergency()">⚠️ Экстренный режим</a>
+    </aside>
 
     <main>
-        <section class="news-section">
-            <h2 class="sidebar-title">НОВОСТИ ПОРТАЛА</h2>
-            <div class="post">
-                <h3>Техперерыв в Brawl Stars</h3>
-                <p>Суперы опять чинят ящики. Ждем компенсацию. vktr работает стабильно.</p>
-            </div>
-            <div class="post">
-                <h3>Макс под подозрением</h3>
-                <p>Не давай цыганить свои данные. Пользуйся только проверенными входами.</p>
-            </div>
-        </section>
-
-        <section class="forum-preview">
-            <h2 class="sidebar-title">ФОРУМ</h2>
-            <p><strong>MaximShpaklevka:</strong> Кто видел мой ТикТок для Мяула?</p>
-            <p><strong>vktr_admin:</strong> Напоминаю, за флуд про "Гойду" — бан.</p>
-        </section>
+        <div class="content-box">
+            <h1>Добро пожаловать в систему</h1>
+            <p>Это не мессенджер и не игра. Это твоя точка доступа к защищенным данным.</p>
+            <hr style="border: 0; border-top: 1px solid #1a1a1a; margin: 20px 0;">
+            <h3>Текущий статус:</h3>
+            <p style="color: #00ff00;">● Все системы vktrserver работают в штатном режиме.</p>
+        </div>
     </main>
-
-    <aside>
-        <h2 class="sidebar-title">РЕКОМЕНДУЕМЫЕ</h2>
-        <div class="user-card">
-            <div class="user-avatar"></div>
-            <div><strong>Шпаклёвчик</strong><br><small>В сети (на унитазе)</small></div>
-        </div>
-        <div class="user-card">
-            <div class="user-avatar" style="background: #ff4141;"></div>
-            <div><strong>Степанчик</strong><br><small>Бот-хранитель</small></div>
-        </div>
-    </aside>
 </div>
+
+<script>
+    function activateEmergency() {
+        // Режим Балды при попытке захвата
+        document.body.innerHTML = '<video autoplay loop style="width:100%"><source src="15805.mp4"></video>';
+        const audio = new Audio('vktr music.mp3');
+        audio.play();
+    }
+</script>
 
 </body>
 </html>
