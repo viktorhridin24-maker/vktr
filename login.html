@@ -2,181 +2,44 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktr | Свобода от ловушек</title>
-    <style>
-        :root {
-            --vktr-red: #ff4141;
-            --vktr-bg: #050505;
-            --vktr-panel: #0f0f0f;
-        }
+    <title>vktr - Твой путь к свободе</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body style="background-color: #000; color: #fff; font-family: 'Arial', sans-serif; margin: 0;">
 
-        body {
-            background-color: var(--vktr-bg);
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    <header style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #333;">
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/ТВОЙ_ПРОФИЛЬ/ТВОЙ_РЕПОЗИТОРИЙ/main/WhiteLogoVKTR.png" alt="vktr" style="height: 30px;">
+        </div>
+        <div class="auth-box">
+            <input type="email" placeholder="Электронная почта" style="background: #111; border: 1px solid #333; color: #eee; padding: 5px;">
+            <input type="text" placeholder="Ваш ID" style="background: #111; border: 1px solid #333; color: #eee; padding: 5px;">
+            <button style="background: #ff0000; border: none; color: white; padding: 5px 15px; cursor: pointer; font-weight: bold;">ВХОД</button>
+        </div>
+    </header>
 
-        /* УМНАЯ СТРОЧКА ЛОГИНА */
-        header {
-            background: var(--vktr-panel);
-            border-bottom: 2px solid var(--vktr-red);
-            padding: 10px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    <main style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center;">
+        
+        <div class="video-container" style="box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); border-radius: 10px; overflow: hidden; margin-bottom: 30px;">
+            <video width="640" height="360" controls style="background: #111;">
+                <source src="твой-ролик.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
+        </div>
 
-        .logo { font-size: 24px; font-weight: 900; }
-        .logo span { color: var(--vktr-red); }
+        <div class="action-buttons" style="display: flex; gap: 20px;">
+            <button style="background: transparent; border: 2px solid #fff; color: #fff; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                ОБУЧЕНИЕ VKTR
+            </button>
+            <button style="background: #fff; border: none; color: #000; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                НАШЕ СООБЩЕСТВО
+            </button>
+        </div>
 
-        .auth-bar { display: flex; gap: 10px; }
-        input {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 4px;
-            outline: none;
-        }
-        .btn-auth {
-            background: var(--vktr-red);
-            color: #fff;
-            border: none;
-            padding: 6px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    </main>
 
-        /* ЦЕНТРАЛЬНЫЙ БЛОК */
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .alert-box {
-            color: var(--vktr-red);
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-            border: 1px dashed var(--vktr-red);
-            padding: 10px 20px;
-        }
-
-        .video-box {
-            width: 100%;
-            max-width: 800px;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #222;
-            box-shadow: 0 0 30px rgba(255, 65, 65, 0.15);
-        }
-
-        video { width: 100%; display: block; }
-
-        .description {
-            margin-top: 30px;
-            max-width: 600px;
-            line-height: 1.6;
-            color: #ccc;
-        }
-
-        /* СКРИМЕР ТОПОТА */
-        #screamer {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000 url('Топот.png') center no-repeat;
-            background-size: contain;
-            z-index: 1000;
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="logo"><span>vktr</span></div>
-    <div class="auth-bar">
-        <input type="email" id="email" placeholder="Электронная почта">
-        <input type="text" id="vktr-id" placeholder="Ваш ID">
-        <button class="btn-auth" onclick="handleVktrAuth()">ВХОД</button>
+    <div style="position: fixed; bottom: 20px; right: 20px; width: 100px;">
+        <img src="hamster.png" alt="vktr helper" style="width: 100%;">
     </div>
-</header>
-
-<main>
-    <div class="alert-box">⚠ Госуслуги и переходы в мессенджеры — это ловушка!</div>
-    
-    <div class="video-box">
-        <video controls>
-            <source src="video_2026-04-27_18-47-17.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="description">
-        <p>Когда система заманивает тебя в ловушку фальшивых сервисов, остается только один путь. 
-        Посмотри видео-объяснение и узнай, как <strong>vktr</strong> защищает твою свободу.</p>
-    </div>
-</main>
-
-<div id="screamer"></div>
-
-<script>
-    const database = ["viktorhridin24@gmail.com"];
-
-    function handleVktrAuth() {
-        const mail = document.getElementById('email').value.trim();
-        const uid = document.getElementById('vktr-id').value.trim();
-
-        // Вход по ID
-        if (uid) {
-            alert("Безопасный доступ разрешен.");
-            location.href = 'profile.html';
-            return;
-        }
-
-        if (!mail) return alert("Введите данные для входа.");
-
-        if (database.includes(mail)) {
-            location.href = 'profile.html';
-        } else {
-            // Регистрация: если почты нет, пароль не нужен, только 6-значный код
-            let code = prompt("Для защиты от слежки введите 6-значный код от system:");
-            
-            if (code && code.length === 6) {
-                // Включаем твою фоновую музыку при успешной регистрации
-                const music = new Audio('vktr music.mp3');
-                music.play().catch(() => {});
-                
-                alert("Почта подтверждена. Добро пожаловать в vktr. Настрой свой профиль.");
-                location.href = 'settings.html';
-            } else {
-                playTopotScreamer(); // Ошибка — Топот!
-            }
-        }
-    }
-
-    function playTopotScreamer() {
-        const overlay = document.getElementById('screamer');
-        const sound = new Audio('Топот.wav'); 
-        overlay.style.display = 'block';
-        sound.play().catch(() => {});
-        setTimeout(() => { overlay.style.display = 'none'; }, 800);
-    }
-</script>
 
 </body>
 </html>
