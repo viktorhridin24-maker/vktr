@@ -3,54 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vktrСообщество</title>
-    <!-- Твой фавикон, который мы обсуждали -->
-    <link rel="icon" type="image/png" href="vktrButterfly.png">
+    <title>VKTR | Портал услуг</title>
     
+    <!-- Фавикон бабочки для узнаваемости -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <style>
-        /* Обновленный красно-белый стандарт 2.0 */
+        /* Красно-белый стандарт 2.0 */
         :root {
             --bg-color: #0a0a0a;
             --card-bg: #161616;
             --accent-red: #e60000;
-            --text-main: #ffffff;
+            --text-white: #ffffff;
+            --text-gray: #b3b3b3;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: var(--text-white);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
-            transition: background 0.3s ease;
+            padding: 20px;
         }
 
-        /* Тот самый эффект карточек из видео */
+        /* Анимация из видео Record_2026_04_29_20_23_56_611.mp4 */
         .vktr-card {
             background: var(--card-bg);
             border-radius: 12px;
             border: 1px solid #333;
-            padding: 20px;
-            margin: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            max-width: 600px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease-out;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
         }
 
         .vktr-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
+
+        .btn-buy {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn-buy:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-links {
+            margin-top: 50px;
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .footer-links a { color: var(--accent-red); text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <!-- Сюда переносим твои блоки: Хедер, Баланс 7789, Кабинет -->
+    <!-- Секция Услуг -->
+    <div class="vktr-card" id="service-meowl">
+        <h2>🐱 Meowl.Social Premium</h2>
+        <p>Подписка на премиум-возможности от нашего партнёра Meowl.</p>
+        <p>Стоимость: <strong>500 🫧 (пузырьков)</strong></p>
+        <button class="btn-buy" onclick="buyService('meowl_premium')">Активировать за пузырьки</button>
+    </div>
 
-    <!-- Firebase и Логика сохранения данных -->
+    <!-- Юридический щит vktr -->
+    <div class="footer-links">
+        При регистрации на сайт вы принимаете наши 
+        <a href="privacy.html">условия Конфиденциальности</a> и 
+        <a href="rules.html">правила</a>.
+    </div>
+
+    <!-- Логика Firebase и Данных -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Твой конфиг (сохранен из предыдущих шагов)
         const firebaseConfig = {
             apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
             authDomain: "vktrserver.firebaseapp.com",
@@ -64,11 +104,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Функция для работы с куки и ID
-        function updateUserData(userId) {
-            // Твои 103 файла cookie останутся, если ты не меняешь домен
-            console.log("vktr: данные синхронизированы с базой и куки");
-        }
+        // Функция покупки (пример для Виктора)
+        window.buyService = async (serviceId) => {
+            console.log("Запрос к базе данных по услуге:", serviceId);
+            // Тут логика списания пузырьков
+        };
+
+        // Запуск анимаций появления
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        });
+        document.querySelectorAll('.vktr-card').forEach(card => observer.observe(card));
     </script>
 </body>
 </html>
