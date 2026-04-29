@@ -181,4 +181,29 @@
 </script>
 
 </body>
+    <!-- Твой HTML код (шапка, баланс пузырей, логотипы) -->
+
+<script type="module">
+  // 1. Сюда вставляешь импорты
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // 2. Твой конфиг
+  const firebaseConfig = {
+    apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+    authDomain: "vktrserver.firebaseapp.com",
+    projectId: "vktrserver",
+    storageBucket: "vktrserver.firebasestorage.app",
+    messagingSenderId: "305612049380",
+    appId: "1:305612049380:web:baa13df62e123adc5195f1",
+    measurementId: "G-Y6W7430K9V"
+  };
+
+  // 3. Инициализация
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  console.log("vktr подключен к базе!");
+</script>
+</body>
 </html>
