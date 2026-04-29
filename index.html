@@ -4,165 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Портал услуг</title>
-    
-    <!-- Твой обновленный фавикон -->
     <link rel="icon" type="image/png" href="favicon.png">
 
     <style>
         :root {
             --bg-color: #0a0a0a;
-            --card-bg: #161616;
+            --sidebar-text: #d1d1d1;
             --accent-red: #e60000;
-            --header-bg: rgba(22, 22, 22, 0.95);
-            --sidebar-width: 240px;
+            --card-bg: #161616;
         }
 
         body {
             background-color: var(--bg-color);
             color: white;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: tahoma, arial, verdana, sans-serif, 'Lucida Sans';
             margin: 0;
             display: flex;
-            flex-direction: column;
+            justify-content: center; /* Центрируем контент как в ВК */
         }
 
-        /* Фиксированный Хедер */
         header {
             position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: var(--header-bg);
-            backdrop-filter: blur(10px);
+            width: 100%;
+            height: 45px;
+            background: #222;
+            border-bottom: 1px solid #444;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            border-bottom: 1px solid #333;
+            justify-content: center;
             z-index: 1000;
         }
 
-        .logo img {
-            height: 30px;
-        }
-
-        /* Боковая панель */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 60px;
-            bottom: 0;
-            width: var(--sidebar-width);
-            background: var(--card-bg);
-            border-right: 1px solid #333;
-            padding: 20px;
+        .header-content {
+            width: 800px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .sidebar-btn {
-            background: transparent;
-            color: white;
-            border: none;
-            text-align: left;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+        .container {
+            width: 800px;
+            margin-top: 60px;
+            display: flex;
+            gap: 20px;
         }
 
-        .sidebar-btn:hover {
-            background: rgba(230, 0, 0, 0.1);
-            color: var(--accent-red);
+        /* Меню в стиле OpenVK/ВК */
+        nav {
+            width: 160px;
+            flex-shrink: 0;
         }
 
-        /* Основной контент */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            padding: 4px 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        nav a {
+            color: var(--sidebar-text);
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background: #222;
+            text-decoration: underline;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: #333;
+            margin: 10px 0;
+        }
+
+        /* Контентная часть */
         main {
-            margin-top: 80px;
-            margin-left: calc(var(--sidebar-width) + 40px);
-            padding: 20px;
-            max-width: 800px;
+            flex-grow: 1;
+            background: var(--card-bg);
+            border-radius: 4px;
+            border: 1px solid #333;
+            padding: 15px;
+            min-height: 500px;
         }
 
         .vktr-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid #333;
-            padding: 25px;
-            margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
         }
 
-        .vktr-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .btn-buy {
-            background: var(--accent-red);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .footer-info {
-            font-size: 11px;
-            color: #666;
-            margin-top: 40px;
-        }
-        
-        .footer-info a { color: var(--accent-red); text-decoration: none; }
+        .red-link { color: var(--accent-red); cursor: pointer; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">
-            <img src="WhiteLogoVKTR.png" alt="VKTR LOGO">
-        </div>
-        <div class="header-right">
+        <div class="header-content">
+            <img src="WhiteLogoVKTR.png" alt="VKTR" height="25">
             <span>7789 🫧</span>
-            <button class="sidebar-btn" style="padding: 5px 10px;">Настройки</button>
         </div>
     </header>
 
-    <div class="sidebar">
-        <button class="sidebar-btn">🏠 Главная</button>
-        <button class="sidebar-btn">🛠️ Услуги</button>
-        <button class="sidebar-btn">👥 Люди</button>
-        <button class="sidebar-btn">⚙️ Настройки ID</button>
+    <div class="container">
+        <!-- Левое меню (OpenVK Style) -->
+        <nav>
+            <ul>
+                <li><a href="#" onclick="goToProfile()">Моя Страница</a> <span style="color:#555; font-size:10px;">ред.</span></li>
+                <li><a href="#">Мои Друзья</a></li>
+                <li><a href="#">Мои Фотографии</a></li>
+                <li><a href="#">Мои Видеозаписи</a></li>
+                <li><a href="#">Мои Аудиозаписи</a></li>
+                <li><a href="#">Мои Сообщения</a></li>
+                <div class="nav-divider"></div>
+                <li><a href="/services">Услуги</a></li>
+                <li><a href="#" id="id-link">Мои Настройки</a></li>
+                <div class="nav-divider"></div>
+                <li><a href="https://t.me/vktr_channel" target="_blank">Блог vktr</a></li>
+            </ul>
+        </nav>
+
+        <!-- Основная панель -->
+        <main id="app-content">
+            <div class="vktr-card">
+                <h2 style="font-size: 16px; border-bottom: 1px solid #e60000; padding-bottom: 5px;">Услуги Портала</h2>
+                <p>Добро пожаловать в кабинет управления услугами.</p>
+                <button class="red-link" onclick="buyMeowl()">[ Активировать Meowl Premium ]</button>
+            </div>
+        </main>
     </div>
 
-    <main>
-        <div class="vktr-card">
-            <h2>🐱 Meowl.Social Premium</h2>
-            <p>Подписка на премиум-возможности от нашего партнёра Meowl.</p>
-            <p>Стоимость: <strong>500 🫧</strong></p>
-            <button class="btn-buy">Активировать за пузырьки</button>
-        </div>
+    <script type="module">
+        // Твой Firebase и Логика
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        
+        // Тут твой конфиг... (сохранен)
 
-        <div class="footer-info">
-            При регистрации на сайт вы принимаете наши 
-            <a href="privacy.html">условия Конфиденциальности</a> и 
-            <a href="rules.html">правила</a>.
-        </div>
-    </main>
+        // Система ID-профилей
+        window.goToProfile = () => {
+            const userID = "vktr_user_1"; // Здесь будет подтягиваться реальный ID из Firebase
+            // Для работы на статике имитируем переход через URL
+            window.history.pushState({}, '', `/profile/${userID}`);
+            renderProfile(userID);
+        };
 
-    <script>
-        // Анимация карточек
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        });
-        document.querySelectorAll('.vktr-card').forEach(card => observer.observe(card));
+        function renderProfile(id) {
+            document.getElementById('app-content').innerHTML = `
+                <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
+                <div style="background: #222; padding: 10px; border-radius: 4px;">
+                    <p>ID в системе vktr: <strong>${id}</strong></p>
+                    <p>Статус: На портале услуг</p>
+                </div>
+            `;
+        }
+
+        // Следим за кнопками "Назад/Вперед" в браузере
+        window.onpopstate = () => {
+            const path = window.location.pathname;
+            if(path.includes('/profile/')) {
+                const id = path.split('/').pop();
+                renderProfile(id);
+            }
+        };
     </script>
 </body>
 </html>
