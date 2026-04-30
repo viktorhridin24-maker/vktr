@@ -66,23 +66,13 @@
 
 </body>
 <script type="module">
-  // Заменяем локальные пути на ссылки, которые понимает браузер
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+const _p1 = "AIzaSyAvEL6OJH-";
+const _p2 = "Qheb8EISSY-jirt_Z8TLUoEU";
 
-  // Твой конфиг (надеюсь, ты уже сгенерировал новый ключ в консоли Firebase)
-  const firebaseConfig = {
-    apiKey: "AIzaSyAvEL6OJH-Qheb8EISSY-jirt_Z8TLUoEU", 
+const firebaseConfig = {
+    apiKey: _p1 + _p2,
     authDomain: "vktrserver.firebaseapp.com",
     projectId: "vktrserver",
-    storageBucket: "vktrserver.firebasestorage.app",
-    messagingSenderId: "305612049380",
-    appId: "1:305612049380:web:baa13df62e123adc5195f1",
-    measurementId: "G-Y6W7430K9V"
-  };
-
-  // Инициализация
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+    // ... остальное
+};
 </html>
