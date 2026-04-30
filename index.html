@@ -110,35 +110,7 @@
         <div class="header-content">
             <img src="WhiteLogoVKTR.png" alt="VKTR" height="25">
             <span>7789 🫧</span>
-            <!-- Твой код Firebase здесь... -->
-
-    <script type="module">
-        // ВСТАВЛЯТЬ СЮДА
-        document.getElementById('vktr-avatar-upload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.getElementById('display-avatar');
-                    img.style.opacity = '0';
-                    setTimeout(() => {
-                        img.src = event.target.result;
-                        img.style.opacity = '1';
-                    }, 300);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.getElementById('music-upload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const url = URL.createObjectURL(file);
-                const player = document.getElementById('vktr-player');
-                player.src = url;
-                player.play();
-            }
-        });
+        
     </script>
 </body>
         </div>
@@ -187,14 +159,35 @@
         };
 
         function renderProfile(id) {
-            document.getElementById('app-content').innerHTML = `
-                <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
-                <div style="background: #222; padding: 10px; border-radius: 4px;">
-                    <p>ID в системе vktr: <strong>${id}</strong></p>
-                    <p>Статус: На портале услуг</p>
+    document.getElementById('app-content').innerHTML = `
+        <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
+        <div style="background: #222; padding: 20px; border-radius: 8px; display: flex; gap: 20px;">
+            
+            <!-- Аватарка -->
+            <div style="text-align: center;">
+                <div onclick="document.getElementById('vktr-ava-input').click()" style="cursor:pointer;">
+                    <img src="default-avatar.png" id="vktr-ava-img" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #444;">
+                    <p style="font-size: 10px; color: #888; margin-top: 5px;">Сменить фото</p>
                 </div>
-            `;
-        }
+                <input type="file" id="vktr-ava-input" hidden accept="image/*" onchange="window.vktrUpdateAva(event)">
+            </div>
+
+            <!-- Инфо и Музыка -->
+            <div style="flex-grow: 1;">
+                <p>ID в системе vktr: <strong>${id}</strong></p>
+                <input type="text" id="vktr-status-text" placeholder="На портале услуг" 
+                       style="background: transparent; border: none; border-bottom: 1px solid #444; color: white; width: 100%; padding: 5px 0; outline: none;">
+                
+                <div style="margin-top: 15px;">
+                    <button onclick="document.getElementById('vktr-mus-input').click()" style="background: #333; color: white; border: 1px solid #555; padding: 5px 10px; cursor: pointer; border-radius: 4px;">🎵 Музыка</button>
+                    <input type="file" id="vktr-mus-input" hidden accept="audio/*" onchange="window.vktrUpdateMusic(event)">
+                    <audio id="vktr-audio" controls style="display:none; width: 100%; margin-top: 10px; height: 30px;"></audio>
+                </div>
+            </div>
+
+        </div>
+    `;
+}
 
         // Следим за кнопками "Назад/Вперед" в браузере
         window.onpopstate = () => {
