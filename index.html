@@ -199,4 +199,32 @@
         };
     </script>
 </body>
+   function renderEditProfile() {
+        const content = document.getElementById('app-content');
+        content.innerHTML = `
+            <h2 style="font-size: 16px; margin-bottom: 15px;">Настройки vktrID</h2>
+            <div style="background: #181818; padding: 25px; border-radius: 12px; border: 1px solid #333;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; color: #888; font-size: 11px; margin-bottom: 5px;">МЕСТОИМЕНИЯ:</label>
+                    <input type="text" id="p-pronouns" style="background:#222; border:1px solid #444; color:white; width:100%; padding:8px; border-radius:4px;" placeholder="напр. он/его">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; color: #888; font-size: 11px; margin-bottom: 5px;">КОНТАКТЫ:</label>
+                    <input type="text" id="p-contact" style="background:#222; border:1px solid #444; color:white; width:100%; padding:8px; border-radius:4px;" placeholder="@vktr_user">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="saveChanges()" style="background: #e63946; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Сохранить</button>
+                    <button onclick="renderProfile('vktr_user_1')" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Назад</button>
+                </div>
+            </div>
+        `;
+    }
+
+    window.saveChanges = function() {
+        alert("Настройки применены!");
+        renderProfile('vktr_user_1');
+    };
+
+}; // Вот эта закрывающая скобка от window.onpopstate или общего блока (строка 199)
+</script>
 </html>
