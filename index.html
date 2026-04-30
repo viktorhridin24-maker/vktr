@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="34b354cb-ddee-4606-9ced-40c330f1fc33" data-blockingmode="auto" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,6 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <style>
-        /* Магия выезда плашки */
-.vktr-avatar-wrapper:hover .vktr-upload-btn {
-    bottom: 0 !important; /* Поднимаем плашку при наведении */
-}
         :root {
             --bg-color: #0a0a0a;
             --sidebar-text: #d1d1d1;
@@ -19,35 +16,63 @@
             --card-bg: #161616;
         }
 
+        /* --- МАГИЯ АВАТАРКИ --- */
+        .vktr-avatar-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #444;
+            overflow: hidden; /* Скрываем плашку, когда она внизу */
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .vktr-avatar-wrapper img#main-ava {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vktr-upload-btn {
+            position: absolute;
+            bottom: -45px; /* Прячем за край */
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            transition: bottom 0.3s ease; /* Плавный выезд */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vktr-avatar-wrapper:hover .vktr-upload-btn {
+            bottom: 0 !important; /* Выезжает при наведении */
+        }
+        /* ---------------------- */
+
         body {
             background-color: var(--bg-color);
             color: white;
-            font-family: tahoma, arial, verdana, sans-serif, 'Lucida Sans';
+            font-family: tahoma, arial, verdana, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
         }
 
-       header {
-    position: fixed;
-    top: 0;
-    left: 0; /* Обязательно, чтобы не было смещения */
-    width: 100%;
-    height: 45px;
-    background: #222;
-    border-bottom: 1px solid #444;
-    display: flex;
-    justify-content: center;
-    z-index: 2000; /* Поднимаем выше всех элементов */
-}
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 45px;
+            background: #222;
+            border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: center;
+            z-index: 2000;
+        }
 
-.container {
-    width: 800px;
-    margin-top: 65px; /* Увеличил отступ, чтобы контент не залез под шапку */
-    display: flex;
-    gap: 20px;
-}
-            .header-content {
+        .header-content {
             width: 800px;
             display: flex;
             align-items: center;
@@ -56,44 +81,18 @@
 
         .container {
             width: 800px;
-            margin-top: 60px;
+            margin-top: 65px;
             display: flex;
             gap: 20px;
         }
 
-        nav {
-            width: 160px;
-            flex-shrink: 0;
-        }
+        nav { width: 160px; flex-shrink: 0; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { padding: 4px 6px; font-size: 13px; }
+        nav a { color: var(--sidebar-text); text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav li {
-            padding: 4px 6px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-        }
-
-        nav a {
-            color: var(--sidebar-text);
-            text-decoration: none;
-        }
-
-        nav a:hover {
-            background: #222;
-            text-decoration: underline;
-        }
-
-        .nav-divider {
-            height: 1px;
-            background: #333;
-            margin: 10px 0;
-        }
+        .nav-divider { height: 1px; background: #333; margin: 10px 0; }
 
         main {
             flex-grow: 1;
@@ -104,13 +103,7 @@
             min-height: 500px;
         }
 
-        .vktr-card {
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .red-link { color: var(--accent-red); cursor: pointer; text-decoration: none; }
+        .red-link { color: var(--accent-red); cursor: pointer; text-decoration: none; border:none; background:none; font-family: inherit; }
     </style>
 </head>
 <body>
@@ -130,13 +123,6 @@
                     <span onclick="renderEditProfile()" style="color:#555; font-size:10px; cursor:pointer; margin-left:5px;">ред.</span>
                 </li>
                 <li><a href="#">Все услуги</a></li>
-                <li><a href="#">Профиль</a></li>
-                <li><a href="#">Форум</a></li>
-                <li><a href="#">Все сервисы</a></li>
-                <li><a href="#">Настройки</a></li>
-                <div class="nav-divider"></div>
-                <li><a href="/services">Дать идею</a></li>
-                <li><a href="https://send.monobank.ua/jar/3Hxuvji3pq">Поддержка проекта</a></li>
                 <div class="nav-divider"></div>
                 <li><a href="https://t.me/vktrproducs" target="_blank">Канал команды vktr</a></li>
             </ul>
@@ -151,23 +137,28 @@
         </main>
     </div>
 
-    <!-- ВСЕ СКРИПТЫ В ОДНОМ МЕСТЕ -->
     <script>
-        // 1. Система навигации
         window.goToProfile = () => {
             const userID = "vktr_user_1";
-            window.history.pushState({}, '', `/profile/${userID}`);
             renderProfile(userID);
         };
 
-        // 2. Отрисовка профиля
+        // ОБНОВЛЕННАЯ ОТРИСОВКА ПРОФИЛЯ
         window.renderProfile = function(id) {
             document.getElementById('app-content').innerHTML = `
                 <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
                 <div style="background: #222; padding: 20px; border-radius: 8px; display: flex; gap: 20px;">
                     <div style="text-align: center;">
-                        <img src="default-avatar.png" style="width: 100px; height: 100px; border: 2px solid #444;">
-                        <p style="font-size: 10px; color: #888; margin-top: 5px; cursor:pointer;">Сменить фото</p>
+                        
+                        <!-- Новый контейнер с плашкой -->
+                        <div class="vktr-avatar-wrapper">
+                            <img src="default-avatar.png" id="main-ava">
+                            <div class="vktr-upload-btn">
+                                <img src="setnewavatar.png" style="width: 80%;">
+                            </div>
+                        </div>
+
+                        <p style="font-size: 10px; color: #888; margin-top: 5px;">vktrID</p>
                     </div>
                     <div style="flex-grow: 1;">
                         <p>ID в системе vktr: <strong>${id}</strong></p>
@@ -178,36 +169,38 @@
             `;
         };
 
-        // 3. ФУНКЦИЯ РЕДАКТИРОВАНИЯ (Та самая!)
         window.renderEditProfile = function() {
             const content = document.getElementById('app-content');
             content.innerHTML = `
                 <h2 style="font-size: 16px; margin-bottom: 15px;">Настройки vktrID</h2>
                 <div style="background: #181818; padding: 25px; border-radius: 12px; border: 1px solid #333;">
-                    <div style="margin-bottom: 15px;">
+                    
+                    <div style="margin-bottom: 20px;">
                         <label style="display:block; color: #888; font-size: 11px; margin-bottom: 5px;">МЕСТОИМЕНИЯ:</label>
                         <input type="text" id="p-pronouns" style="background:#222; border:1px solid #444; color:white; width:100%; padding:8px; border-radius:4px;" placeholder="он/его">
                     </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <img src="captcha-icon.png" style="width: 20px;">
+                            <label style="color: var(--accent-red); font-size: 11px; font-weight: bold;">БЕЗОПАСНОСТЬ:</label>
+                        </div>
+                        <div class="g-recaptcha" data-sitekey="ТВОЙ_КЛЮЧ" data-theme="dark"></div>
+                    </div>
+
                     <div style="display: flex; gap: 10px;">
                         <button onclick="saveChanges()" style="background: #e63946; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Сохранить</button>
                         <button onclick="renderProfile('vktr_user_1')" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Назад</button>
                     </div>
                 </div>
             `;
+            // Перезагрузка капчи, если она не отрисовалась
+            if (window.grecaptcha) { grecaptcha.render(); }
         };
 
-        // 4. Сохранение
         window.saveChanges = function() {
-            alert("Настройки применены!");
+            alert("Настройки vktrID защищены и сохранены!");
             renderProfile('vktr_user_1');
-        };
-
-        // 5. Обработка кнопки "Назад"
-        window.onpopstate = () => {
-            const path = window.location.pathname;
-            if(path.includes('/profile/')) {
-                renderProfile(path.split('/').pop());
-            }
         };
     </script>
 </body>
