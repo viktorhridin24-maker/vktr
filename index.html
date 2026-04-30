@@ -2,35 +2,43 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VKTR | Portal</title>
     <style>
-        :root { --accent: #e60000; --bg: #0a0a0a; }
+        :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; }
         body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
         
-        .container { width: 800px; margin-top: 65px; }
-        main { background: #161616; border: 1px solid #333; padding: 20px; border-radius: 4px; }
+        /* ШАПКА */
+        header { position: fixed; top: 0; width: 100%; height: 45px; background: #222; border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 1000; }
+        .h-content { width: 800px; display: flex; align-items: center; }
 
-        /* --- ИСПРАВЛЕННЫЙ КОНТЕЙНЕР --- */
+        .container { width: 800px; margin-top: 65px; display: flex; gap: 20px; }
+        
+        /* МЕНЮ */
+        nav { width: 160px; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { padding: 5px 0; color: #d1d1d1; cursor: pointer; font-size: 13px; }
+        nav li:hover { text-decoration: underline; }
+
+        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 4px; min-height: 300px; }
+
+        /* АВАТАРКА */
         .vktr-avatar-wrapper { 
             position: relative; 
             width: 120px; 
             height: 120px; 
-            background: #000; 
+            background: #222; /* Запасной фон, если картинка упадет */
             overflow: hidden; 
             border: 1px solid #444;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         #main-ava { 
             position: absolute; 
-            /* Убираем зависимость от ширины в процентах, используем трансформацию */
             width: 100%; 
             height: 100%;
-            object-fit: contain; /* Чтобы картинка не искажалась */
+            object-fit: cover; 
             display: block;
-            pointer-events: none;
         }
 
         .vktr-upload-btn { 
@@ -41,68 +49,94 @@
             transition: bottom 0.2s ease;
             z-index: 10;
         }
-
         .vktr-avatar-wrapper:hover .vktr-upload-btn { bottom: 0; }
 
-        /* ОКНО МАКЕТА */
-        .box-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .box { background: #181818; width: 400px; border: 1px solid #444; border-radius: 8px; padding: 20px; text-align: center; }
-        .crop-zone { width: 200px; height: 200px; border: 2px dashed var(--accent); margin: 0 auto 15px; position: relative; overflow: hidden; }
-        #crop-img { position: absolute; width: 100%; height: 100%; object-fit: contain; }
+        /* ОКНО */
+        .box-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .box { background: #181818; width: 350px; border: 1px solid #444; border-radius: 8px; padding: 20px; }
+        .crop-zone { width: 200px; height: 200px; border: 1px dashed var(--accent); margin: 0 auto 15px; position: relative; overflow: hidden; background: #000; }
+        #crop-img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
         
         .btn { background: var(--accent); color: white; border: none; padding: 10px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 10px; border-radius: 4px; }
+        .btn-sec { background: #333; color: #ccc; border: none; padding: 8px; width: 100%; cursor: pointer; margin-top: 5px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div id="box-overlay" class="box-overlay">
     <div class="box">
-        <h4>Редактор миниатюры</h4>
+        <h4 style="margin-top:0">Редактор миниатюры</h4>
         <div class="crop-zone" id="crop-zone">
-            <img src="default-avatar.png" id="crop-img" draggable="false">
+            <img src="https://via.placeholder.com/200" id="crop-img" draggable="false">
         </div>
-        <input type="range" id="zoom" min="1" max="5" step="0.01" value="1" style="width:100%; accent-color:red">
-        <button class="btn" onclick="save()">Сохранить результат</button>
+        <input type="range" id="zoom" min="1" max="3" step="0.01" value="1" style="width:100%; accent-color:red">
+        <input type="file" id="file-in" style="display:none" accept="image/*">
+        <button class="btn-sec" onclick="document.getElementById('file-in').click()">Выбрать файл</button>
+        <button class="btn" onclick="save()">Сохранить</button>
     </div>
 </div>
 
+<header>
+    <div class="h-content">
+        <strong style="letter-spacing: 1px;">VKTR</strong>
+    </div>
+</header>
+
 <div class="container">
+    <nav>
+        <ul>
+            <li onclick="showProfile()">Моя Страница</li>
+            <li>Все услуги</li>
+        </ul>
+    </nav>
     <main id="content">
-        <button class="btn" style="width:auto" onclick="showProfile()">Показать профиль</button>
+        <h3>Добро пожаловать в VKTR</h3>
+        <p style="color: #888;">Выберите пункт меню слева.</p>
     </main>
 </div>
 
 <script>
-    let data = { src: 'https://i.imgur.com/8Km9tPg.png', z: 1, x: 0, y: 0 };
+    let data = { src: 'https://via.placeholder.com/200', z: 1, x: 0, y: 0 };
     let drag = false, sx, sy;
 
-    const zone = document.getElementById('crop-zone');
     const cImg = document.getElementById('crop-img');
     
-    zone.onmousedown = (e) => { drag = true; sx = e.clientX - data.x; sy = e.clientY - data.y; };
+    document.getElementById('crop-zone').onmousedown = (e) => { drag = true; sx = e.clientX - data.x; sy = e.clientY - data.y; };
     window.onmousemove = (e) => {
         if (!drag) return;
         data.x = e.clientX - sx; data.y = e.clientY - sy;
-        cImg.style.transform = `translate(${data.x}px, ${data.y}px) scale(${data.z})`;
+        updatePreview();
     };
     window.onmouseup = () => drag = false;
-    
-    document.getElementById('zoom').oninput = (e) => { 
-        data.z = e.target.value; 
-        cImg.style.transform = `translate(${data.x}px, ${data.y}px) scale(${data.z})`; 
+    document.getElementById('zoom').oninput = (e) => { data.z = e.target.value; updatePreview(); };
+
+    document.getElementById('file-in').onchange = (e) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            data.src = ev.target.result;
+            cImg.src = data.src;
+            data.x = 0; data.y = 0; data.z = 1;
+            updatePreview();
+        };
+        reader.readAsDataURL(e.target.files[0]);
     };
 
+    function updatePreview() {
+        cImg.style.transform = `translate(${data.x}px, ${data.y}px) scale(${data.z})`;
+    }
+
     function showProfile() {
-        // Здесь мы используем translate для позиционирования, это надежнее чем left/top
-        const factor = 120 / 200; 
+        const f = 120/200; 
         document.getElementById('content').innerHTML = `
-            <h3>Профиль: vktr_user_1</h3>
-            <div class="vktr-avatar-wrapper" onclick="document.getElementById('box-overlay').style.display='flex'">
-                <img src="${data.src}" id="main-ava" 
-                     style="transform: translate(${data.x * factor}px, ${data.y * factor}px) scale(${data.z})">
-                <img src="setnewavatar.png" class="vktr-upload-btn">
+            <h3 style="margin-top:0">Профиль: vktr_user_1</h3>
+            <div style="background:#222; padding:20px; border-radius:6px; display:inline-block">
+                <div class="vktr-avatar-wrapper" onclick="document.getElementById('box-overlay').style.display='flex'">
+                    <img src="${data.src}" id="main-ava" 
+                         style="transform: translate(${data.x*f}px, ${data.y*f}px) scale(${data.z})">
+                    <img src="setnewavatar.png" class="vktr-upload-btn" alt="Загрузить">
+                </div>
+                <p style="color:#666; font-size:11px; text-align:center; margin:10px 0 0 0">vktrID</p>
             </div>
-            <p style="color:#888; font-size:12px; margin-top:10px;">vktrID</p>
         `;
     }
 
