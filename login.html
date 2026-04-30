@@ -2,45 +2,80 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>vktr - Твой путь к свободе</title>
+    <title>Вход в систему | VKTR</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png"> 
-</head> <body style="background-color: #000; color: #fff; font-family: 'Arial', sans-serif; margin: 0;">
+    <style>
+        /* Стили кнопок в духе твоего видео */
+        .vktr-btn {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-    <header style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #333;">
-        <div class="logo">
-            <img src="https://raw.githubusercontent.com/ТВОЙ_ПРОФИЛЬ/ТВОЙ_РЕПОЗИТОРИЙ/main/WhiteLogoVKTR.png" alt="vktr" style="height: 30px;">
-        </div>
-        <div class="auth-box">
-            <input type="email" placeholder="Электронная почта" style="background: #111; border: 1px solid #333; color: #eee; padding: 5px;">
-            <input type="text" placeholder="Ваш ID" style="background: #111; border: 1px solid #333; color: #eee; padding: 5px;">
-            <button style="background: #ff0000; border: none; color: white; padding: 5px 15px; cursor: pointer; font-weight: bold;">ВХОД</button>
-        </div>
-    </header>
+        .vktr-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
+        }
 
-    <main style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center;">
+        .input-group { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container" style="text-align: center; padding-top: 100px;">
+        <h1 id="main-title">Система VKTR</h1>
         
-        <div class="video-container" style="box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); border-radius: 10px; overflow: hidden; margin-bottom: 30px;">
-            <video width="640" height="360" controls style="background: #111;">
-                <source src="твой-ролик.mp4" type="video/mp4">
-                Ваш браузер не поддерживает видео.
-            </video>
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Введи свою почту..." 
+                   style="padding: 12px; width: 300px; border-radius: 5px; border: 1px solid #333; background: #1a1a1a; color: white;">
         </div>
 
-        <div class="action-buttons" style="display: flex; gap: 20px;">
-            <button style="background: transparent; border: 2px solid #fff; color: #fff; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
-                ОБУЧЕНИЕ VKTR
-            </button>
-            <button style="background: #fff; border: none; color: #000; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
-                НАШЕ СООБЩЕСТВО
-            </button>
-        </div>
-
-    </main>
-
-    <div style="position: fixed; bottom: 20px; right: 20px; width: 100px;">
-        <img src="hamster.png" alt="vktr helper" style="width: 100%;">
+        <!-- Та самая кнопка из промо -->
+        <button class="vktr-btn" onclick="handleLogin()">Запустить систему</button>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+            authDomain: "vktrserver.firebaseapp.com",
+            projectId: "vktrserver",
+            appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = "vktr_pass_123"; // Временный пароль, как в регистрации
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Проверяем: подтвердил ли он почту?
+                if (user.emailVerified) {
+                    // Если да — летим на главную или в профиль
+                    window.location.href = "registrationprofile.html";
+                } else {
+                    // Если нет — перекидываем на страницу с просьбой проверить почту
+                    // Передаем почту через URL, чтобы на той странице её показать
+                    window.location.href = `accountaccept.html?email=${encodeURIComponent(email)}`;
+                }
+            } catch (error) {
+                alert("Ошибка входа: проверь почту или сначала зарегистрируйся!");
+            }
+        };
+    </script>
 </body>
 </html>
