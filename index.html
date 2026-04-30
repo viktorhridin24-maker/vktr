@@ -1,228 +1,143 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="34b354cb-ddee-4606-9ced-40c330f1fc33" data-blockingmode="auto" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Портал услуг</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-
     <style>
         :root {
             --bg-color: #0a0a0a;
-            --sidebar-text: #d1d1d1;
             --accent-red: #e60000;
             --card-bg: #161616;
             --box-bg: #181818;
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО (BOX) --- */
-        .vktr-box-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-        }
+        body { background-color: var(--bg-color); color: white; font-family: tahoma, arial; margin: 0; display: flex; justify-content: center; }
+        
+        /* ШАПКА */
+        header { position: fixed; top: 0; width: 100%; height: 45px; background: #222; border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 2000; }
+        .header-content { width: 800px; display: flex; align-items: center; padding-top: 10px; }
 
-        .vktr-box {
-            background: var(--box-bg);
-            width: 450px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-        }
+        .container { width: 800px; margin-top: 65px; display: flex; gap: 20px; }
+        nav { width: 160px; flex-shrink: 0; }
+        nav ul { list-style: none; padding: 0; }
+        nav a { color: #d1d1d1; text-decoration: none; cursor: pointer; font-size: 13px; }
 
-        .vktr-box-header {
-            padding: 12px 15px;
-            background: #222;
-            border-bottom: 1px solid #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        main { flex-grow: 1; background: var(--card-bg); border-radius: 4px; border: 1px solid #333; padding: 15px; min-height: 400px; }
 
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .vktr-box-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 3000; }
+        .vktr-box { background: var(--box-bg); width: 400px; border-radius: 8px; border: 1px solid #444; overflow: hidden; }
+        .vktr-box-header { padding: 10px; background: #222; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
         .vktr-box-body { padding: 20px; text-align: center; }
 
-        /* --- ОБЛАСТЬ ПРЕДПРОСМОТРА (КРОПЕР) --- */
-        .crop-container {
-            width: 200px;
-            height: 200px;
-            margin: 15px auto;
-            border: 2px dashed #e60000;
-            position: relative;
-            overflow: hidden; /* Контур обрезки */
-            background: #111;
-            cursor: move;
+        /* КРОПЕР */
+        .crop-area { 
+            width: 200px; height: 200px; margin: 0 auto 15px; 
+            border: 2px dashed var(--accent-red); position: relative; 
+            overflow: hidden; background: #000; cursor: move;
         }
+        #crop-preview { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
 
-        #crop-preview {
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform-origin: top left;
-            user-select: none;
+        /* АВАТАРКА В ПРОФИЛЕ */
+        .vktr-avatar-wrapper { 
+            position: relative; width: 120px; height: 120px; 
+            background: #111; overflow: hidden; cursor: pointer; border: 1px solid #333;
         }
-
-        /* --- МАГИЯ АВАТАРКИ --- */
-        .vktr-avatar-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            border: 1px solid #333;
-            overflow: hidden;
-            cursor: pointer;
-            background: #111;
+        #main-ava { position: absolute; transform-origin: 0 0; width: 100%; height: auto; display: block; }
+        
+        /* ПЛАШКА (ИСПРАВЛЕНА) */
+        .vktr-upload-btn { 
+            position: absolute; bottom: -40px; left: 0; width: 100%; 
+            display: block; transition: bottom 0.2s ease-in-out; z-index: 10; 
         }
+        .vktr-avatar-wrapper:hover .vktr-upload-btn { bottom: 0; }
 
-        /* Плашка - теперь ЧИСТОЕ ИЗОБРАЖЕНИЕ без фона */
-        .vktr-upload-btn {
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            width: 100%;
-            transition: bottom 0.25s ease;
-            z-index: 10;
-            pointer-events: none; /* Чтобы не мешала клику */
-        }
-
-        .vktr-avatar-wrapper:hover .vktr-upload-btn {
-            bottom: 5px; /* Выплывает чуть выше края */
-        }
-
-        /* БАЗОВЫЕ СТИЛИ САЙТА */
-        body { background-color: var(--bg-color); color: white; font-family: tahoma, arial; margin: 0; display: flex; justify-content: center; }
-        header { position: fixed; top: 0; width: 100%; height: 45px; background: #222; border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 2000; }
-        .container { width: 800px; margin-top: 65px; display: flex; gap: 20px; }
-        nav { width: 160px; }
-        nav ul { list-style: none; padding: 0; }
-        nav li { padding: 5px; font-size: 13px; }
-        nav a { color: var(--sidebar-text); text-decoration: none; }
-        main { flex-grow: 1; background: var(--card-bg); border: 1px solid #333; padding: 20px; border-radius: 4px; }
-        .vktr-btn-red { background: var(--accent-red); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+        .btn-red { background: var(--accent-red); color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ МАКЕТА -->
     <div id="box-overlay" class="vktr-box-overlay">
         <div class="vktr-box">
-            <div class="vktr-box-header">
-                <span style="font-size: 13px; font-weight: bold;">Редактор миниатюры</span>
-                <span style="cursor:pointer;" onclick="closeBox()">&times;</span>
-            </div>
+            <div class="vktr-box-header"><span>Редактор миниатюры</span><span style="cursor:pointer" onclick="closeBox()">&times;</span></div>
             <div class="vktr-box-body">
-                <div class="crop-container" id="crop-zone">
-                    <img src="default-avatar.png" id="crop-preview" draggable="false">
-                </div>
-                <p style="font-size: 11px; color: #888;">Перетащите фото внутри рамки и настройте масштаб:</p>
-                
-                <input type="range" id="zoom-slider" min="0.1" max="3" step="0.01" value="1" style="width: 100%; accent-color: red; margin: 10px 0;">
-                
-                <input type="file" id="file-input" style="display: none;" accept="image/*">
-                <button class="vktr-btn-red" onclick="document.getElementById('file-input').click()" style="background:#333; margin-bottom: 10px;">Выбрать другой файл</button>
-                <button class="vktr-btn-red" onclick="applyCrop()">Сохранить аватарку</button>
+                <div class="crop-area" id="crop-zone"><img src="default-avatar.png" id="crop-preview" draggable="false"></div>
+                <input type="range" id="zoom-range" min="0.1" max="3" step="0.01" value="1" style="width: 100%; accent-color: red;">
+                <input type="file" id="file-selector" style="display: none" accept="image/*">
+                <button class="btn-red" style="background:#444" onclick="document.getElementById('file-selector').click()">Выбрать файл</button>
+                <button class="btn-red" onclick="saveAvatar()">Сохранить аватарку</button>
             </div>
         </div>
     </div>
 
-    <header><div style="width:800px;"><img src="WhiteLogoVKTR.png" height="25" style="margin-top:10px;"></div></header>
+    <header><div class="header-content"><img src="WhiteLogoVKTR.png" height="25"></div></header>
 
     <div class="container">
-        <nav>
-            <ul>
-                <li><a href="#" onclick="goToProfile()">Моя Страница</a> <span onclick="renderEditProfile()" style="color:#555; cursor:pointer;">ред.</span></li>
-                <li><a href="#">Все услуги</a></li>
-            </ul>
-        </nav>
-        <main id="app-content">
-            <h2>Нажми "Моя Страница"</h2>
-        </main>
+        <nav><ul><li><a onclick="renderProfile('vktr_user_1')">Моя Страница</a></li></ul></nav>
+        <main id="app-content"><h2>Нажми на "Моя Страница"</h2></main>
     </div>
 
     <script>
-        let zoom = 1;
-        let posX = 0, posY = 0;
-        let isDragging = false;
-        let startX, startY;
+        let ava = { src: 'default-avatar.png', zoom: 1, x: 0, y: 0 };
+        let isDragging = false, startX, startY;
 
-        window.goToProfile = () => renderProfile("vktr_user_1");
+        const cp = document.getElementById('crop-preview');
+        const zr = document.getElementById('zoom-range');
 
-        window.renderProfile = function(id) {
-            document.getElementById('app-content').innerHTML = `
-                <h2 style="font-size: 16px;">Профиль: ${id}</h2>
-                <div style="background: #222; padding: 20px; border-radius: 8px; display: flex; gap: 20px;">
-                    <div style="text-align: center;">
-                        <div class="vktr-avatar-wrapper" onclick="openBox()">
-                            <!-- Аватарка с примененными смещениями -->
-                            <img src="default-avatar.png" id="main-ava" style="position: absolute; left: ${posX}px; top: ${posY}px; width: ${zoom * 100}%; transform-origin: 0 0;">
-                            
-                            <!-- ПЛАШКА: теперь просто картинка -->
-                            <img src="setnewavatar.png" class="vktr-upload-btn">
-                        </div>
-                        <p style="font-size: 10px; color: #888; margin-top: 5px;">vktrID</p>
-                    </div>
-                </div>
-            `;
-        };
-
-        // ЛОГИКА МАКЕТА
-        const cropZone = document.getElementById('crop-zone');
-        const cropPreview = document.getElementById('crop-preview');
-        const zoomSlider = document.getElementById('zoom-slider');
-
-        function openBox() { document.getElementById('box-overlay').style.display = 'flex'; }
-        function closeBox() { document.getElementById('box-overlay').style.display = 'none'; }
-
-        // Масштаб
-        zoomSlider.oninput = function() {
-            zoom = this.value;
-            cropPreview.style.transform = `scale(${zoom})`;
-        };
-
-        // Перетаскивание внутри контура
-        cropZone.onmousedown = (e) => {
+        // Логика перемещения в макете
+        document.getElementById('crop-zone').onmousedown = (e) => {
             isDragging = true;
-            startX = e.clientX - posX;
-            startY = e.clientY - posY;
+            startX = e.clientX - ava.x;
+            startY = e.clientY - ava.y;
         };
 
         window.onmousemove = (e) => {
             if (!isDragging) return;
-            posX = e.clientX - startX;
-            posY = e.clientY - startY;
-            cropPreview.style.left = posX + 'px';
-            cropPreview.style.top = posY + 'px';
+            ava.x = e.clientX - startX;
+            ava.y = e.clientY - startY;
+            cp.style.left = ava.x + 'px';
+            cp.style.top = ava.y + 'px';
         };
 
         window.onmouseup = () => isDragging = false;
-
-        // Загрузка нового файла в макет
-        document.getElementById('file-input').onchange = function(e) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                cropPreview.src = event.target.result;
-                posX = 0; posY = 0; zoom = 1;
-                cropPreview.style.left = '0px'; cropPreview.style.top = '0px';
-                cropPreview.style.transform = 'scale(1)';
-                zoomSlider.value = 1;
-            };
-            reader.readAsDataURL(e.target.files[0]);
+        zr.oninput = (e) => { 
+            ava.zoom = e.target.value; 
+            cp.style.transform = `scale(${ava.zoom})`; 
         };
 
-        function applyCrop() {
-            const mainAva = document.getElementById('main-ava');
-            if(mainAva) {
-                mainAva.src = cropPreview.src;
-                mainAva.style.left = (posX * (120/200)) + 'px'; // Коррекция под размер на странице
-                mainAva.style.top = (posY * (120/200)) + 'px';
-                mainAva.style.width = (zoom * 100) + '%';
-            }
-            closeBox();
-        }
+        document.getElementById('file-selector').onchange = (e) => {
+            const r = new FileReader();
+            r.onload = (ev) => {
+                ava.src = ev.target.result;
+                cp.src = ava.src;
+                ava.x = 0; ava.y = 0; ava.zoom = 1;
+                cp.style.left = '0px'; cp.style.top = '0px';
+                cp.style.transform = 'scale(1)';
+                zr.value = 1;
+            };
+            r.readAsDataURL(e.target.files[0]);
+        };
+
+        function openBox() { document.getElementById('box-overlay').style.display = 'flex'; }
+        function closeBox() { document.getElementById('box-overlay').style.display = 'none'; }
+        function saveAvatar() { closeBox(); renderProfile('vktr_user_1'); }
+
+        window.renderProfile = function(id) {
+            // Коэффициент 0.6 нужен, чтобы пересчитать координаты из 200px (макет) в 120px (профиль)
+            const factor = 120 / 200;
+            document.getElementById('app-content').innerHTML = `
+                <h3 style="margin-top:0;">Профиль: ${id}</h3>
+                <div style="background: #222; padding: 20px; border-radius: 8px; display: inline-block;">
+                    <div class="vktr-avatar-wrapper" onclick="openBox()">
+                        <img src="${ava.src}" id="main-ava" 
+                             style="left: ${ava.x * factor}px; top: ${ava.y * factor}px; width: ${ava.zoom * 100}%;">
+                        <img src="setnewavatar.png" class="vktr-upload-btn">
+                    </div>
+                    <p style="font-size: 11px; text-align: center; color: #888;">vktrID</p>
+                </div>
+            `;
+        };
     </script>
 </body>
 </html>
