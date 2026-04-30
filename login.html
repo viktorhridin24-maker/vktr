@@ -3,169 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR SYSTEM | Вход и Регистрация</title>
+    <title>VKTR | Главная</title>
     <style>
-        /* Фоновое видео из твоего промо */
-        #bg-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            filter: brightness(30%); /* Делаем темнее, чтобы текст горел ярче */
-            object-fit: cover;
-        }
-
         body {
             margin: 0;
             padding: 0;
             background-color: #000;
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             height: 100vh;
             overflow: hidden;
         }
 
-        .auth-container {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 40px;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
-            text-align: center;
-            width: 380px;
+        /* Верхняя панель (Хедер) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #000;
         }
 
-        h1 {
-            color: #ff0000;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px #550000;
-        }
+        .logo { font-weight: bold; font-size: 1.2rem; }
 
-        input {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
+        .auth-bar { display: flex; gap: 10px; }
+
+        .auth-bar input {
             background: #111;
-            border: 1px solid #ff0000;
+            border: 1px solid #333;
             color: #fff;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 2px;
         }
 
-        .btn-group {
+        .btn-login {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 5px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Центральная часть */
+        main {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
         }
 
-        /* Стиль кнопок как в видео */
-        .vktr-btn {
-            padding: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            transition: 0.3s;
-            font-size: 1rem;
+        .video-container {
+            width: 60%;
+            max-width: 800px;
+            border: 2px solid #333;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
         }
 
-        .login-btn {
-            background: #ff0000;
-            color: #000;
-            box-shadow: 0 4px 0 #8b0000;
-        }
+        video { width: 100%; display: block; }
 
-        .login-btn:hover {
-            background: #ff4d4d;
-            transform: translateY(-2px);
-        }
+        .action-buttons { display: flex; gap: 20px; }
 
-        .reg-btn {
+        .btn-outline {
+            border: 2px solid #fff;
             background: transparent;
-            color: #ff0000;
-            border: 2px solid #ff0000;
+            color: #fff;
+            padding: 10px 30px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
         }
 
-        .reg-btn:hover {
-            background: rgba(255, 0, 0, 0.1);
+        .btn-white {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Хомяк в углу */
+        .helper-img {
+            position: fixed;
+            right: 20px;
+            bottom: 80px;
+            width: 100px;
+        }
+
+        .footer-logo {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
 
-    <!-- Видео на фоне -->
-    <video autoplay muted loop id="bg-video">
-        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
-    </video>
+<header>
+    <div class="logo">vktr</div>
+    <div class="auth-bar">
+        <input type="email" id="email" placeholder="Электронная почта">
+        <input type="password" id="pass" placeholder="Ваш ID">
+        <button class="btn-login" onclick="handleAuth()">ВХОД</button>
+    </div>
+</header>
 
-    <div class="auth-container">
-        <h1>VKTR SYSTEM</h1>
-        <input type="email" id="email" placeholder="ВВЕДИТЕ ПОЧТУ">
-        
-        <div class="btn-group">
-            <!-- Кнопка Входа -->
-            <button class="vktr-btn login-btn" onclick="handleAuth('login')">ЗАПУСТИТЬ РЕЛИЗ</button>
-            
-            <!-- Новая кнопка Регистрации -->
-            <button class="vktr-btn reg-btn" onclick="handleAuth('register')">РЕГИСТРАЦИЯ</button>
-        </div>
+<main>
+    <div class="video-container">
+        <video controls>
+            <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
+        </video>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    <div class="action-buttons">
+        <button class="btn-outline">ОБУЧЕНИЕ VKTR</button>
+        <button class="btn-white">НАШЕ СООБЩЕСТВО</button>
+    </div>
+</main>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
-            authDomain: "vktrserver.firebaseapp.com",
-            projectId: "vktrserver",
-            appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
-        };
+<img src="hamster.png" class="helper-img" alt="helper"> <!-- Замени на своего хомяка -->
+<div class="footer-logo">vktr helper</div>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        window.handleAuth = async (mode) => {
-            const email = document.getElementById('email').value.trim();
-            const password = "vktr_pass_123"; // Твой стандартный пароль
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    };
 
-            if (!email) {
-                alert("Ошибка: Поле почты пустое!");
-                return;
-            }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-            try {
-                if (mode === 'register') {
-                    // Создаем нового пользователя
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    // Отправляем письмо для подтверждения
-                    await sendEmailVerification(userCredential.user);
-                    alert("Аккаунт создан! Проверь почту для подтверждения.");
-                    window.location.href = `accountaccept.html?email=${encodeURIComponent(email)}`;
-                } else {
-                    // Вход
-                    await signInWithEmailAndPassword(auth, email, password);
-                    window.location.href = `accountaccept.html?email=${encodeURIComponent(email)}`;
-                }
-            } catch (error) {
-                console.error(error);
-                if (error.code === 'auth/email-already-in-use') {
-                    alert("Эта почта уже есть в базе! Просто нажми 'ЗАПУСТИТЬ РЕЛИЗ'.");
-                } else {
-                    alert("Ошибка системы! Проверь правильность почты.");
-                }
-            }
-        };
-    </script>
+    window.handleAuth = async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = "vktr_pass_123"; // Или бери из поля 'Ваш ID'
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            window.location.href = "accountaccept.html";
+        } catch (e) {
+            alert("Ошибка входа! Проверь данные.");
+        }
+    }
+</script>
+
 </body>
 </html>
