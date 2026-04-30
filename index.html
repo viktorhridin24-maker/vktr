@@ -110,6 +110,37 @@
         <div class="header-content">
             <img src="WhiteLogoVKTR.png" alt="VKTR" height="25">
             <span>7789 🫧</span>
+            <!-- Твой код Firebase здесь... -->
+
+    <script type="module">
+        // ВСТАВЛЯТЬ СЮДА
+        document.getElementById('vktr-avatar-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('display-avatar');
+                    img.style.opacity = '0';
+                    setTimeout(() => {
+                        img.src = event.target.result;
+                        img.style.opacity = '1';
+                    }, 300);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('music-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                const player = document.getElementById('vktr-player');
+                player.src = url;
+                player.play();
+            }
+        });
+    </script>
+</body>
         </div>
     </header>
 
