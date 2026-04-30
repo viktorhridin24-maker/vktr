@@ -2,43 +2,93 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Вход в систему | VKTR</title>
+    <title>Вход VKTR | Система</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Стили кнопок в духе твоего видео */
-        .vktr-btn {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
+        /* Видео на задний план, как ты просил */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(40%); /* Чтобы текст читался */
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .login-box {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border: 2px solid #ff0000; /* Дерзкий красный контур */
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 { color: #ff0000; text-transform: uppercase; letter-spacing: 3px; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* Кнопка в стиле видео-промо */
+        .vktr-btn-red {
+            background: #ff0000;
+            color: #000;
             border: none;
-            color: white;
             padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
             font-weight: bold;
+            font-size: 1.1rem;
             text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            box-shadow: 0 5px 0 #8b0000;
         }
 
-        .vktr-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
+        .vktr-btn-red:hover {
+            background: #ff4d4d;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #8b0000;
         }
 
-        .input-group { margin-bottom: 20px; }
+        .vktr-btn-red:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #8b0000;
+        }
     </style>
 </head>
 <body>
-    <div class="container" style="text-align: center; padding-top: 100px;">
-        <h1 id="main-title">Система VKTR</h1>
-        
-        <div class="input-group">
-            <input type="email" id="email" placeholder="Введи свою почту..." 
-                   style="padding: 12px; width: 300px; border-radius: 5px; border: 1px solid #333; background: #1a1a1a; color: white;">
-        </div>
 
-        <!-- Та самая кнопка из промо -->
-        <button class="vktr-btn" onclick="handleLogin()">Запустить систему</button>
+    <!-- Видео на фоне -->
+    <video autoplay muted loop id="bg-video">
+        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
+    </video>
+
+    <div class="login-box">
+        <h1>VKTR SYSTEM</h1>
+        <input type="email" id="email" placeholder="ТВОЯ ПОЧТА">
+        <button class="vktr-btn-red" onclick="handleLogin()">ЗАПУСТИТЬ РЕЛИЗ</button>
     </div>
 
     <script type="module">
@@ -56,24 +106,22 @@
         const auth = getAuth(app);
 
         window.handleLogin = async () => {
-            const email = document.getElementById('email').value;
-            const password = "vktr_pass_123"; // Временный пароль, как в регистрации
+            const email = document.getElementById('email').value.trim();
+            const password = "vktr_pass_123"; 
+
+            // Добавим проверку: если поле пустое, не пускаем дальше
+            if (!email) {
+                alert("Эй, почту введи!");
+                return;
+            }
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Проверяем: подтвердил ли он почту?
-                if (user.emailVerified) {
-                    // Если да — летим на главную или в профиль
-                    window.location.href = "registrationprofile.html";
-                } else {
-                    // Если нет — перекидываем на страницу с просьбой проверить почту
-                    // Передаем почту через URL, чтобы на той странице её показать
-                    window.location.href = `accountaccept.html?email=${encodeURIComponent(email)}`;
-                }
+                // Если зашли — кидаем на проверку почты
+                window.location.href = `accountaccept.html?email=${encodeURIComponent(email)}`;
             } catch (error) {
-                alert("Ошибка входа: проверь почту или сначала зарегистрируйся!");
+                console.error(error);
+                alert("Ошибка! Либо почта не та, либо ты еще не в базе. Проверь регистрацию!");
             }
         };
     </script>
