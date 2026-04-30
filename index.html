@@ -21,7 +21,7 @@
             font-family: tahoma, arial, verdana, sans-serif, 'Lucida Sans';
             margin: 0;
             display: flex;
-            justify-content: center; /* Центрируем контент как в ВК */
+            justify-content: center;
         }
 
         header {
@@ -50,7 +50,6 @@
             gap: 20px;
         }
 
-        /* Меню в стиле OpenVK/ВК */
         nav {
             width: 160px;
             flex-shrink: 0;
@@ -85,7 +84,6 @@
             margin: 10px 0;
         }
 
-        /* Контентная часть */
         main {
             flex-grow: 1;
             background: var(--card-bg);
@@ -110,17 +108,16 @@
         <div class="header-content">
             <img src="WhiteLogoVKTR.png" alt="VKTR" height="25">
             <span>7789 🫧</span>
-        
-    </script>
-</body>
         </div>
     </header>
 
     <div class="container">
-        <!-- Левое меню (OpenVK Style) -->
         <nav>
             <ul>
-                <li><a href="#" onclick="goToProfile()">Моя Страница</a> <span onclick="renderEditProfile()" style="color:#555; font-size:10px; cursor:pointer; margin-left:5px;">ред.</span></li>
+                <li>
+                    <a href="#" onclick="goToProfile()">Моя Страница</a> 
+                    <span onclick="renderEditProfile()" style="color:#555; font-size:10px; cursor:pointer; margin-left:5px;">ред.</span>
+                </li>
                 <li><a href="#">Все услуги</a></li>
                 <li><a href="#">Профиль</a></li>
                 <li><a href="#">Форум</a></li>
@@ -128,106 +125,79 @@
                 <li><a href="#">Настройки</a></li>
                 <div class="nav-divider"></div>
                 <li><a href="/services">Дать идею</a></li>
-                <li><a href="https://send.monobank.ua/jar/3Hxuvji3pq" id="id-link">Поддержка проекта</a></li>
+                <li><a href="https://send.monobank.ua/jar/3Hxuvji3pq">Поддержка проекта</a></li>
                 <div class="nav-divider"></div>
                 <li><a href="https://t.me/vktrproducs" target="_blank">Канал команды vktr</a></li>
             </ul>
         </nav>
 
-        <!-- Основная панель -->
         <main id="app-content">
             <div class="vktr-card">
                 <h2 style="font-size: 16px; border-bottom: 1px solid #e60000; padding-bottom: 5px;">Услуги Портала</h2>
                 <p>Добро пожаловать в кабинет управления услугами.</p>
-                <button class="red-link" onclick="buyMeowl()">[ Активировать Meowl Premium ]</button>
+                <button class="red-link" onclick="alert('Meowl Premium скоро будет!')">[ Активировать Meowl Premium ]</button>
             </div>
         </main>
     </div>
 
-    <script type="module">
-        // Твой Firebase и Логика
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        
-        // Тут твой конфиг... (сохранен)
-
-        // Система ID-профилей
+    <!-- ВСЕ СКРИПТЫ В ОДНОМ МЕСТЕ -->
+    <script>
+        // 1. Система навигации
         window.goToProfile = () => {
-            const userID = "vktr_user_1"; // Здесь будет подтягиваться реальный ID из Firebase
-            // Для работы на статике имитируем переход через URL
+            const userID = "vktr_user_1";
             window.history.pushState({}, '', `/profile/${userID}`);
             renderProfile(userID);
         };
 
-        function renderProfile(id) {
-    document.getElementById('app-content').innerHTML = `
-        <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
-        <div style="background: #222; padding: 20px; border-radius: 8px; display: flex; gap: 20px;">
-            
-            <!-- Аватарка -->
-            <div style="text-align: center;">
-                <div onclick="document.getElementById('vktr-ava-input').click()" style="cursor:pointer;">
-                    <img src="default-avatar.png" id="vktr-ava-img" style="width: 100px; height: 100px; border-radius: 0%; object-fit: cover; border: 2px solid #444;">
-                    <p style="font-size: 10px; color: #888; margin-top: 5px;">Сменить фото</p>
+        // 2. Отрисовка профиля
+        window.renderProfile = function(id) {
+            document.getElementById('app-content').innerHTML = `
+                <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
+                <div style="background: #222; padding: 20px; border-radius: 8px; display: flex; gap: 20px;">
+                    <div style="text-align: center;">
+                        <img src="default-avatar.png" style="width: 100px; height: 100px; border: 2px solid #444;">
+                        <p style="font-size: 10px; color: #888; margin-top: 5px; cursor:pointer;">Сменить фото</p>
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <p>ID в системе vktr: <strong>${id}</strong></p>
+                        <p style="color:#aaa;">На портале услуг</p>
+                        <button style="background: #333; color: white; border: 1px solid #555; padding: 5px 10px; cursor: pointer; border-radius: 4px;">🎵 Музыка</button>
+                    </div>
                 </div>
-                <input type="file" id="vktr-ava-input" hidden accept="image/*" onchange="window.vktrUpdateAva(event)">
-            </div>
+            `;
+        };
 
-            <!-- Инфо и Музыка -->
-            <div style="flex-grow: 1;">
-                <p>ID в системе vktr: <strong>${id}</strong></p>
-                <input type="text" id="vktr-status-text" placeholder="На портале услуг" 
-                       style="background: transparent; border: none; border-bottom: 1px solid #444; color: white; width: 100%; padding: 5px 0; outline: none;">
-                
-                <div style="margin-top: 15px;">
-                    <button onclick="document.getElementById('vktr-mus-input').click()" style="background: #333; color: white; border: 1px solid #555; padding: 5px 10px; cursor: pointer; border-radius: 4px;">🎵 Музыка</button>
-                    <input type="file" id="vktr-mus-input" hidden accept="audio/*" onchange="window.vktrUpdateMusic(event)">
-                    <audio id="vktr-audio" controls style="display:none; width: 100%; margin-top: 10px; height: 30px;"></audio>
+        // 3. ФУНКЦИЯ РЕДАКТИРОВАНИЯ (Та самая!)
+        window.renderEditProfile = function() {
+            const content = document.getElementById('app-content');
+            content.innerHTML = `
+                <h2 style="font-size: 16px; margin-bottom: 15px;">Настройки vktrID</h2>
+                <div style="background: #181818; padding: 25px; border-radius: 12px; border: 1px solid #333;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display:block; color: #888; font-size: 11px; margin-bottom: 5px;">МЕСТОИМЕНИЯ:</label>
+                        <input type="text" id="p-pronouns" style="background:#222; border:1px solid #444; color:white; width:100%; padding:8px; border-radius:4px;" placeholder="он/его">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="saveChanges()" style="background: #e63946; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Сохранить</button>
+                        <button onclick="renderProfile('vktr_user_1')" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Назад</button>
+                    </div>
                 </div>
-            </div>
+            `;
+        };
 
-        </div>
-    `;
-}
+        // 4. Сохранение
+        window.saveChanges = function() {
+            alert("Настройки применены!");
+            renderProfile('vktr_user_1');
+        };
 
-        // Следим за кнопками "Назад/Вперед" в браузере
+        // 5. Обработка кнопки "Назад"
         window.onpopstate = () => {
             const path = window.location.pathname;
             if(path.includes('/profile/')) {
-                const id = path.split('/').pop();
-                renderProfile(id);
+                renderProfile(path.split('/').pop());
             }
         };
     </script>
 </body>
-    // ... здесь заканчивается твой window.onpopstate (строка 198)
-    }; 
-
-    // ВСТАВЛЯЙ СЮДА (строка 199)
-    window.renderEditProfile = function() {
-        console.log("Кнопка 'ред.' нажата!"); // Это для проверки в консоли (F12)
-        const content = document.getElementById('app-content');
-        if (!content) return;
-
-        content.innerHTML = `
-            <h2 style="font-size: 16px; margin-bottom: 15px;">Настройки vktrID</h2>
-            <div style="background: #181818; padding: 25px; border-radius: 12px; border: 1px solid #333;">
-                <div style="margin-bottom: 15px;">
-                    <label style="display:block; color: #888; font-size: 11px; margin-bottom: 5px;">МЕСТОИМЕНИЯ:</label>
-                    <input type="text" id="p-pronouns" style="background:#222; border:1px solid #444; color:white; width:100%; padding:8px; border-radius:4px;" placeholder="он/его">
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="saveChanges()" style="background: #e63946; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Сохранить</button>
-                    <button onclick="renderProfile('vktr_user_1')" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Назад</button>
-                </div>
-            </div>
-        `;
-    };
-
-    window.saveChanges = function() {
-        alert("Настройки применены!");
-        renderProfile('vktr_user_1');
-    };
-
-</script> <!-- Это строка 200 на твоем скрине -->
-</script>
 </html>
