@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- Подключаем капчу сразу -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="34b354cb-ddee-4606-9ced-40c330f1fc33" data-blockingmode="auto" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Портал услуг</title>
@@ -11,149 +11,205 @@
     <style>
         :root {
             --bg-color: #0a0a0a;
+            --sidebar-text: #d1d1d1;
             --accent-red: #e60000;
             --card-bg: #161616;
+            --box-bg: #181818;
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: white;
-            font-family: tahoma, arial, sans-serif;
-            margin: 0;
-            display: flex;
+        /* --- СТИЛИ МОДАЛЬНОГО ОКНА (BOX) --- */
+        .vktr-box-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none; /* Скрыто по умолчанию */
             justify-content: center;
+            align-items: center;
+            z-index: 3000;
         }
 
-        /* Контейнер аватара */
+        .vktr-box {
+            background: var(--box-bg);
+            width: 400px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .vktr-box-header {
+            padding: 10px 15px;
+            background: #222;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vktr-box-body { padding: 20px; }
+
+        .vktr-box-close { cursor: pointer; color: #888; font-size: 20px; }
+        .vktr-box-close:hover { color: white; }
+
+        /* --- МАГИЯ АВАТАРКИ --- */
         .vktr-avatar-wrapper {
             position: relative;
-            width: 120px;
-            height: 120px;
-            border: 2px solid #333;
-            background: #111;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #444;
             overflow: hidden;
             cursor: pointer;
             margin: 0 auto;
         }
 
-        #main-ava {
-            width: 100%; /* По умолчанию 100% */
+        .vktr-avatar-wrapper img#main-ava {
+            width: 100%; /* Управляется скриптом */
             height: auto;
             display: block;
             margin: 0 auto;
         }
 
-        /* Плашка загрузки (твоё изображение) */
         .vktr-upload-btn {
             position: absolute;
-            bottom: -50px;
+            bottom: -45px;
             left: 0;
             width: 100%;
             height: 40px;
+            background: rgba(0, 0, 0, 0.7);
             transition: bottom 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.6);
         }
 
         .vktr-avatar-wrapper:hover .vktr-upload-btn {
-            bottom: 0;
+            bottom: 0 !important;
         }
 
-        /* Стили для основного контента */
-        header { position: fixed; top: 0; width: 100%; height: 45px; background: #222; border-bottom: 1px solid #444; z-index: 2000; display: flex; justify-content: center; }
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        body { background-color: var(--bg-color); color: white; font-family: tahoma, arial; margin: 0; display: flex; justify-content: center; }
+        header { position: fixed; top: 0; width: 100%; height: 45px; background: #222; border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 2000; }
+        .header-content { width: 800px; display: flex; align-items: center; justify-content: space-between; }
         .container { width: 800px; margin-top: 65px; display: flex; gap: 20px; }
+        nav { width: 160px; flex-shrink: 0; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { padding: 4px 6px; font-size: 13px; }
+        nav a { color: var(--sidebar-text); text-decoration: none; }
+        .nav-divider { height: 1px; background: #333; margin: 10px 0; }
         main { flex-grow: 1; background: var(--card-bg); border-radius: 4px; border: 1px solid #333; padding: 15px; min-height: 500px; }
-        
-        /* Кнопки и инпуты */
-        .vktr-input { background: #222; border: 1px solid #444; color: white; padding: 8px; border-radius: 4px; width: 100%; margin-top: 5px; }
-        .vktr-btn-red { background: var(--accent-red); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .vktr-btn { background: #e63946; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
+    <!-- МОДАЛЬНОЕ ОКНО (BOX) -->
+    <div id="box-overlay" class="vktr-box-overlay">
+        <div class="vktr-box">
+            <div class="vktr-box-header">
+                <span style="font-size: 13px; font-weight: bold;">Загрузка новой фотографии</span>
+                <span class="vktr-box-close" onclick="closeBox()">&times;</span>
+            </div>
+            <div class="vktr-box-body">
+                <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Выберите файл и настройте ширину отображения.</p>
+                
+                <input type="file" id="file-input" style="display: none;" accept="image/*">
+                <button class="vktr-btn" onclick="document.getElementById('file-input').click()" style="width: 100%; margin-bottom: 15px;">
+                    Выбрать изображение
+                </button>
+
+                <label style="font-size: 11px; color: #888;">ШИРИНА АВАТАРКИ:</label>
+                <input type="range" id="width-range" min="50" max="150" value="100" style="width: 100%; accent-color: red;" oninput="previewWidth(this.value)">
+                <div id="width-label" style="text-align: center; font-size: 12px; margin-top: 5px;">100%</div>
+
+                <button class="vktr-btn" style="width: 100%; margin-top: 20px; background: #333;" onclick="closeBox()">Готово</button>
+            </div>
+        </div>
+    </div>
+
     <header>
-        <div style="width: 800px; display: flex; align-items: center;"><img src="WhiteLogoVKTR.png" height="25"></div>
+        <div class="header-content">
+            <img src="WhiteLogoVKTR.png" alt="VKTR" height="25">
+            <span>7789 🫧</span>
+        </div>
     </header>
 
     <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" onclick="goToProfile()">Моя Страница</a> <span onclick="renderEditProfile()" style="color:#555; font-size:10px; cursor:pointer;">ред.</span></li>
+                <li><a href="#">Все услуги</a></li>
+                <div class="nav-divider"></div>
+                <li><a href="https://t.me/vktrproducs" target="_blank">Канал команды vktr</a></li>
+            </ul>
+        </nav>
+
         <main id="app-content">
-            <!-- Тут появится контент -->
+            <div class="vktr-card">
+                <h2 style="font-size: 16px; border-bottom: 1px solid #e60000; padding-bottom: 5px;">Добро пожаловать</h2>
+                <p>Нажмите "Моя Страница", чтобы увидеть профиль.</p>
+            </div>
         </main>
     </div>
 
-    <!-- Скрытый инпут для выбора файла -->
-    <input type="file" id="avatar-input" style="display: none;" accept="image/*">
-
     <script>
-        // Глобальная переменная для ширины (чтобы настраивать)
-        let currentAvaWidth = 100;
+        let currentWidth = 100;
+
+        window.goToProfile = () => renderProfile("vktr_user_1");
 
         window.renderProfile = function(id) {
             document.getElementById('app-content').innerHTML = `
-                <h2 style="font-size: 16px;">Профиль: ${id}</h2>
+                <h2 style="font-size: 16px;">Профиль пользователя: ${id}</h2>
                 <div style="background: #222; padding: 20px; border-radius: 8px; display: flex; gap: 20px;">
                     <div style="text-align: center;">
-                        
-                        <div class="vktr-avatar-wrapper" onclick="document.getElementById('avatar-input').click()">
-                            <img src="default-avatar.png" id="main-ava" style="width: ${currentAvaWidth}%;">
+                        <div class="vktr-avatar-wrapper" onclick="openBox()">
+                            <img src="default-avatar.png" id="main-ava" style="width: ${currentWidth}%">
                             <div class="vktr-upload-btn">
-                                <img src="captcha-icon.png" style="width: 20px; margin-right: 5px;"> <!-- Для теста иконка -->
-                                <span style="font-size: 10px;">ЗАГРУЗИТЬ</span>
+                                <img src="setnewavatar.png" style="width: 80%;">
                             </div>
                         </div>
-
+                        <p style="font-size: 10px; color: #888; margin-top: 5px;">vktrID</p>
                     </div>
-                    <div style="flex-grow: 1;">
-                        <p>Настройки ширины: <b id="width-val">${currentAvaWidth}%</b></p>
-                        <input type="range" min="10" max="200" value="${currentAvaWidth}" 
-                               oninput="updateAvaWidth(this.value)" style="width: 100%; accent-color: red;">
-                        
-                        <div style="margin-top: 20px;">
-                            <button class="vktr-btn-red" onclick="renderEditProfile()">Настройки vktrID</button>
-                        </div>
+                    <div>
+                        <p>ID: <strong>${id}</strong></p>
+                        <button style="background:#333; color:white; border:1px solid #444; padding:5px 10px; cursor:pointer;">🎵 Музыка</button>
                     </div>
                 </div>
             `;
         };
 
-        // Логика изменения ширины
-        window.updateAvaWidth = (val) => {
-            currentAvaWidth = val;
-            const img = document.getElementById('main-ava');
-            if(img) img.style.width = val + '%';
-            document.getElementById('width-val').innerText = val + '%';
-        };
+        // ЛОГИКА BOX (ОКОШКА)
+        function openBox() { document.getElementById('box-overlay').style.display = 'flex'; }
+        function closeBox() { document.getElementById('box-overlay').style.display = 'none'; }
 
-        // Логика загрузки файла
-        document.getElementById('avatar-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    document.getElementById('main-ava').src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+        function previewWidth(val) {
+            currentWidth = val;
+            document.getElementById('width-label').innerText = val + '%';
+            if(document.getElementById('main-ava')) {
+                document.getElementById('main-ava').style.width = val + '%';
             }
+        }
+
+        // Загрузка файла
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('main-ava').src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
         });
 
         window.renderEditProfile = function() {
             document.getElementById('app-content').innerHTML = `
                 <h2>Настройки vktrID</h2>
-                <div style="background: #181818; padding: 20px; border-radius: 8px; border: 1px solid #333;">
-                    <label style="color: #888; font-size: 11px;">БЕЗОПАСНОСТЬ:</label>
-                    <div style="margin: 15px 0;">
-                        <div class="g-recaptcha" data-sitekey="YOUR_KEY" data-theme="dark"></div>
-                    </div>
-                    <button class="vktr-btn-red" onclick="renderProfile('vktr_user_1')">Сохранить и выйти</button>
+                <div style="background: #181818; padding: 25px; border-radius: 12px; border: 1px solid #333;">
+                    <label style="color: #888; font-size: 11px;">МЕСТОИМЕНИЯ:</label>
+                    <input type="text" style="background:#222; border:1px solid #444; color:white; width:100%; padding:8px; margin-bottom:15px;">
+                    <div class="g-recaptcha" data-sitekey="KEY" data-theme="dark"></div>
+                    <button class="vktr-btn" onclick="renderProfile('vktr_user_1')" style="margin-top:15px;">Сохранить</button>
                 </div>
             `;
             if (window.grecaptcha) grecaptcha.render();
         };
-
-        // Запуск
-        renderProfile('vktr_user_1');
     </script>
 </body>
 </html>
