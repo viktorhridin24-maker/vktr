@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение аккаунта | VKTR</title>
+    <!-- Подключаем те же стили, что в index.html -->
+    <link rel="stylesheet" href="style.css"> 
+    <style>
+        .container { text-align: center; margin-top: 50px; }
+        .status-box { background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Почти готово!</h1>
+        <div class="status-box">
+            <p>Письмо от <strong>vktr</strong> уже в пути.</p>
+            <p>Нажми на ссылку в письме, чтобы подтвердить, что ты не бот.</p>
+            <div id="loader">Ожидание подтверждения...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU", // Твой ключ
+            authDomain: "vktrserver.firebaseapp.com",
+            projectId: "vktrserver"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Скрипт проверки: как только юзер нажмет на ссылку в почте
+        // и вернется, мы это заметим и перекинем его дальше
+        setInterval(() => {
+            if (auth.currentUser) {
+                auth.currentUser.reload().then(() => {
+                    if (auth.currentUser.emailVerified) {
+                        window.location.href = "registrationprofile.html";
+                    }
+                });
+            }
+        }, 3000); // Проверяем каждые 3 секунды
+    </script>
+</body>
+</html>
