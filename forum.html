@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>vktr — идеи</title>
     <style>
         body { background: #f0f0f0; color: #000; font-family: sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
@@ -66,4 +65,25 @@
     </script>
 
 </body>
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+  authDomain: "vktrserver.firebaseapp.com",
+  projectId: "vktrserver",
+  storageBucket: "vktrserver.firebasestorage.app",
+  messagingSenderId: "305612049380",
+  appId: "1:305612049380:web:baa13df62e123adc5195f1",
+  measurementId: "G-Y6W7430K9V"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 </html>
