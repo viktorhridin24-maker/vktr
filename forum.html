@@ -17,30 +17,25 @@
         .logo-img { height: 30px; cursor: pointer; }
 
         .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
-        
-        /* Навигация */
         nav { width: 180px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { padding: 7px 10px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; }
         nav li:hover { background: #222; color: #fff; }
 
-        /* Контент форума */
-        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 4px; }
+        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 4px; min-height: 500px; }
         
         .forum-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
-        .btn-create { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .btn-create { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
 
-        /* Стили списка тем */
         .topic-item { 
             background: #1d1d1d; border: 1px solid #333; padding: 15px; 
             border-radius: 4px; margin-bottom: 10px; display: flex; 
             justify-content: space-between; align-items: center;
-            transition: 0.2s; cursor: pointer;
+            transition: 0.2s;
         }
-        .topic-item:hover { border-color: var(--accent); background: #222; }
+        .topic-item:hover { border-color: var(--accent); }
         .topic-info h4 { margin: 0 0 5px 0; color: #fff; }
         .topic-info span { font-size: 11px; color: #777; }
-        .topic-meta { text-align: right; font-size: 12px; color: #aaa; }
 
         .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
     </style>
@@ -49,10 +44,8 @@
 
 <header>
     <div class="h-content">
-        <div class="h-left">
-            <img src="logo_vktr.png" alt="VKTR" class="logo-img" onclick="location.href='index.html'">
-        </div>
-        <div class="h-right" style="font-size: 14px; opacity: 0.8;">VKTR Forum v1.0</div>
+        <img src="logo_vktr.png" alt="VKTR" class="logo-img" onclick="location.href='index.html'">
+        <div style="font-size: 14px; opacity: 0.8;">Cloud Forum v1.1</div>
     </div>
 </header>
 
@@ -61,68 +54,81 @@
         <ul>
             <li onclick="location.href='index.html'">На главную</li>
             <li style="color: var(--accent); font-weight: bold;">Все разделы</li>
-            <li>Мои темы</li>
-            <li>Закладки</li>
             <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
         </ul>
     </nav>
 
-    <main id="forum-main">
+    <main>
         <div class="forum-header">
             <h2 style="margin:0;">Обсуждения</h2>
-            <button class="btn-create" onclick="createNewTopic()">+ Создать тему</button>
+            <button class="btn-create" id="add-topic-btn">+ Создать тему</button>
         </div>
-
-        <div id="topics-list">
-            <!-- Пример темы -->
-            <div class="topic-item">
-                <div class="topic-info">
-                    <h4>Добро пожаловать на обновленный VKTR Forum!</h4>
-                    <span>Автор: <b>SYSTEM</b> • 20 мин. назад</span>
-                </div>
-                <div class="topic-meta">
-                    <div>💬 12</div>
-                    <div>👁️ 45</div>
-                </div>
-            </div>
-
-            <div class="topic-item">
-                <div class="topic-info">
-                    <h4>Как вам новый дизайн портала?</h4>
-                    <span>Автор: <b>Миша</b> • 1 час назад</span>
-                </div>
-                <div class="topic-meta">
-                    <div>💬 5</div>
-                    <div>👁️ 112</div>
-                </div>
-            </div>
-        </div>
+        <div id="topics-list">Загрузка тем...</div>
     </main>
 </div>
 
-<img src="hamster.png" class="hamster-helper" alt="helper">
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-<script>
-    function createNewTopic() {
-        const title = prompt("Введите название новой темы:");
-        if (title) {
-            const list = document.getElementById('topics-list');
-            const newTopic = document.createElement('div');
-            newTopic.className = 'topic-item';
-            newTopic.innerHTML = `
-                <div class="topic-info">
-                    <h4>${title}</h4>
-                    <span>Автор: <b>Виктор</b> • только что</span>
-                </div>
-                <div class="topic-meta">
-                    <div>💬 0</div>
-                    <div>👁️ 1</div>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser = "Аноним";
+
+    // Проверка авторизации
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user.email.split('@')[0];
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // Загрузка тем в реальном времени
+    const q = query(collection(db, "forum_topics"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const list = document.getElementById('topics-list');
+        list.innerHTML = '';
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const date = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : 'Только что';
+            
+            list.innerHTML += `
+                <div class="topic-item">
+                    <div class="topic-info">
+                        <h4>${data.title}</h4>
+                        <span>Автор: <b>${data.author}</b> • ${date}</span>
+                    </div>
                 </div>
             `;
-            list.prepend(newTopic);
-            alert("Тема создана! (Пока сохраняется только локально)");
+        });
+    });
+
+    // Создание новой темы
+    document.getElementById('add-topic-btn').onclick = async () => {
+        const title = prompt("О чем хочешь завести тему?");
+        if (title) {
+            try {
+                await addDoc(collection(db, "forum_topics"), {
+                    title: title,
+                    author: currentUser,
+                    createdAt: serverTimestamp()
+                });
+            } catch (e) {
+                alert("Ошибка при создании: " + e);
+            }
         }
-    }
+    };
 </script>
 
 </body>
