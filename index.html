@@ -122,7 +122,7 @@
         const isBot = (email === 'vitungg15@gmail.com');
         const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
 
-        const name = isBot ? "SYSTEM" : (email.split('@')[0]);
+       const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
         // Для бота ставим его аватарку, для остальных default-avatar_2.png
         const avatar = isBot ? 'avatar-system .png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
         const verifyBadge = isBot ? '<span style="color:#007bff; margin-left:5px">☑️</span>' : '';
