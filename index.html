@@ -125,7 +125,7 @@
        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
         // Для бота ставим его аватарку, для остальных default-avatar_2.png
         const avatar = isBot ? 'avatar-system .png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
-        const verifyBadge = isBot ? '<span style="color:#007bff; margin-left:5px">☑️</span>' : '';
+       const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;" title="Подтвержденный аккаунт VKTR">` : '';
 
         // Только одна плашка выбора файла
         const overlay = isBot ? '' : `
