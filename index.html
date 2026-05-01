@@ -142,7 +142,12 @@
                 </div>
                 <div>
                     <h2 style="margin:0">${name}${verifyBadge}</h2>
-                    <div class="status-bubble">💬 ${isBot ? 'Система запущена' : 'В сети'}</div>
+                    <div class="status-bubble" id="user-status" onclick="editStatus()" style="cursor:pointer;">
+    💬 ${localStorage.getItem('vktr_status_text') || (isBot ? 'Система запущена' : 'В сети')}
+</div>
+<div id="music-player-zone">
+    ${localStorage.getItem('vktr_status_music') ? `<audio controls src="${localStorage.getItem('vktr_status_music')}" style="height:30px; margin-top:5px;"></audio>` : ''}
+</div>
                 </div>
             </div>
         `;
@@ -234,6 +239,31 @@ function saveSettings() {
 
     alert("Настройки сохранены, Виктор!");
     showProfile(); // Возвращаемся в профиль
+}
+    function editStatus() {
+    const newText = prompt("О чем думаешь, Виктор?", localStorage.getItem('vktr_status_text') || "");
+    if (newText !== null) {
+        localStorage.setItem('vktr_status_text', newText);
+        
+        // Спрашиваем, хочет ли он добавить музыку (ссылку или файл)
+        if(confirm("Хочешь прикрепить музыку к статусу?")) {
+            const musicInput = document.createElement('input');
+            musicInput.type = 'file';
+            musicInput.accept = 'audio/*';
+            musicInput.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = event => {
+                    localStorage.setItem('vktr_status_music', event.target.result);
+                    showProfile(); // Обновляем профиль
+                };
+                reader.readAsDataURL(file);
+            };
+            musicInput.click();
+        } else {
+            showProfile();
+        }
+    }
 }
 </script>
 
