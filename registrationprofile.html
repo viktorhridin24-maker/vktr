@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VKTR | Настройка профиля</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Видео из твоего промо на фон */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(30%);
+            object-fit: cover;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.85);
+            border-bottom: 2px solid #ff0000;
+        }
+
+        .logo { 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            color: #ff0000; 
+            text-transform: uppercase; 
+            letter-spacing: 3px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-container {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff0000;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ff0000;
+        }
+
+        .btn-save {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 0 #8b0000;
+        }
+
+        .btn-save:hover {
+            background: #ff4d4d;
+            transform: translateY(-2px);
+        }
+
+        /* Твой хомяк-помощник */
+        .hamster-helper {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 80px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
+    </video>
+
+    <header>
+        <div class="logo">vktr profile</div>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <h2>Настройка аккаунта</h2>
+            
+            <div class="input-group">
+                <label>НИКНЕЙМ</label>
+                <input type="text" placeholder="Введите ваш ник">
+            </div>
+
+            <div class="input-group">
+                <label>СТАТУС</label>
+                <input type="text" placeholder="Что у вас на уме?">
+            </div>
+
+            <button class="btn-save" onclick="alert('Данные VKTR сохранены!')">ОБНОВИТЬ ПРОФИЛЬ</button>
+        </div>
+    </main>
+
+    <!-- Тот самый хомяк из image_7434df.png -->
+    <img src="hamster.png" class="hamster-helper" alt="helper">
+
+</body>
+</html>
