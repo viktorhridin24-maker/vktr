@@ -83,10 +83,11 @@
             <li>Новости</li>
             <li>Мессенджер</li>
             <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
+            <li onclick="showSettings()">Настройки</li>
         </ul>
     </nav>
     <main id="content">
-        <h3>Загрузка портала...</h3>
+        <h3>Загрузка страницы</h3>
     </main>
 </div>
 
@@ -169,6 +170,71 @@
             reader.readAsDataURL(file);
         }
     };
+    function showSettings() {
+    const savedName = localStorage.getItem('vktr_name') || (window.currentUserEmail.split('@')[0]);
+    const savedPronouns = localStorage.getItem('vktr_pronouns') || "не указано";
+    const savedTimezone = localStorage.getItem('vktr_timezone') || "UTC+3 (Москва/Киев)";
+
+    document.getElementById('content').innerHTML = `
+        <h2 style="margin-top:0">Настройки профиля</h2>
+        <div style="display:flex; flex-direction:column; gap:15px; max-width:400px;">
+            
+            <label>Имя профиля:
+                <input type="text" id="set-name" value="${savedName}" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
+            </label>
+
+            <label>Местоимение:
+                <select id="set-pronouns" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
+                    <option value="он/его" ${savedPronouns === 'он/его' ? 'selected' : ''}>он/его</option>
+                    <option value="она/её" ${savedPronouns === 'она/её' ? 'selected' : ''}>она/её</option>
+                    <option value="они/их" ${savedPronouns === 'они/их' ? 'selected' : ''}>они/их</option>
+                </select>
+            </label>
+
+            <label>Часовой пояс:
+                <input type="text" id="set-tz" value="${savedTimezone}" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
+            </label>
+
+            <label>Дизайн сайта:
+                <select id="set-theme" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
+                    <option value="dark">VKTR Dark (Стандарт)</option>
+                    <option value="amoled">Deep Black (AMOLED)</option>
+                    <option value="red">System Red</option>
+                </select>
+            </label>
+
+            <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
+            
+            <button onclick="alert('Функция Firebase смены пароля в разработке')" style="padding:8px; background:#333; border:1px solid #555; color:white; cursor:pointer;">
+                Изменить пароль
+            </button>
+
+            <button onclick="saveSettings()" style="padding:10px; background:var(--accent); border:none; color:white; cursor:pointer; font-weight:bold; margin-top:10px;">
+                СОХРАНИТЬ ИЗМЕНЕНИЯ
+            </button>
+        </div>
+    `;
+}
+
+function saveSettings() {
+    const newName = document.getElementById('set-name').value;
+    const newPronouns = document.getElementById('set-pronouns').value;
+    const newTZ = document.getElementById('set-tz').value;
+    const newTheme = document.getElementById('set-theme').value;
+
+    localStorage.setItem('vktr_name', newName);
+    localStorage.setItem('vktr_pronouns', newPronouns);
+    localStorage.setItem('vktr_timezone', newTZ);
+    localStorage.setItem('vktr_theme', newTheme);
+
+    // Применяем тему мгновенно
+    if(newTheme === 'amoled') document.documentElement.style.setProperty('--bg', '#000');
+    else if(newTheme === 'red') document.documentElement.style.setProperty('--accent', '#ff4d4d');
+    else document.documentElement.style.setProperty('--bg', '#0a0a0a');
+
+    alert("Настройки сохранены, Виктор!");
+    showProfile(); // Возвращаемся в профиль
+}
 </script>
 
 </body>
