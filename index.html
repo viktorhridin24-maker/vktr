@@ -7,7 +7,6 @@
         :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
         body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
         
-        /* Обновленный Хедер */
         header { 
             position: fixed; top: 0; width: 100%; height: 48px; 
             background: var(--header-bg); border-bottom: 1px solid #444; 
@@ -16,8 +15,6 @@
         .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
         .h-left { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 30px; cursor: pointer; }
-        
-        /* Правая часть хедера: Сообщение и Профиль */
         .h-right { display: flex; align-items: center; gap: 20px; }
         .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; font-size: 14px; color: #fff; text-decoration: none; }
         .h-icon:hover { opacity: 1; }
@@ -30,26 +27,44 @@
 
         main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 400px; }
 
-        /* Аватарка с одной плашкой */
         .vktr-avatar-wrapper { 
             position: relative; width: 150px; height: 150px; 
             background: #222; overflow: hidden; border: 1px solid #444; 
             cursor: pointer; border-radius: 4px;
         }
         #main-ava { width: 100%; height: 100%; object-fit: cover; }
-        
         .upload-overlay {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
             background: rgba(0,0,0,0.7); display: flex; align-items: center; 
             justify-content: center; opacity: 0; transition: 0.3s;
         }
         .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
-        .upload-overlay img { width: 100%; height: auto; }
-
         .status-bubble { 
             display: inline-block; background: #2a2a2a; padding: 8px 15px; 
             border-radius: 15px; font-size: 13px; border: 1px solid #444; margin-top: 10px;
         }
+
+        /* ТЕ САМЫЕ СТИЛИ, КОТОРЫЕ ВЫЛЕЗАЛИ ТЕКСТОМ */
+        .vktr-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: flex; align-items: center; 
+            justify-content: center; z-index: 2000;
+        }
+        .vktr-modal-content {
+            background: #1a1a1a; padding: 25px; border-radius: 12px; 
+            border: 1px solid #444; width: 340px; text-align: center;
+        }
+        .vktr-modal-content input[type="text"] {
+            width: 100%; padding: 12px; background: #000; border: 1px solid #333; 
+            color: white; border-radius: 6px; margin: 15px 0; box-sizing: border-box;
+        }
+        .file-upload-zone {
+            padding: 20px; border: 2px dashed #444; border-radius: 8px; 
+            cursor: pointer; margin-bottom: 20px;
+        }
+        .file-upload-zone:hover { border-color: var(--accent); }
+        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-cancel { background: #333; color: #ccc; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-left: 10px; }
 
         .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
         #file-input { display: none; }
@@ -68,10 +83,9 @@
                 <a href="#" style="color: #aaa; text-decoration: none;">Блог</a>
             </div>
         </div>
-        <!-- Вместо почты теперь иконки -->
         <div class="h-right">
-            <div class="h-icon" title="Сообщения">✉️ Сообщения</div>
-            <div class="h-icon" onclick="showProfile()" title="Мой профиль">👤 Профиль</div>
+            <div class="h-icon">✉️ Сообщения</div>
+            <div class="h-icon" onclick="showProfile()">👤 Профиль</div>
         </div>
     </div>
 </header>
@@ -87,36 +101,27 @@
         </ul>
     </nav>
     <main id="content">
-        <h3>Загрузка страницы</h3>
+        <h3>Загрузка...</h3>
     </main>
 </div>
 
-<img src="hamster.png" class="hamster-helper" alt="helper">
+<!-- МОДАЛЬНОЕ ОКНО (ВНЕ СКРИПТОВ!) -->
+<div id="status-modal" class="vktr-modal" style="display:none;">
+    <div class="vktr-modal-content">
+        <h3>Установить статус</h3>
+        <input type="text" id="new-status-text" placeholder="О чем думаешь?" maxlength="50">
+        <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
+            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
+            <input type="file" id="music-upload" accept="audio/*" style="display:none;">
+        </div>
+        <div class="modal-buttons">
+            <button onclick="saveNewStatus()" class="btn-save">Поставить статус</button>
+            <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
+        </div>
+    </div>
+</div>
 
-    /* Стили для твоего нового Box-окошка */
-        .vktr-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: flex; align-items: center; 
-            justify-content: center; z-index: 2000;
-        }
-        .vktr-modal-content {
-            background: #1a1a1a; padding: 25px; border-radius: 12px; 
-            border: 1px solid #444; width: 340px; text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .vktr-modal-content h3 { margin-top: 0; font-size: 18px; color: var(--accent); }
-        .vktr-modal-content input[type="text"] {
-            width: 100%; padding: 12px; background: #000; border: 1px solid #333; 
-            color: white; border-radius: 6px; margin: 15px 0; box-sizing: border-box;
-        }
-        .file-upload-zone {
-            padding: 20px; border: 2px dashed #444; border-radius: 8px; 
-            cursor: pointer; margin-bottom: 20px; transition: 0.3s;
-        }
-        .file-upload-zone:hover { border-color: var(--accent); background: #222; }
-        .modal-buttons { display: flex; gap: 10px; justify-content: center; }
-        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-cancel { background: #333; color: #ccc; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+<img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -141,23 +146,15 @@
         }
     });
 
-    // Делаем функцию доступной глобально
     window.showProfile = function() {
         const email = window.currentUserEmail || "";
         const isBot = (email === 'vitungg15@gmail.com');
         const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
+        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
+        const avatar = isBot ? 'avatar-system.png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
+        const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;">` : '';
 
-       const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
-        // Для бота ставим его аватарку, для остальных default-avatar_2.png
-        const avatar = isBot ? 'avatar-system .png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
-       const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;" title="Подтвержденный аккаунт VKTR">` : '';
-
-        // Только одна плашка выбора файла
-        const overlay = isBot ? '' : `
-            <div class="upload-overlay" onclick="document.getElementById('file-input').click()">
-                <img src="setnewavatar_2.png">
-            </div>
-        `;
+        const overlay = isBot ? '' : `<div class="upload-overlay" onclick="document.getElementById('file-input').click()"><img src="setnewavatar_2.png"></div>`;
 
         document.getElementById('content').innerHTML = `
             <div style="display:flex; gap:25px">
@@ -168,11 +165,11 @@
                 <div>
                     <h2 style="margin:0">${name}${verifyBadge}</h2>
                     <div class="status-bubble" id="user-status" onclick="editStatus()" style="cursor:pointer;">
-    💬 ${localStorage.getItem('vktr_status_text') || (isBot ? 'Система запущена' : 'В сети')}
-</div>
-<div id="music-player-zone">
-    ${localStorage.getItem('vktr_status_music') ? `<audio controls src="${localStorage.getItem('vktr_status_music')}" style="height:30px; margin-top:5px;"></audio>` : ''}
-</div>
+                        💬 ${localStorage.getItem('vktr_status_text') || (isBot ? 'Система запущена' : 'В сети')}
+                    </div>
+                    <div id="music-player-zone">
+                        ${localStorage.getItem('vktr_status_music') ? `<audio controls src="${localStorage.getItem('vktr_status_music')}" style="height:30px; margin-top:5px;"></audio>` : ''}
+                    </div>
                 </div>
             </div>
         `;
@@ -188,125 +185,44 @@
 </script>
 
 <script>
-    // Обработка загрузки файла
+    // ФУНКЦИИ МОДАЛКИ
+    window.editStatus = function() {
+        document.getElementById('status-modal').style.display = 'flex';
+    };
+    window.closeStatusModal = function() {
+        document.getElementById('status-modal').style.display = 'none';
+    };
+    window.saveNewStatus = function() {
+        const text = document.getElementById('new-status-text').value;
+        const fileInput = document.getElementById('music-upload');
+        localStorage.setItem('vktr_status_text', text);
+        if (fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                localStorage.setItem('vktr_status_music', e.target.result);
+                closeStatusModal(); showProfile();
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            closeStatusModal(); showProfile();
+        }
+    };
+
     document.getElementById('file-input').onchange = function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = event => {
                 localStorage.setItem('vktr_avatar', event.target.result);
                 showProfile();
             };
             reader.readAsDataURL(file);
         }
     };
-    function showSettings() {
-    const savedName = localStorage.getItem('vktr_name') || (window.currentUserEmail.split('@')[0]);
-    const savedPronouns = localStorage.getItem('vktr_pronouns') || "не указано";
-    const savedTimezone = localStorage.getItem('vktr_timezone') || "UTC+3 (Москва/Киев)";
 
-    document.getElementById('content').innerHTML = `
-        <h2 style="margin-top:0">Настройки профиля</h2>
-        <div style="display:flex; flex-direction:column; gap:15px; max-width:400px;">
-            
-            <label>Имя профиля:
-                <input type="text" id="set-name" value="${savedName}" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
-            </label>
-
-            <label>Местоимение:
-                <select id="set-pronouns" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
-                    <option value="он/его" ${savedPronouns === 'он/его' ? 'selected' : ''}>он/его</option>
-                    <option value="она/её" ${savedPronouns === 'она/её' ? 'selected' : ''}>она/её</option>
-                    <option value="они/их" ${savedPronouns === 'они/их' ? 'selected' : ''}>они/их</option>
-                </select>
-            </label>
-
-            <label>Часовой пояс:
-                <input type="text" id="set-tz" value="${savedTimezone}" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
-            </label>
-
-            <label>Дизайн сайта:
-                <select id="set-theme" style="width:100%; padding:5px; background:#222; border:1px solid #444; color:white;">
-                    <option value="dark">VKTR Dark (Стандарт)</option>
-                    <option value="amoled">Deep Black (AMOLED)</option>
-                    <option value="red">System Red</option>
-                </select>
-            </label>
-
-            <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
-            
-            <button onclick="alert('Функция Firebase смены пароля в разработке')" style="padding:8px; background:#333; border:1px solid #555; color:white; cursor:pointer;">
-                Изменить пароль
-            </button>
-
-            <button onclick="saveSettings()" style="padding:10px; background:var(--accent); border:none; color:white; cursor:pointer; font-weight:bold; margin-top:10px;">
-                СОХРАНИТЬ ИЗМЕНЕНИЯ
-            </button>
-        </div>
-    `;
-}
-
-function saveSettings() {
-    const newName = document.getElementById('set-name').value;
-    const newPronouns = document.getElementById('set-pronouns').value;
-    const newTZ = document.getElementById('set-tz').value;
-    const newTheme = document.getElementById('set-theme').value;
-
-    localStorage.setItem('vktr_name', newName);
-    localStorage.setItem('vktr_pronouns', newPronouns);
-    localStorage.setItem('vktr_timezone', newTZ);
-    localStorage.setItem('vktr_theme', newTheme);
-
-    // Применяем тему мгновенно
-    if(newTheme === 'amoled') document.documentElement.style.setProperty('--bg', '#000');
-    else if(newTheme === 'red') document.documentElement.style.setProperty('--accent', '#ff4d4d');
-    else document.documentElement.style.setProperty('--bg', '#0a0a0a');
-
-    alert("Настройки сохранены, Виктор!");
-    showProfile(); // Возвращаемся в профиль
-}
-<script>
-    // Открыть модалку
-    window.editStatus = function() {
-        document.getElementById('status-modal').style.display = 'flex';
-        document.getElementById('new-status-text').value = localStorage.getItem('vktr_status_text') || "";
+    document.getElementById('music-upload').onchange = function(e) {
+        if(this.files[0]) document.getElementById('file-name-label').innerText = "✅ " + this.files[0].name;
     };
-
-    // Закрыть модалку
-    window.closeStatusModal = function() {
-        document.getElementById('status-modal').style.display = 'none';
-    };
-
-    // Сохранить статус и медиафайл
-    window.saveNewStatus = function() {
-        const text = document.getElementById('new-status-text').value;
-        const fileInput = document.getElementById('music-upload');
-
-        localStorage.setItem('vktr_status_text', text);
-
-        if (fileInput.files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                localStorage.setItem('vktr_status_music', e.target.result);
-                finishSaving();
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            finishSaving();
-        }
-    };
-
-    function finishSaving() {
-        closeStatusModal();
-        if(typeof showProfile === 'function') showProfile();
-    }
-
-    // Слушатель для изменения текста в плашке выбора файла
-    document.addEventListener('change', function(e) {
-        if(e.target.id === 'music-upload' && e.target.files[0]) {
-            document.getElementById('file-name-label').innerText = "✅ " + e.target.files[0].name;
-        }
-    });
 </script>
 
 </body>
