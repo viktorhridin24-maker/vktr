@@ -31,30 +31,32 @@
 <body>
 
 <script>
-    // --- СИСТЕМА ПРОВЕРКИ (AUTH SYSTEM) ---
-    async function checkAuth() {
-        const trustedKey = localStorage.getItem('vktr_trusted_device');
-        const lastIP = localStorage.getItem('vktr_last_ip');
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        try {
-            // Получаем текущий IP пользователя через бесплатный сервис
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            const currentIP = data.ip;
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    };
 
-            // Если ключа нет ИЛИ IP изменился — кидаем на логин
-            if (!trustedKey || lastIP !== currentIP) {
-                console.log("Доступ ограничен: новый IP или браузер.");
-                window.location.href = "login.html"; 
-            }
-        } catch (error) {
-            console.error("Ошибка проверки IP, но на всякий случай проверяем ключ...");
-            if (!trustedKey) window.location.href = "login.html";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // ВОТ ЭТА ПРОВЕРКА ИСПРАВЛЯЕТ ВЫЛЕТ В ЛОГИН
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Если юзер есть, пишем его почту в хедер (как на твоем видео Record_2026_05_01_09_53_59_818.mp4)
+            document.getElementById('display-name').innerText = user.email;
+            console.log("Доступ разрешен:", user.email);
+        } else {
+            // Если юзера нет — только тогда гоним в логин
+            console.log("Юзер не залогинен, уходим на Login.html");
+            window.location.href = "Login.html";
         }
-    }
-
-    // Запускаем проверку сразу при загрузке
-    checkAuth();
+    });
 </script>
 
 <div id="box-overlay" class="box-overlay">
