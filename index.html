@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Portal</title>
     <style>
         :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
@@ -44,7 +45,6 @@
             border-radius: 15px; font-size: 13px; border: 1px solid #444; margin-top: 10px;
         }
 
-        /* ТЕ САМЫЕ СТИЛИ, КОТОРЫЕ ВЫЛЕЗАЛИ ТЕКСТОМ */
         .vktr-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); display: flex; align-items: center; 
@@ -68,6 +68,13 @@
 
         .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
         #file-input { display: none; }
+        
+        /* Адаптация для мобилок */
+        @media (max-width: 768px) {
+            .container { width: 95%; flex-direction: column; }
+            nav { width: 100%; }
+            .h-content { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -96,8 +103,9 @@
             <li onclick="showProfile()">Моя Страница</li>
             <li>Новости</li>
             <li>Мессенджер</li>
+            <!-- Исправили ссылку на маленькую букву -->
             <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
-            <li onclick="showSettings()">Настройки</li>
+            <li onclick="alert('В разработке')">Настройки</li>
         </ul>
     </nav>
     <main id="content">
@@ -105,7 +113,6 @@
     </main>
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО (ВНЕ СКРИПТОВ!) -->
 <div id="status-modal" class="vktr-modal" style="display:none;">
     <div class="vktr-modal-content">
         <h3>Установить статус</h3>
@@ -142,7 +149,8 @@
             window.currentUserEmail = user.email;
             showProfile(); 
         } else {
-            window.location.href = "Login.html";
+            // Исправили Login.html на login.html (строго маленькие буквы)
+            window.location.href = "login.html";
         }
     });
 
@@ -154,10 +162,10 @@
         const avatar = isBot ? 'avatar-system.png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
         const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;">` : '';
 
-        const overlay = isBot ? '' : `<div class="upload-overlay" onclick="document.getElementById('file-input').click()"><img src="setnewavatar_2.png"></div>`;
+        const overlay = isBot ? '' : `<div class="upload-overlay" onclick="document.getElementById('file-input').click()"><img src="setnewavatar_2.png" style="width:30px;"></div>`;
 
         document.getElementById('content').innerHTML = `
-            <div style="display:flex; gap:25px">
+            <div style="display:flex; gap:25px; flex-wrap: wrap;">
                 <div class="vktr-avatar-wrapper">
                     <img src="${avatar}" id="main-ava" onerror="this.src='default-avatar_2.png'">
                     ${overlay}
@@ -185,13 +193,9 @@
 </script>
 
 <script>
-    // ФУНКЦИИ МОДАЛКИ
-    window.editStatus = function() {
-        document.getElementById('status-modal').style.display = 'flex';
-    };
-    window.closeStatusModal = function() {
-        document.getElementById('status-modal').style.display = 'none';
-    };
+    window.editStatus = function() { document.getElementById('status-modal').style.display = 'flex'; };
+    window.closeStatusModal = function() { document.getElementById('status-modal').style.display = 'none'; };
+    
     window.saveNewStatus = function() {
         const text = document.getElementById('new-status-text').value;
         const fileInput = document.getElementById('music-upload');
@@ -220,7 +224,7 @@
         }
     };
 
-    document.getElementById('music-upload').onchange = function(e) {
+    document.getElementById('music-upload').onchange = function() {
         if(this.files[0]) document.getElementById('file-name-label').innerText = "✅ " + this.files[0].name;
     };
 </script>
