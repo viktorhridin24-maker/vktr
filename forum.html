@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Forum</title>
+    <title>VKTR | Forum Feed</title>
     <style>
         :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
         body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
@@ -16,28 +16,46 @@
         .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
         .logo-img { height: 30px; cursor: pointer; }
 
-        .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
-        nav { width: 180px; }
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { padding: 7px 10px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; }
+        .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; padding-bottom: 50px; }
+        nav { width: 180px; position: sticky; top: 65px; height: fit-content; }
+        nav ul { list-style: none; padding: 0; }
+        nav li { padding: 10px; color: #d1d1d1; cursor: pointer; border-radius: 4px; font-size: 13px; }
         nav li:hover { background: #222; color: #fff; }
 
-        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 4px; min-height: 500px; }
+        main { flex-grow: 1; max-width: 650px; }
         
-        .forum-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
-        .btn-create { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-
-        .topic-item { 
-            background: #1d1d1d; border: 1px solid #333; padding: 15px; 
-            border-radius: 4px; margin-bottom: 10px; display: flex; 
-            justify-content: space-between; align-items: center;
-            transition: 0.2s;
+        /* BOX ПОСТА */
+        .post-card { 
+            background: var(--card); border: 1px solid #333; 
+            border-radius: 8px; margin-bottom: 20px; overflow: hidden;
         }
-        .topic-item:hover { border-color: var(--accent); }
-        .topic-info h4 { margin: 0 0 5px 0; color: #fff; }
-        .topic-info span { font-size: 11px; color: #777; }
+        .post-header { padding: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #222; }
+        .post-author-ava { width: 35px; height: 35px; background: #333; border-radius: 50%; }
+        .post-title { padding: 15px 15px 5px 15px; font-weight: bold; font-size: 18px; color: var(--accent); }
+        .post-content { padding: 0 15px 15px 15px; font-size: 14px; line-height: 1.5; color: #ccc; }
+        .post-image { width: 100%; max-height: 400px; object-fit: cover; display: block; background: #000; }
+        
+        /* КНОПКИ ВЗАИМОДЕЙСТВИЯ */
+        .post-actions { 
+            padding: 10px 15px; border-top: 1px solid #222; 
+            display: flex; gap: 20px; font-size: 13px; color: #888; 
+        }
+        .action-btn { cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .action-btn:hover { color: #fff; }
+        .action-btn.liked { color: var(--accent); }
 
-        .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
+        /* ФОРМА СОЗДАНИЯ */
+        .create-post-box { 
+            background: #111; border: 1px solid var(--accent); 
+            padding: 15px; border-radius: 8px; margin-bottom: 25px; 
+        }
+        .create-post-box input, .create-post-box textarea { 
+            width: 100%; background: #000; border: 1px solid #333; 
+            color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 4px; box-sizing: border-box;
+        }
+        .btn-send { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; float: right; }
+
+        .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 80px; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -45,31 +63,39 @@
 <header>
     <div class="h-content">
         <img src="logo_vktr.png" alt="VKTR" class="logo-img" onclick="location.href='index.html'">
-        <div style="font-size: 14px; opacity: 0.8;">Cloud Forum v1.1</div>
+        <div style="font-size: 13px; color: #666;">VKTR FORUM ENGINE 2.0</div>
     </div>
 </header>
 
 <div class="container">
     <nav>
         <ul>
-            <li onclick="location.href='index.html'">На главную</li>
-            <li style="color: var(--accent); font-weight: bold;">Все разделы</li>
-            <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
+            <li onclick="location.href='index.html'">🏠 Профиль</li>
+            <li style="color:var(--accent)">🔥 Свежее</li>
+            <li>💬 Мои посты</li>
+            <li style="margin-top:20px; color:#444" onclick="location.href='login.html'">🚪 Выход</li>
         </ul>
     </nav>
 
     <main>
-        <div class="forum-header">
-            <h2 style="margin:0;">Обсуждения</h2>
-            <button class="btn-create" id="add-topic-btn">+ Создать тему</button>
+        <!-- ФОРМА СОЗДАНИЯ ПОСТА -->
+        <div class="create-post-box">
+            <input type="text" id="p-title" placeholder="Заголовок поста">
+            <textarea id="p-text" placeholder="Что нового, Виктор?" rows="3"></textarea>
+            <input type="text" id="p-img" placeholder="Ссылка на картинку (URL)">
+            <button class="btn-send" id="btn-publish">Опубликовать</button>
+            <div style="clear:both"></div>
         </div>
-        <div id="topics-list">Загрузка тем...</div>
+
+        <div id="feed">Загрузка ленты...</div>
     </main>
 </div>
 
+<img src="hamster.png" class="hamster-helper">
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -83,51 +109,73 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    let currentUser = "Аноним";
+    let userMail = "";
 
-    // Проверка авторизации
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user.email.split('@')[0];
-        } else {
-            window.location.href = "login.html";
-        }
+        if (user) { userMail = user.email; } 
+        else { window.location.href = "login.html"; }
     });
 
-    // Загрузка тем в реальном времени
-    const q = query(collection(db, "forum_topics"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snapshot) => {
-        const list = document.getElementById('topics-list');
-        list.innerHTML = '';
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const date = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : 'Только что';
+    // ПУБЛИКАЦИЯ
+    document.getElementById('btn-publish').onclick = async () => {
+        const t = document.getElementById('p-title').value;
+        const txt = document.getElementById('p-text').value;
+        const img = document.getElementById('p-img').value;
+
+        if(!t || !txt) return alert("Заполни заголовок и текст!");
+
+        await addDoc(collection(db, "posts"), {
+            title: t,
+            text: txt,
+            image: img || null,
+            author: userMail.split('@')[0],
+            likes: 0,
+            reposts: 0,
+            createdAt: serverTimestamp()
+        });
+
+        document.getElementById('p-title').value = '';
+        document.getElementById('p-text').value = '';
+        document.getElementById('p-img').value = '';
+    };
+
+    // ПОЛУЧЕНИЕ ПОСТОВ
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snap) => {
+        const feed = document.getElementById('feed');
+        feed.innerHTML = '';
+        snap.forEach((postDoc) => {
+            const p = postDoc.data();
+            const id = postDoc.id;
             
-            list.innerHTML += `
-                <div class="topic-item">
-                    <div class="topic-info">
-                        <h4>${data.title}</h4>
-                        <span>Автор: <b>${data.author}</b> • ${date}</span>
+            feed.innerHTML += `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-author-ava"></div>
+                        <div style="font-size:13px"><b>${p.author}</b><br><span style="color:#555; font-size:11px">VKTR USER</span></div>
+                    </div>
+                    <div class="post-title">${p.title}</div>
+                    <div class="post-content">${p.text}</div>
+                    ${p.image ? `<img src="${p.image}" class="post-image" onerror="this.style.display='none'">` : ''}
+                    <div class="post-actions">
+                        <div class="action-btn" onclick="window.likePost('${id}')">❤️ ${p.likes || 0}</div>
+                        <div class="action-btn" onclick="alert('Коментарии в разработке. Вернитесь позже после обновления')">💬 0</div>
+                        <div class="action-btn" onclick="window.repostPost('${id}')">🔁 ${p.reposts || 0}</div>
                     </div>
                 </div>
             `;
         });
     });
 
-    // Создание новой темы
-    document.getElementById('add-topic-btn').onclick = async () => {
-        const title = prompt("О чем хочешь завести тему?");
-        if (title) {
-            try {
-                await addDoc(collection(db, "forum_topics"), {
-                    title: title,
-                    author: currentUser,
-                    createdAt: serverTimestamp()
-                });
-            } catch (e) {
-                alert("Ошибка при создании: " + e);
-            }
-        }
+    // ФУНКЦИИ ВЗАИМОДЕЙСТВИЯ (ОБЯЗАТЕЛЬНО ЧЕРЕЗ WINDOW)
+    window.likePost = async (id) => {
+        const postRef = doc(db, "posts", id);
+        await updateDoc(postRef, { likes: increment(1) });
+    };
+
+    window.repostPost = async (id) => {
+        const postRef = doc(db, "posts", id);
+        await updateDoc(postRef, { reposts: increment(1) });
     };
 </script>
 
