@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Главная</title>
+    <title>VKTR | Вход в Систему</title>
     <style>
         body {
             margin: 0;
@@ -17,150 +17,151 @@
             overflow: hidden;
         }
 
-        /* Верхняя панель (Хедер) */
+        /* Видео из твоего промо на фон */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(35%);
+            object-fit: cover;
+        }
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            background: #000;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid #333;
         }
 
-        .logo { font-weight: bold; font-size: 1.2rem; }
+        .logo { font-weight: bold; font-size: 1.5rem; color: #ff0000; text-transform: uppercase; }
 
         .auth-bar { display: flex; gap: 10px; }
 
         .auth-bar input {
             background: #111;
-            border: 1px solid #333;
+            border: 1px solid #ff0000;
             color: #fff;
-            padding: 5px 10px;
-            border-radius: 2px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            outline: none;
         }
 
         .btn-login {
             background: #ff0000;
             color: #fff;
             border: none;
-            padding: 5px 20px;
+            padding: 8px 25px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
+            transition: 0.3s;
         }
 
-        /* Центральная часть */
+        .btn-login:hover { background: #b30000; }
+
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 30px;
+            text-align: center;
         }
 
-        .video-container {
-            width: 60%;
-            max-width: 800px;
-            border: 2px solid #333;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            background: #000;
+        .vktr-box {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 50px;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
         }
 
-        video { width: 100%; display: block; }
+        h2 { margin-bottom: 25px; letter-spacing: 2px; }
 
-        .action-buttons { display: flex; gap: 20px; }
-
-        .btn-outline {
-            border: 2px solid #fff;
-            background: transparent;
-            color: #fff;
-            padding: 10px 30px;
-            font-weight: bold;
+        .reg-link {
+            margin-top: 20px;
+            color: #888;
             cursor: pointer;
-            text-transform: uppercase;
+            text-decoration: underline;
+            display: block;
         }
 
-        .btn-white {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 10px 30px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* Хомяк в углу */
-        .helper-img {
-            position: fixed;
-            right: 20px;
-            bottom: 80px;
-            width: 100px;
-        }
-
-        .footer-logo {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            opacity: 0.7;
-        }
+        .reg-link:hover { color: #ff0000; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">vktr</div>
-    <div class="auth-bar">
-        <input type="email" id="email" placeholder="Электронная почта">
-        <input type="password" id="pass" placeholder="Ваш ID">
-        <button class="btn-login" onclick="handleAuth()">ВХОД</button>
-    </div>
-</header>
+    <video autoplay muted loop id="bg-video">
+        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
+    </video>
 
-<main>
-    <div class="video-container">
-        <video controls>
-            <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
-        </video>
-    </div>
+    <header>
+        <div class="logo">vktr system</div>
+        <div class="auth-bar">
+            <input type="email" id="email" placeholder="Почта">
+            <input type="password" id="pass" placeholder="Ваш ID (Пароль)">
+            <button class="btn-login" onclick="handleAuth('login')">ВХОД</button>
+        </div>
+    </header>
 
-    <div class="action-buttons">
-        <button class="btn-outline">ОБУЧЕНИЕ VKTR</button>
-        <button class="btn-white">НАШЕ СООБЩЕСТВО</button>
-    </div>
-</main>
+    <main>
+        <div class="vktr-box">
+            <h2>ДОБРО ПОЖАЛОВАТЬ В VKTR</h2>
+            <p>Нажми кнопку входа сверху или создай новый аккаунт ниже</p>
+            <span class="reg-link" onclick="handleAuth('register')">У меня еще нет аккаунта (Регистрация)</span>
+        </div>
+    </main>
 
-<img src="hamster.png" class="helper-img" alt="helper"> <!-- Замени на своего хомяка -->
-<div class="footer-logo">vktr helper</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+            authDomain: "vktrserver.firebaseapp.com",
+            projectId: "vktrserver",
+            appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+        };
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
-        authDomain: "vktrserver.firebaseapp.com",
-        projectId: "vktrserver",
-        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
-    };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        window.handleAuth = async (mode) => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('pass').value;
 
-    window.handleAuth = async () => {
-        const email = document.getElementById('email').value.trim();
-        const password = "GridikV15!"; // Или бери из поля 'Ваш ID'
+            if (!email || !password) {
+                alert("Заполни все поля!");
+                return;
+            }
 
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            window.location.href = "accountaccept.html";
-        } catch (e) {
-            alert("Ошибка входа! Проверь данные.");
-        }
-    }
-</script>
-
+            try {
+                if (mode === 'register') {
+                    // Создаем юзера и СРАЗУ кидаем в профиль без писем
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("Регистрация успешна! Идем настраивать профиль.");
+                    window.location.href = "registrationprofile.html";
+                } else {
+                    // Вход и тоже сразу в профиль
+                    await signInWithEmailAndPassword(auth, email, password);
+                    window.location.href = "registrationprofile.html";
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.code === 'auth/wrong-password') {
+                    alert("Неверный пароль (ID)!");
+                } else if (error.code === 'auth/email-already-in-use') {
+                    alert("Почта уже занята, просто нажми ВХОД.");
+                } else {
+                    alert("Ошибка: " + error.message);
+                }
+            }
+        };
+    </script>
 </body>
 </html>
