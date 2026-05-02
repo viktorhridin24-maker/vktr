@@ -143,7 +143,18 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
+    
+window.generateUserID = function(email) {
+        if (email === 'viktorhridin24@gmail.com') return "00001488";
+        
+        let newID;
+        while (true) {
+            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
+            if (!newID.includes("67")) break;
+        }
+        return newID;
+    };
+    
     onAuthStateChanged(auth, (user) => {
         if (user) {
             window.currentUserEmail = user.email;
