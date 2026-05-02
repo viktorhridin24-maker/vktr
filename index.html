@@ -69,7 +69,6 @@
         .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
         #file-input { display: none; }
         
-        /* Адаптация для мобилок */
         @media (max-width: 768px) {
             .container { width: 95%; flex-direction: column; }
             nav { width: 100%; }
@@ -103,7 +102,6 @@
             <li onclick="showProfile()">Моя Страница</li>
             <li>Новости</li>
             <li onclick="window.location.href='errorunfinishedpage.html'">Форум</li>
-            <!-- Исправили ссылку на маленькую букву -->
             <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
             <li onclick="alert('В разработке')">Настройки</li>
         </ul>
@@ -144,9 +142,8 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     
-window.generateUserID = function(email) {
+    window.generateUserID = function(email) {
         if (email === 'viktorhridin24@gmail.com') return "00001488";
-        
         let newID;
         while (true) {
             newID = Math.floor(10000000 + Math.random() * 90000000).toString();
@@ -160,7 +157,6 @@ window.generateUserID = function(email) {
             window.currentUserEmail = user.email;
             showProfile(); 
         } else {
-            // Исправили Login.html на login.html (строго маленькие буквы)
             window.location.href = "login.html";
         }
     });
@@ -172,18 +168,16 @@ window.generateUserID = function(email) {
         const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
         const avatar = isBot ? 'avatar-system.png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
         const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;">` : '';
-let userID = localStorage.getItem('vktr_user_id');
+
+        let userID = localStorage.getItem('vktr_user_id');
         if (!userID) {
             userID = window.generateUserID(email);
             localStorage.setItem('vktr_user_id', userID);
         }
+
         const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + userID;
         window.history.pushState({path:newUrl}, '', newUrl);
-<div>
-                    <h2 style="margin:0">${name}${verifyBadge}</h2>
-                    <div style="color: #666; font-size: 12px; margin-top: 4px;">ID: ${userID}</div>
-                    ...
-        
+
         const overlay = isBot ? '' : `<div class="upload-overlay" onclick="document.getElementById('file-input').click()"><img src="setnewavatar_2.png" style="width:30px;"></div>`;
 
         document.getElementById('content').innerHTML = `
@@ -194,6 +188,7 @@ let userID = localStorage.getItem('vktr_user_id');
                 </div>
                 <div>
                     <h2 style="margin:0">${name}${verifyBadge}</h2>
+                    <div style="color: #666; font-size: 12px; margin-top: 4px; margin-bottom: 10px;">ID: ${userID}</div>
                     <div class="status-bubble" id="user-status" onclick="editStatus()" style="cursor:pointer;">
                         💬 ${localStorage.getItem('vktr_status_text') || (isBot ? 'Система запущена' : 'В сети')}
                     </div>
