@@ -172,7 +172,18 @@ window.generateUserID = function(email) {
         const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
         const avatar = isBot ? 'avatar-system.png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
         const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;">` : '';
-
+let userID = localStorage.getItem('vktr_user_id');
+        if (!userID) {
+            userID = window.generateUserID(email);
+            localStorage.setItem('vktr_user_id', userID);
+        }
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + userID;
+        window.history.pushState({path:newUrl}, '', newUrl);
+        <div>
+                    <h2 style="margin:0">${name}${verifyBadge}</h2>
+                    <div style="color: #666; font-size: 12px; margin-top: 4px;">ID: ${userID}</div>
+                    ...
+        
         const overlay = isBot ? '' : `<div class="upload-overlay" onclick="document.getElementById('file-input').click()"><img src="setnewavatar_2.png" style="width:30px;"></div>`;
 
         document.getElementById('content').innerHTML = `
