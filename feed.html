@@ -2,174 +2,240 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>VKTR - Портал Услуг</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VKTR | Portal</title>
     <style>
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
+        :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
+        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
+        
+        header { 
+            position: fixed; top: 0; width: 100%; height: 48px; 
+            background: var(--header-bg); border-bottom: 1px solid #444; 
+            display: flex; justify-content: center; z-index: 1000; 
+        }
+        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
+        .h-left { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 30px; cursor: pointer; }
+        .h-right { display: flex; align-items: center; gap: 20px; }
+        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; font-size: 14px; color: #fff; text-decoration: none; }
+        .h-icon:hover { opacity: 1; }
+
+        .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
+        nav { width: 180px; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { padding: 7px 10px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; margin-bottom: 5px; }
+        nav li:hover { background: #222; color: #fff; }
+        nav li.active { background: #e60000; color: #fff; }
+
+        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 500px; }
+
+        /* Профиль */
+        .vktr-avatar-wrapper { 
+            position: relative; width: 150px; height: 150px; 
+            background: #222; overflow: hidden; border: 1px solid #444; 
+            cursor: pointer; border-radius: 0px;
+        }
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
+        .upload-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: rgba(0,0,0,0.7); display: flex; align-items: center; 
+            justify-content: center; opacity: 0; transition: 0.3s;
+        }
+        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
+        .status-bubble { 
+            display: inline-block; background: #2a2a2a; padding: 8px 15px; 
+            border-radius: 15px; font-size: 13px; border: 1px solid #444; margin-top: 10px;
         }
 
-        /* Верхняя панель */
-        header {
-            background-color: #1a1a1a;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
+        /* Сетка услуг */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .service-card { 
+            background: #222; border: 1px solid #333; padding: 15px; border-radius: 8px; 
+            text-align: center; transition: 0.3s; 
         }
+        .service-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .service-price { color: #00ff00; font-weight: bold; font-size: 18px; margin: 10px 0; }
+        .btn-order { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; width: 100%; }
 
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .vktr-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: flex; align-items: center; 
+            justify-content: center; z-index: 2000;
         }
-
-        #logo-vktr {
-            cursor: pointer;
-            transition: transform 0.2s;
+        .vktr-modal-content {
+            background: #1a1a1a; padding: 25px; border-radius: 12px; 
+            border: 1px solid #444; width: 340px; text-align: center;
         }
-
-        #logo-vktr:active {
-            transform: scale(0.95);
-        }
-
-        nav a {
-            color: #aaaaaa;
-            text-decoration: none;
-            margin-right: 15px;
-            font-size: 14px;
-        }
-
-        /* Контентная часть */
-        .main-container {
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        /* Боковое меню */
-        .sidebar {
-            width: 200px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .sidebar a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .admin-panel {
-            color: #ff0000 !important;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* Секция услуг (скрыта по умолчанию) */
-        #services-menu {
-            display: none;
-            background: #111;
-            border: 1px solid #ff0000;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        .service-item {
-            padding: 10px;
-            border-bottom: 1px solid #222;
-        }
-
-        .btn-buy {
-            background: #ff0000;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
+        .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; transition: 0.3s; }
+        .hamster-helper:hover { transform: scale(1.1) rotate(5deg); }
+        
+        #file-input { display: none; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-section">
-            <img src="path_to_logo.png" id="logo-vktr" alt="VKTR" width="80">
-            <nav>
-                <a href="#">Поиск</a>
-                <a href="#">Блог</a>
-            </nav>
-        </div>
-        <div class="user-nav">
-            <span style="color: #aaa; margin-right: 20px;">Сообщения</span>
-            <span style="color: #aaa;">Профиль</span>
-        </div>
-    </header>
+<input type="file" id="file-input" accept="image/*">
 
-    <div class="main-container">
-        <div class="sidebar">
-            <a href="#">Моя Страница</a>
-            <a href="#">Новости</a>
-            <a href="#">Форум</a>
-            <div style="margin-top: 20px;">
-                <a href="#">Выход</a>
-                <a href="#">Настройки</a>
-                <a href="#" class="admin-panel">⚙ АДМИН-ПАНЕЛЬ</a>
+<header>
+    <div class="h-content">
+        <div class="h-left">
+            <img src="logo_vktr.png" alt="VKTR" class="logo-img" onclick="showProfile()">
+            <div class="services-nav" style="display: flex; gap: 15px; font-size: 13px;">
+                <a href="#" style="color: #aaa; text-decoration: none;">Поиск</a>
+                <a href="#" style="color: #aaa; text-decoration: none;">Блог</a>
             </div>
         </div>
-
-        <div class="content" style="flex-grow: 1;">
-            <!-- Секция, которая появляется при клике на лого -->
-            <div id="services-menu">
-                <h3>Услуги VKTR</h3>
-                <div class="service-item">
-                    <span>Премиум Meowl.Social</span>
-                    <button class="btn-buy">310 пузырей</button>
-                </div>
-            </div>
-
-            <!-- Лента уведомлений -->
-            <div id="feed" style="background: #111; padding: 20px; border-radius: 10px;">
-                <p style="color: #666;">Здесь будут отображаться уведомления из базы...</p>
-            </div>
+        <div class="h-right">
+            <div class="h-icon">✉️ Сообщения</div>
+            <div class="h-icon" onclick="showProfile()">👤 Профиль</div>
         </div>
     </div>
+</header>
 
-    <script>
-        const logo = document.getElementById('logo-vktr');
-        const services = document.getElementById('services-menu');
-        const notificationSound = new Audio('Обычное уведомление_2.wav');
+<div class="container">
+    <nav>
+        <ul id="nav-menu">
+            <li id="menu-profile" onclick="showProfile()">Моя Страница</li>
+            <li id="menu-news" onclick="alert('Новостей пока нет')">Новости</li>
+            <li id="menu-services" onclick="showServices()">💎 Услуги VKTR</li>
+            <li onclick="window.location.href='errorunfinishedpage.html'">Форум</li>
+            <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
+        </ul>
+    </nav>
+    <main id="content">
+        <h3 style="text-align: center; margin-top: 50px;">Загрузка системы VKTR...</h3>
+    </main>
+</div>
 
-        // Клик по логотипу
-        logo.addEventListener('click', () => {
-            // Воспроизводим звук
-            notificationSound.play();
-            
-            // Переключаем видимость меню услуг
-            if (services.style.display === 'block') {
-                services.style.display = 'none';
-            } else {
-                services.style.display = 'block';
-            }
-        });
+<!-- Модальное окно статуса -->
+<div id="status-modal" class="vktr-modal" style="display:none;">
+    <div class="vktr-modal-content">
+        <h3>Установить статус</h3>
+        <input type="text" id="new-status-text" placeholder="О чем думаешь?" maxlength="50" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #444; color:white;">
+        <div class="modal-buttons">
+            <button onclick="saveNewStatus()" style="background:var(--accent); color:white; border:none; padding:10px 20px; cursor:pointer;">Сохранить</button>
+            <button onclick="closeStatusModal()" style="background:#333; color:white; border:none; padding:10px 20px; cursor:pointer; margin-left:10px;">Отмена</button>
+        </div>
+    </div>
+</div>
 
-        // Функция обработки уведомлений (заглушка для базы)
-        function checkBaseNotifications() {
-            // Здесь будет твой fetch к базе
-            console.log("База обрабатывает уведомления...");
+<img src="hamster.png" class="hamster-helper" alt="helper" title="Миша следит за качеством!">
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.generateUserID = function(email) {
+        if (email === 'viktorhridin24@gmail.com') return "00001488";
+        return Math.floor(10000000 + Math.random() * 90000000).toString();
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            window.currentUserEmail = user.email;
+            showProfile(); 
+        } else {
+            window.location.href = "login.html";
         }
+    });
 
-        setInterval(checkBaseNotifications, 5000);
-    </script>
+    // Функция отрисовки профиля
+    window.showProfile = function() {
+        setActive('menu-profile');
+        const email = window.currentUserEmail || "";
+        const isAdmin = (email === 'viktorhridin24@gmail.com');
+        const name = localStorage.getItem('vktr_name') || email.split('@')[0];
+        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
+        const userID = localStorage.getItem('vktr_user_id') || window.generateUserID(email);
+        localStorage.setItem('vktr_user_id', userID);
+
+        document.getElementById('content').innerHTML = `
+            <div style="display:flex; gap:25px; align-items: flex-start;">
+                <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
+                    <img src="${avatar}" id="main-ava" onerror="this.src='default-avatar_2.png'">
+                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:30px;"></div>
+                </div>
+                <div>
+                    <h2 style="margin:0">${name} ${isAdmin ? '<img src="vktr_verif.png" style="width:18px; vertical-align:middle;">' : ''}</h2>
+                    <div style="color: #666; font-size: 13px; margin-top: 5px;">ID: ${userID}</div>
+                    <div class="status-bubble" onclick="editStatus()" style="cursor:pointer;">
+                        💬 ${localStorage.getItem('vktr_status_text') || 'В сети (Троещина)'}
+                    </div>
+                </div>
+            </div>
+            <hr style="border:0; border-top:1px solid #333; margin:30px 0;">
+            <h3>Стена активности</h3>
+            <div style="color:#555; text-align:center; padding:40px;">Пока пусто. Самое время запостить разоблачение Бублика!</div>
+        `;
+    };
+
+    // Функция отрисовки Услуг
+    window.showServices = function() {
+        setActive('menu-services');
+        document.getElementById('content').innerHTML = `
+            <h3>💎 Услуги VKTR TEAM</h3>
+            <p style="color:#aaa;">Выбирай качество, а не туалетный продакшен.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>Разоблачение фрика</h4>
+                    <p style="font-size:12px; color:#888;">Полный разбор рассинхрона и кринжа.</p>
+                    <div class="service-price">310 пузырей</div>
+                    <button class="btn-order" onclick="alert('Заказ принят. Бублик будет уничтожен!')">Заказать</button>
+                </div>
+                <div class="service-card">
+                    <h4>3D Текстура</h4>
+                    <p style="font-size:12px; color:#888;">Как в лучших порталах Троещины.</p>
+                    <div class="service-price">150 пузырей</div>
+                    <button class="btn-order">Заказать</button>
+                </div>
+                <div class="service-card">
+                    <h4>Защита от Бублика</h4>
+                    <p style="font-size:12px; color:#888;">Бан на все туалетные заставки.</p>
+                    <div class="service-price">Бесплатно</div>
+                    <button class="btn-order">Активировать</button>
+                </div>
+            </div>
+        `;
+    };
+
+    function setActive(id) {
+        document.querySelectorAll('nav li').forEach(li => li.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+</script>
+
+<script>
+    window.editStatus = function() { document.getElementById('status-modal').style.display = 'flex'; };
+    window.closeStatusModal = function() { document.getElementById('status-modal').style.display = 'none'; };
+    window.saveNewStatus = function() {
+        const text = document.getElementById('new-status-text').value;
+        localStorage.setItem('vktr_status_text', text);
+        closeStatusModal(); showProfile();
+    };
+
+    document.getElementById('file-input').onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = event => {
+                localStorage.setItem('vktr_avatar', event.target.result);
+                showProfile();
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+</script>
 
 </body>
 </html>
