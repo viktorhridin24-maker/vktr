@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>VKTR - Портал Услуг</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Верхняя панель */
+        header {
+            background-color: #1a1a1a;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #logo-vktr {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #logo-vktr:active {
+            transform: scale(0.95);
+        }
+
+        nav a {
+            color: #aaaaaa;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        /* Контентная часть */
+        .main-container {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Боковое меню */
+        .sidebar {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .admin-panel {
+            color: #ff0000 !important;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Секция услуг (скрыта по умолчанию) */
+        #services-menu {
+            display: none;
+            background: #111;
+            border: 1px solid #ff0000;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .service-item {
+            padding: 10px;
+            border-bottom: 1px solid #222;
+        }
+
+        .btn-buy {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-section">
+            <img src="path_to_logo.png" id="logo-vktr" alt="VKTR" width="80">
+            <nav>
+                <a href="#">Поиск</a>
+                <a href="#">Блог</a>
+            </nav>
+        </div>
+        <div class="user-nav">
+            <span style="color: #aaa; margin-right: 20px;">Сообщения</span>
+            <span style="color: #aaa;">Профиль</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <a href="#">Моя Страница</a>
+            <a href="#">Новости</a>
+            <a href="#">Форум</a>
+            <div style="margin-top: 20px;">
+                <a href="#">Выход</a>
+                <a href="#">Настройки</a>
+                <a href="#" class="admin-panel">⚙ АДМИН-ПАНЕЛЬ</a>
+            </div>
+        </div>
+
+        <div class="content" style="flex-grow: 1;">
+            <!-- Секция, которая появляется при клике на лого -->
+            <div id="services-menu">
+                <h3>Услуги VKTR</h3>
+                <div class="service-item">
+                    <span>Премиум Meowl.Social</span>
+                    <button class="btn-buy">310 пузырей</button>
+                </div>
+            </div>
+
+            <!-- Лента уведомлений -->
+            <div id="feed" style="background: #111; padding: 20px; border-radius: 10px;">
+                <p style="color: #666;">Здесь будут отображаться уведомления из базы...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const logo = document.getElementById('logo-vktr');
+        const services = document.getElementById('services-menu');
+        const notificationSound = new Audio('Обычное уведомление_2.wav');
+
+        // Клик по логотипу
+        logo.addEventListener('click', () => {
+            // Воспроизводим звук
+            notificationSound.play();
+            
+            // Переключаем видимость меню услуг
+            if (services.style.display === 'block') {
+                services.style.display = 'none';
+            } else {
+                services.style.display = 'block';
+            }
+        });
+
+        // Функция обработки уведомлений (заглушка для базы)
+        function checkBaseNotifications() {
+            // Здесь будет твой fetch к базе
+            console.log("База обрабатывает уведомления...");
+        }
+
+        setInterval(checkBaseNotifications, 5000);
+    </script>
+
+</body>
+</html>
