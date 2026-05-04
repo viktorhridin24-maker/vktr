@@ -3,97 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Feed & Services</title>
+    <title>VKTR | Портал услуг</title>
     <style>
         :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
-        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
+        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; overflow-x: hidden; }
         
-        header { 
-            position: fixed; top: 0; width: 100%; height: 48px; 
-            background: var(--header-bg); border-bottom: 1px solid #444; 
-            display: flex; justify-content: center; z-index: 1000; 
-        }
+        header { position: fixed; top: 0; width: 100%; height: 48px; background: var(--header-bg); border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 1000; }
         .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
-        .h-left { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 30px; cursor: pointer; }
-        .h-right { display: flex; align-items: center; gap: 20px; }
-        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; font-size: 13px; color: #fff; text-decoration: none; }
+        .h-right { display: flex; gap: 20px; font-size: 13px; }
+        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; }
         .h-icon:hover { opacity: 1; }
 
         .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
         nav { width: 180px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { padding: 8px 12px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; transition: 0.2s; }
+        nav li { padding: 10px; color: #aaa; cursor: pointer; border-radius: 4px; font-size: 13px; }
         nav li:hover { background: #222; color: #fff; }
         nav li.active { background: #333; color: #fff; }
 
-        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 500px; }
+        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 80vh; }
 
-        /* Услуги */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
-        .service-card { background: #1a1a1a; border: 1px solid #333; padding: 20px; border-radius: 8px; text-align: center; transition: 0.3s; }
-        .service-card:hover { border-color: var(--accent); transform: scale(1.02); }
-        .price { color: var(--accent); font-size: 20px; font-weight: bold; margin: 15px 0; }
-        .btn-buy { background: var(--accent); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+        /* Стили модального окна с Тодуком */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-card { background: #1a1a1a; padding: 25px; border-radius: 12px; width: 400px; border: 1px solid #444; text-align: center; }
+        .btn-ready { background: var(--accent); color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 20px; }
 
-        .vktr-avatar-wrapper { position: relative; width: 130px; height: 130px; border: 1px solid #444; background: #222; }
-        #main-ava { width: 100%; height: 100%; object-fit: cover; }
-        
-        .btn-action { background: #222; border: 1px solid #444; color: #fff; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 10px; font-size: 12px; }
-        .btn-action:hover { background: #333; border-color: #666; }
-
-        @media (max-width: 768px) { .container { width: 95%; flex-direction: column; } nav { width: 100%; } }
+        /* Сетки услуг */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; transition: 0.3s; }
+        .card:hover { border-color: var(--accent); }
+        .price { color: var(--accent); font-weight: bold; margin: 10px 0; }
     </style>
 </head>
 <body>
 
+<div id="welcome-box" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+        <img src="welcomevktr.png" style="width: 100%; border-radius: 8px; margin-bottom: 15px;" alt="Welcome">
+        <h3>Добро пожаловать!</h3>
+        <p style="font-size: 13px; color: #999;">Желаем вам счастливого дня в vktr. Но сначала активируйте карточку с пузырями и добавьте Цветок Доверия вот здесь!</p>
+        <button class="btn-ready" onclick="closeWelcome()">Поехали!</button>
+    </div>
+</div>
+
 <header>
     <div class="h-content">
-        <div class="h-left">
-            <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="showServices()">
-            <div style="display: flex; gap: 15px; font-size: 13px; margin-left: 10px;">
-                <span style="color: #666; cursor: default;">Поиск</span>
-                <span style="color: #666; cursor: default;">Блог</span>
-            </div>
-        </div>
+        <img src="WhiteLogoVKTR.png" class="logo-img" onclick="changeTab('feed')">
         <div class="h-right">
-            <div class="h-icon" onclick="showServices()">🛒 Услуги</div>
-            <div class="h-icon" onclick="showProfile()">👤 Кабинет</div>
+            <span class="h-icon" onclick="changeTab('feed')">🛒 Услуги</span>
+            <span class="h-icon" onclick="changeTab('profile')">👤 Кабинет</span>
         </div>
     </div>
 </header>
 
 <div class="container">
     <nav>
-        <ul id="nav-menu">
-            <li id="m-services" onclick="showServices()">Лента услуг</li>
-            <li id="m-profile" onclick="showProfile()">Мой профиль</li>
-            <li onclick="window.location.href='errorunfinishedpage.html'">vktrСообщество</li>
-            <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
+        <ul>
+            <li id="nav-feed" onclick="changeTab('feed')">Лента услуг</li>
+            <li id="nav-profile" onclick="changeTab('profile')">Мой профиль</li>
+            <li onclick="location.href='idea.html'">💡 Предложить идею</li>
+            <li style="margin-top: 20px; color: #555;" onclick="location.href='login.html'">Выход</li>
         </ul>
     </nav>
-    <main id="content">
-        <h3>Загрузка ленты...</h3>
+    <main id="main-content">
+        <h2 id="loading-text">Загрузка ленты...</h2>
     </main>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+<script>
+    // 1. Управление вкладками
+    function changeTab(tab) {
+        const content = document.getElementById('main-content');
+        document.querySelectorAll('nav li').forEach(el => el.classList.remove('active'));
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
-        authDomain: "vktrserver.firebaseapp.com",
-        projectId: "vktrserver",
-        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+        if (tab === 'feed') {
+            document.getElementById('nav-feed').classList.add('active');
+            content.innerHTML = `
+                <h2 style="margin-top:0">Лента услуг</h2>
+                <div class="services-grid">
+                    <div class="card">
+                        <h4>Премиум Meowl</h4>
+                        <p style="font-size:12px; color:#666">Эксклюзивные функции соцсети.</p>
+                        <div class="price">450 🫧</div>
+                        <button style="width:100%; cursor:pointer;">Купить</button>
+                    </div>
+                    <div class="card">
+                        <h4>Памидор</h4>
+                        <p style="font-size:12px; color:#666">Особый товар от Стёпы.</p>
+                        <div class="price">10 🫧</div>
+                        <button style="width:100%; cursor:pointer;">Взять</button>
+                    </div>
+                </div>
+            `;
+        } else if (tab === 'profile') {
+            document.getElementById('nav-profile').classList.add('active');
+            content.innerHTML = `
+                <h2>Личный кабинет</h2>
+                <div style="background:#111; padding:20px; border: 1px solid #333; border-radius:8px;">
+                    <p>Статус: <b>Магнат бейджиков</b> ✅</p>
+                    <p>Баланс: <span style="color:var(--accent)">150 🫧</span></p>
+                    <button style="padding:10px; cursor:pointer;">Активировать карту</button>
+                </div>
+            `;
+        }
+    }
+
+    // 2. Логика первого входа (Тодук)
+    window.onload = function() {
+        if (!localStorage.getItem('vktr_first_visit')) {
+            document.getElementById('welcome-box').style.display = 'flex';
+        }
+        changeTab('feed'); // Загружаем услуги сразу после старта
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    function closeWelcome() {
+        document.getElementById('welcome-box').style.display = 'none';
+        localStorage.setItem('vktr_first_visit', 'done');
+    }
+</script>
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            window.currentUserEmail = user.email;
-            showServices(); 
-        } else {
-            window.location.href = "login.html";
+</body>
+</html>
