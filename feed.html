@@ -3,75 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Portal</title>
+    <title>VKTR | Feed & Services</title>
     <style>
-        :root { --accent: #e60000; --bg: #0b0b0b; --card: #121212; --header: #1a1a1a; --border: #282828; }
-        body { background: var(--bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; justify-content: center; overflow-x: hidden; }
+        :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
+        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
         
         header { 
-            position: fixed; top: 0; width: 100%; height: 52px; 
-            background: var(--header); border-bottom: 1px solid var(--border); 
+            position: fixed; top: 0; width: 100%; height: 48px; 
+            background: var(--header-bg); border-bottom: 1px solid #444; 
             display: flex; justify-content: center; z-index: 1000; 
         }
-        .h-content { width: 1100px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        .logo-img { height: 26px; cursor: pointer; }
+        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
+        .h-left { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 30px; cursor: pointer; }
+        .h-right { display: flex; align-items: center; gap: 20px; }
+        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; font-size: 13px; color: #fff; text-decoration: none; }
+        .h-icon:hover { opacity: 1; }
 
-        .container { width: 1100px; margin-top: 75px; display: flex; gap: 25px; padding: 0 20px; box-sizing: border-box; }
-        
-        nav { width: 220px; flex-shrink: 0; }
+        .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
+        nav { width: 180px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { 
-            padding: 12px 15px; color: #999; cursor: pointer; font-size: 14px; 
-            border-radius: 6px; transition: 0.2s; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;
-        }
-        nav li:hover { background: #1a1a1a; color: #fff; }
-        nav li.active { background: var(--accent); color: #fff; font-weight: bold; }
+        nav li { padding: 8px 12px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; transition: 0.2s; }
+        nav li:hover { background: #222; color: #fff; }
+        nav li.active { background: #333; color: #fff; }
 
-        main { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 8px; min-height: 600px; position: relative; }
+        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 500px; }
 
-        /* Категории услуг */
-        .category-bar { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .cat-btn { 
-            background: #1a1a1a; border: 1px solid var(--border); color: #888; 
-            padding: 7px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: 0.3s;
-        }
-        .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        /* Услуги */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .service-card { background: #1a1a1a; border: 1px solid #333; padding: 20px; border-radius: 8px; text-align: center; transition: 0.3s; }
+        .service-card:hover { border-color: var(--accent); transform: scale(1.02); }
+        .price { color: var(--accent); font-size: 20px; font-weight: bold; margin: 15px 0; }
+        .btn-buy { background: var(--accent); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
 
-        /* Сетка */
-        .grid-system { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-        .module-card { background: #1a1a1a; border: 1px solid var(--border); padding: 20px; border-radius: 8px; transition: 0.3s; }
-        .module-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-        .price-tag { color: var(--accent); font-weight: bold; font-family: monospace; display: block; margin: 10px 0; }
+        .vktr-avatar-wrapper { position: relative; width: 130px; height: 130px; border: 1px solid #444; background: #222; }
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
         
-        .btn-action { background: transparent; border: 1px solid var(--accent); color: var(--accent); width: 100%; padding: 8px; border-radius: 4px; cursor: pointer; }
-        .btn-action:hover { background: var(--accent); color: #fff; }
+        .btn-action { background: #222; border: 1px solid #444; color: #fff; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 10px; font-size: 12px; }
+        .btn-action:hover { background: #333; border-color: #666; }
 
-        .hamster { position: fixed; bottom: 20px; right: 20px; width: 80px; z-index: 100; }
+        @media (max-width: 768px) { .container { width: 95%; flex-direction: column; } nav { width: 100%; } }
     </style>
 </head>
 <body>
 
 <header>
     <div class="h-content">
-        <div onclick="showSection('profile')"><img src="logo_vktr.png" alt="VKTR" class="logo-img" onerror="this.src='https://via.placeholder.com/100x30?text=VKTR'"></div>
-        <div style="font-size: 12px; color: #444;">v1.0.0-restore</div>
+        <div class="h-left">
+            <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="showServices()">
+            <div style="display: flex; gap: 15px; font-size: 13px; margin-left: 10px;">
+                <span style="color: #666; cursor: default;">Поиск</span>
+                <span style="color: #666; cursor: default;">Блог</span>
+            </div>
+        </div>
+        <div class="h-right">
+            <div class="h-icon" onclick="showServices()">🛒 Услуги</div>
+            <div class="h-icon" onclick="showProfile()">👤 Кабинет</div>
+        </div>
     </div>
 </header>
 
 <div class="container">
     <nav>
-        <ul>
-            <li id="m-profile" class="active" onclick="showSection('profile')">📋 Личный кабинет</li>
-            <li id="m-services" onclick="showSection('services')">💎 Услуги VKTR</li>
-            <li onclick="location.href='login.html'">Выйти</li>
+        <ul id="nav-menu">
+            <li id="m-services" onclick="showServices()">Лента услуг</li>
+            <li id="m-profile" onclick="showProfile()">Мой профиль</li>
+            <li onclick="window.location.href='errorunfinishedpage.html'">vktrСообщество</li>
+            <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
         </ul>
     </nav>
-    <main id="main-display">
-        <div style="text-align: center; margin-top: 100px; color: #444;">Инициализация VKTR Core...</div>
+    <main id="content">
+        <h3>Загрузка ленты...</h3>
     </main>
 </div>
-
-<img src="hamster.png" class="hamster" alt="Misha" onerror="this.style.display='none'">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -87,81 +91,9 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const servicesData = [
-        { cat: 'partnership', title: 'Партнёрство', desc: 'Официальное сотрудничество с командой VKTR.', price: 'Договорная' },
-        { cat: 'latest', title: 'Аудит Meowl', desc: 'Разбор обновления Meowl Social от 04.05.', price: '310 пузырей' },
-        { cat: 'first', title: 'Первый гайд', desc: 'Архивные материалы по созданию портала.', price: 'Бесплатно' },
-        { cat: 'others', title: '3D Ассеты', desc: 'Разработка кастомных текстур для ваших сайтов.', price: '150 пузырей' }
-    ];
-
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            window.userEmail = user.email;
-            // Сразу показываем профиль после входа
-            showSection('profile');
+            window.currentUserEmail = user.email;
+            showServices(); 
         } else {
             window.location.href = "login.html";
-        }
-    });
-
-    window.showSection = function(type) {
-        const display = document.getElementById('main-display');
-        document.querySelectorAll('nav li').forEach(li => li.classList.remove('active'));
-
-        if (type === 'profile') {
-            document.getElementById('m-profile').classList.add('active');
-            const email = window.userEmail || "user@vktr.team";
-            const name = email.split('@')[0];
-            display.innerHTML = `
-                <div style="display:flex; gap:25px; align-items:center;">
-                    <div style="width:120px; height:120px; background:#1a1a1a; border:1px solid #333;">
-                        <img src="default-avatar_2.png" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div>
-                        <h1 style="margin:0">${name}</h1>
-                        <p style="color:#555">Статус: В разработке (Релиз 5 мая)</p>
-                    </div>
-                </div>
-                <hr style="border:0; border-top:1px solid #222; margin:30px 0;">
-                <h3>Системные уведомления</h3>
-                <p style="color:#666">Портал готовится к публичному запуску. Проверьте раздел услуг.</p>
-            `;
-        } else if (type === 'services') {
-            document.getElementById('m-services').classList.add('active');
-            renderServicesPage(display);
-        }
-    };
-
-    function renderServicesPage(target) {
-        target.innerHTML = `
-            <div class="category-bar">
-                <button class="cat-btn active" onclick="filterServices('all', this)">Все</button>
-                <button class="cat-btn" onclick="filterServices('partnership', this)">Партнёрство</button>
-                <button class="cat-btn" onclick="filterServices('latest', this)">Самый последний</button>
-                <button class="cat-btn" onclick="filterServices('first', this)">Самый первый</button>
-                <button class="cat-btn" onclick="filterServices('others', this)">Остальные</button>
-            </div>
-            <div class="grid-system" id="services-grid"></div>
-        `;
-        filterServices('all');
-    }
-
-    window.filterServices = function(category, btn) {
-        if (btn) {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-        const grid = document.getElementById('services-grid');
-        const filtered = category === 'all' ? servicesData : servicesData.filter(s => s.cat === category);
-        grid.innerHTML = filtered.map(s => `
-            <div class="module-card">
-                <h4>${s.title}</h4>
-                <p style="font-size:13px; color:#777;">${s.desc}</p>
-                <span class="price-tag">${s.price}</span>
-                <button class="btn-action">Запросить</button>
-            </div>
-        `).join('');
-    };
-</script>
-</body>
-</html>
