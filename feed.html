@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Control Panel</title>
+    <title>VKTR | Portal</title>
     <style>
         :root { --accent: #e60000; --bg: #0b0b0b; --card: #121212; --header: #1a1a1a; --border: #282828; }
-        body { background: var(--bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
+        body { background: var(--bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; justify-content: center; overflow-x: hidden; }
         
         header { 
             position: fixed; top: 0; width: 100%; height: 52px; 
@@ -14,57 +14,47 @@
             display: flex; justify-content: center; z-index: 1000; 
         }
         .h-content { width: 1100px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        .logo-box { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .logo-img { height: 28px; }
+        .logo-img { height: 26px; cursor: pointer; }
 
         .container { width: 1100px; margin-top: 75px; display: flex; gap: 25px; padding: 0 20px; box-sizing: border-box; }
         
         nav { width: 220px; flex-shrink: 0; }
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { 
-            padding: 10px 15px; color: #999; cursor: pointer; font-size: 14px; 
-            border-radius: 6px; transition: 0.2s; margin-bottom: 4px;
+            padding: 12px 15px; color: #999; cursor: pointer; font-size: 14px; 
+            border-radius: 6px; transition: 0.2s; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;
         }
         nav li:hover { background: #1a1a1a; color: #fff; }
-        nav li.active { background: var(--accent); color: #fff; }
+        nav li.active { background: var(--accent); color: #fff; font-weight: bold; }
 
-        main { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 8px; min-height: 600px; }
+        main { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 8px; min-height: 600px; position: relative; }
 
-        /* Панель категорий */
-        .category-bar { 
-            display: flex; gap: 10px; margin-bottom: 25px; 
-            border-bottom: 1px solid var(--border); padding-bottom: 15px; 
-        }
+        /* Категории услуг */
+        .category-bar { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .cat-btn { 
             background: #1a1a1a; border: 1px solid var(--border); color: #888; 
-            padding: 6px 15px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: 0.3s;
+            padding: 7px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: 0.3s;
         }
-        .cat-btn:hover { border-color: var(--accent); color: #fff; }
         .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        /* Сетка услуг */
+        /* Сетка */
         .grid-system { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-        .module-card { 
-            background: #1a1a1a; border: 1px solid var(--border); padding: 20px; 
-            border-radius: 8px; transition: 0.3s; 
-        }
-        .module-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .price-tag { color: var(--accent); font-weight: bold; font-family: monospace; }
+        .module-card { background: #1a1a1a; border: 1px solid var(--border); padding: 20px; border-radius: 8px; transition: 0.3s; }
+        .module-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .price-tag { color: var(--accent); font-weight: bold; font-family: monospace; display: block; margin: 10px 0; }
         
-        .btn-action { 
-            background: transparent; border: 1px solid var(--accent); color: var(--accent); 
-            width: 100%; padding: 8px; border-radius: 4px; cursor: pointer; margin-top: 15px;
-        }
+        .btn-action { background: transparent; border: 1px solid var(--accent); color: var(--accent); width: 100%; padding: 8px; border-radius: 4px; cursor: pointer; }
         .btn-action:hover { background: var(--accent); color: #fff; }
+
+        .hamster { position: fixed; bottom: 20px; right: 20px; width: 80px; z-index: 100; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="h-content">
-        <div class="logo-box" onclick="showSection('profile')">
-            <img src="logo_vktr.png" alt="VKTR" class="logo-img">
-        </div>
+        <div onclick="showSection('profile')"><img src="logo_vktr.png" alt="VKTR" class="logo-img" onerror="this.src='https://via.placeholder.com/100x30?text=VKTR'"></div>
+        <div style="font-size: 12px; color: #444;">v1.0.0-restore</div>
     </div>
 </header>
 
@@ -76,8 +66,12 @@
             <li onclick="location.href='login.html'">Выйти</li>
         </ul>
     </nav>
-    <main id="main-display"></main>
+    <main id="main-display">
+        <div style="text-align: center; margin-top: 100px; color: #444;">Инициализация VKTR Core...</div>
+    </main>
 </div>
+
+<img src="hamster.png" class="hamster" alt="Misha" onerror="this.style.display='none'">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -93,25 +87,45 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // База данных услуг
     const servicesData = [
-        { id: 1, cat: 'partnership', title: 'Партнёрство', desc: 'Официальное сотрудничество с VKTR Team.', price: 'Договорная' },
-        { id: 2, cat: 'latest', title: 'Аудит Meowl Social', desc: 'Технический разбор обновления 04.05.2026.', price: '310 пузырей' },
-        { id: 3, cat: 'first', title: 'Основы UI', desc: 'Тот самый первый гайд по дизайну портала.', price: 'Бесплатно' },
-        { id: 4, cat: 'others', title: '3D Текстуры', desc: 'Создание кастомных материалов для проектов.', price: '150 пузырей' }
+        { cat: 'partnership', title: 'Партнёрство', desc: 'Официальное сотрудничество с командой VKTR.', price: 'Договорная' },
+        { cat: 'latest', title: 'Аудит Meowl', desc: 'Разбор обновления Meowl Social от 04.05.', price: '310 пузырей' },
+        { cat: 'first', title: 'Первый гайд', desc: 'Архивные материалы по созданию портала.', price: 'Бесплатно' },
+        { cat: 'others', title: '3D Ассеты', desc: 'Разработка кастомных текстур для ваших сайтов.', price: '150 пузырей' }
     ];
 
     onAuthStateChanged(auth, (user) => {
-        if (user) { window.userEmail = user.email; showSection('profile'); }
-        else { window.location.href = "login.html"; }
+        if (user) {
+            window.userEmail = user.email;
+            // Сразу показываем профиль после входа
+            showSection('profile');
+        } else {
+            window.location.href = "login.html";
+        }
     });
 
     window.showSection = function(type) {
         const display = document.getElementById('main-display');
         document.querySelectorAll('nav li').forEach(li => li.classList.remove('active'));
+
         if (type === 'profile') {
             document.getElementById('m-profile').classList.add('active');
-            display.innerHTML = `<h1>Личный кабинет</h1><p>Добро пожаловать в VKTR Core.</p>`;
+            const email = window.userEmail || "user@vktr.team";
+            const name = email.split('@')[0];
+            display.innerHTML = `
+                <div style="display:flex; gap:25px; align-items:center;">
+                    <div style="width:120px; height:120px; background:#1a1a1a; border:1px solid #333;">
+                        <img src="default-avatar_2.png" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div>
+                        <h1 style="margin:0">${name}</h1>
+                        <p style="color:#555">Статус: В разработке (Релиз 5 мая)</p>
+                    </div>
+                </div>
+                <hr style="border:0; border-top:1px solid #222; margin:30px 0;">
+                <h3>Системные уведомления</h3>
+                <p style="color:#666">Портал готовится к публичному запуску. Проверьте раздел услуг.</p>
+            `;
         } else if (type === 'services') {
             document.getElementById('m-services').classList.add('active');
             renderServicesPage(display);
@@ -137,14 +151,12 @@
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
-        
         const grid = document.getElementById('services-grid');
         const filtered = category === 'all' ? servicesData : servicesData.filter(s => s.cat === category);
-        
         grid.innerHTML = filtered.map(s => `
             <div class="module-card">
                 <h4>${s.title}</h4>
-                <p>${s.desc}</p>
+                <p style="font-size:13px; color:#777;">${s.desc}</p>
                 <span class="price-tag">${s.price}</span>
                 <button class="btn-action">Запросить</button>
             </div>
