@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VKTR | ЭкстроВход</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Твое фирменное видео на фоне */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(30%);
+            object-fit: cover;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.85);
+            border-bottom: 2px solid #ff0000;
+        }
+
+        .logo { 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            color: #ff0000; 
+            text-transform: uppercase; 
+            letter-spacing: 3px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-container {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff0000;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn-save {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 0 #8b0000;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background: #ff4d4d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #8b0000;
+        }
+
+        .btn-save:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #8b0000;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: #ff0000;
+        }
+
+        /* Хомяк-помощник */
+        .hamster-helper {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 90px;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.4));
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
+    </video>
+
+    <header>
+        <div class="logo">vktrq emergency control</div>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <h2>ЭкстроВход VKTR</h2>
+            <div class="subtitle">Место для обыска базы аккаунтов</div>
+            
+            <div class="input-group">
+                <label>ПОЧТА (EMAIL) ДЛЯ ОБЫСКА</label>
+                <input type="email" id="search-email" placeholder="Введи свой email...">
+            </div>
+
+            <div class="input-group">
+                <label>ПАРОЛЬ ОТ АККАУНТА</label>
+                <input type="password" id="search-password" placeholder="Введи свой пароль...">
+            </div>
+
+            <button class="btn-save" onclick="triggerExtraLogIn()">НАЧАТЬ ОБЫСК БАЗЫ</button>
+            
+            <a href="login.html" class="back-link">← Вернуться к обычному входу</a>
+        </div>
+    </main>
+
+    <img src="hamster.png" class="hamster-helper" alt="helper">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Инициализацию своего Firebase Config вставь сюда (apiKey, authDomain, projectId и т.д.)
+        // const firebaseConfig = { ... };
+        // if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        // const db = firebase.firestore();
+
+        async function triggerExtraLogIn() {
+            const email = document.getElementById('search-email').value.trim();
+            const password = document.getElementById('search-password').value;
+
+            if (!email || !password) {
+                alert("Ошибка: Заполни все поля для обыска базы!");
+                return;
