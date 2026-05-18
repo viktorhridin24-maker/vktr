@@ -5,206 +5,257 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | ЭкстроВход</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #fff;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+        :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
+        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
+        
+        header { 
+            position: fixed; top: 0; width: 100%; height: 48px; 
+            background: var(--header-bg); border-bottom: 1px solid #444; 
+            display: flex; justify-content: center; z-index: 1000; 
         }
+        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
+        .h-left { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 30px; cursor: pointer; }
+        .h-right { display: flex; align-items: center; gap: 20px; }
+        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; font-size: 14px; color: #fff; text-decoration: none; }
+        .h-icon:hover { opacity: 1; }
 
-        /* Твое фирменное видео на фоне */
-        #bg-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            filter: brightness(30%);
-            object-fit: cover;
-        }
+        .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
+        nav { width: 180px; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { padding: 7px 10px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; }
+        nav li:hover { background: #222; color: #fff; }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.85);
-            border-bottom: 2px solid #ff0000;
-        }
+        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 400px; }
 
-        .logo { 
-            font-weight: bold; 
-            font-size: 1.5rem; 
-            color: #ff0000; 
-            text-transform: uppercase; 
-            letter-spacing: 3px;
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .profile-container {
-            background: rgba(0, 0, 0, 0.95);
-            padding: 40px;
-            border: 2px solid #ff0000;
-            border-radius: 15px;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
-            width: 400px;
+        /* Стили формы обыска аккаунта vktrQ */
+        .search-box {
+            max-width: 400px;
+            margin: 30px auto;
+            background: #111;
+            padding: 30px;
+            border: 1px solid #333;
+            border-radius: 6px;
             text-align: center;
         }
-
-        h2 {
-            color: #fff;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            letter-spacing: 2px;
-            font-size: 1.8rem;
-        }
-
-        .subtitle {
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .input-group {
+        .vktrq-logo {
+            max-width: 180px;
             margin-bottom: 20px;
-            text-align: left;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
         }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #ff0000;
-            font-size: 0.8rem;
-            font-weight: bold;
+        .search-box h2 {
+            font-size: 18px;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #fff;
         }
-
-        input {
+        .input-field {
             width: 100%;
             padding: 12px;
-            background: #111;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 5px;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 15px;
             box-sizing: border-box;
             outline: none;
-            transition: 0.3s;
+            font-family: tahoma, sans-serif;
         }
-
-        input:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        .input-field:focus {
+            border-color: var(--accent);
         }
-
-        .btn-save {
-            background: #ff0000;
-            color: #fff;
+        .btn-search {
+            background: var(--accent);
+            color: white;
             border: none;
-            padding: 18px;
-            width: 100%;
-            font-weight: bold;
-            text-transform: uppercase;
+            padding: 12px 25px;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 13px;
             transition: 0.3s;
-            box-shadow: 0 4px 0 #8b0000;
-            font-size: 1rem;
-            margin-top: 10px;
+        }
+        .btn-search:hover {
+            background: #ff2a2a;
         }
 
-        .btn-save:hover {
-            background: #ff4d4d;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 #8b0000;
+        /* Кастомное модальное окно верификации vktrQ */
+        .vktr-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: flex; align-items: center; 
+            justify-content: center; z-index: 2000;
         }
-
-        .btn-save:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #8b0000;
+        .vktr-modal-content {
+            background: #1a1a1a; padding: 30px; border-radius: 8px; 
+            border: 1px solid var(--accent); width: 360px; text-align: center;
+            box-shadow: 0 0 30px rgba(230, 0, 0, 0.4);
         }
-
-        .back-link {
-            display: inline-block;
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
-            color: #888;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: 0.3s;
         }
+        .btn-yes { background: #00cc44; color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-yes:hover { background: #00e64d; }
+        .btn-no { background: #333; color: #ccc; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; }
+        .btn-no:hover { background: #444; color: #fff; }
 
-        .back-link:hover {
-            color: #ff0000;
-        }
-
-        /* Хомяк-помощник */
-        .hamster-helper {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 90px;
-            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.4));
+        .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
+        
+        @media (max-width: 768px) {
+            .container { width: 95%; flex-direction: column; }
+            nav { width: 100%; }
+            .h-content { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop id="bg-video">
-        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
-    </video>
-
-    <header>
-        <div class="logo">vktrq emergency control</div>
-    </header>
-
-    <main>
-        <div class="profile-container">
-            <h2>ЭкстроВход VKTR</h2>
-            <div class="subtitle">Место для обыска базы аккаунтов</div>
-            
-            <div class="input-group">
-                <label>ПОЧТА (EMAIL) ДЛЯ ОБЫСКА</label>
-                <input type="email" id="search-email" placeholder="Введи свой email...">
+<header>
+    <div class="h-content">
+        <div class="h-left">
+            <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'">
+            <div class="services-nav" style="display: flex; gap: 15px; font-size: 13px;">
+                <a href="#" style="color: #aaa; text-decoration: none;">Поиск</a>
+                <a href="#" style="color: #aaa; text-decoration: none;">Блог</a>
             </div>
+        </div>
+        <div class="h-right">
+            <div class="h-icon" onclick="location.href='login.html'">👤 Войти</div>
+        </div>
+    </div>
+</header>
 
-            <div class="input-group">
-                <label>ПАРОЛЬ ОТ АККАУНТА</label>
-                <input type="password" id="search-password" placeholder="Введи свой пароль...">
-            </div>
-
-            <button class="btn-save" onclick="triggerExtraLogIn()">НАЧАТЬ ОБЫСК БАЗЫ</button>
+<div class="container">
+    <nav>
+        <ul id="nav-menu">
+            <li onclick="location.href='login.html'">Главная</li>
+            <li style="color: var(--accent); font-weight: bold;">🔍 vktrQ Обыск</li>
+            <li onclick="window.location.href='errorunfinishedpage.html'">Форум</li>
+        </ul>
+    </nav>
+    <main id="content">
+        <div class="search-box">
+            <img src="ExtraLogIn.png" alt="vktrQ" class="vktrq-logo">
+            <h2>Место обыска аккаунта</h2>
             
-            <a href="login.html" class="back-link">← Вернуться к обычному входу</a>
+            <input type="text" id="search-email" class="input-field" placeholder="Введите ваш Email...">
+            <input type="password" id="search-password" class="input-field" placeholder="Введите ваш Пароль...">
+            
+            <button class="btn-search" onclick="startExtraSearch()">Запустить поиск</button>
         </div>
     </main>
+</div>
 
-    <img src="hamster.png" class="hamster-helper" alt="helper">
+<div id="vktrq-modal" class="vktr-modal" style="display:none;">
+    <div class="vktr-modal-content">
+        <img src="ExtraLogIn.png" style="width: 100px; margin-bottom: 10px;" alt="vktrQ">
+        <h3 style="margin-top: 10px; font-size: 16px;">Система обыска vktrQ</h3>
+        <p id="account-found-text" style="font-size: 14px; color: #ccc; margin: 15px 0;"></p>
+        <h4 style="color: #fff; margin-bottom: 20px;">Это ваш аккаунт?</h4>
+        <div class="modal-buttons">
+            <button onclick="forceLoginYes()" class="btn-yes">ДА</button>
+            <button onclick="forceLoginNo()" class="btn-no">НЕТ</button>
+        </div>
+    </div>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<img src="hamster.png" class="hamster-helper" alt="helper">
 
-    <script>
-        // Инициализацию своего Firebase Config вставь сюда (apiKey, authDomain, projectId и т.д.)
-        // const firebaseConfig = { ... };
-        // if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        // const db = firebase.firestore();
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        async function triggerExtraLogIn() {
-            const email = document.getElementById('search-email').value.trim();
-            const password = document.getElementById('search-password').value;
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    };
 
-            if (!email || !password) {
-                alert("Ошибка: Заполни все поля для обыска базы!");
-                return;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let tempFoundUser = null;
+
+    window.startExtraSearch = async function() {
+        const emailInput = document.getElementById('search-email').value.trim();
+        const passwordInput = document.getElementById('search-password').value;
+
+        if (!emailInput || !passwordInput) {
+            alert("Заполните оба поля для обыска бэкенда!");
+            return;
+        }
+
+        alert("vktrQ: Сканируем базу данных на наличие совпадений...");
+
+        try {
+            // Ищем юзера напрямую в твоей коллекции пользователей по email
+            const usersRef = collection(db, "users"); 
+            const q = query(usersRef, where("email", "==", emailInput));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                // Аккаунт найден в БД
+                querySnapshot.forEach((doc) => {
+                    tempFoundUser = doc.data();
+                });
+
+                // Выводим диалоговое окно верификации
+                document.getElementById('account-found-text').innerText = `Найден аккаунт: ${emailInput}`;
+                document.getElementById('vktrq-modal').style.display = 'flex';
+            } else {
+                // Если в Firestore нет отдельной коллекции, делаем имитацию успешного пересоздания сессии для админа
+                if (emailInput === 'viktorhridin24@gmail.com') {
+                    tempFoundUser = { email: emailInput, name: "Виктор" };
+                    document.getElementById('account-found-text').innerText = `Найден административный аккаунт: ${emailInput}`;
+                    document.getElementById('vktrq-modal').style.display = 'flex';
+                } else {
+                    alert("vktrQ: Обыск завершен. Крендель с такими данными в базе не обнаружен.");
+                }
+            }
+        } catch (error) {
+            console.error("Ошибка обыска базы: ", error);
+            // Фолбэк на случай если Firebase Auth лежит, но админ заходит под своей почтой
+            if (emailInput === 'viktorhridin24@gmail.com') {
+                tempFoundUser = { email: emailInput, name: "Виктор" };
+                document.getElementById('account-found-text').innerText = `Локальный обход vktrQ для: ${emailInput}`;
+                document.getElementById('vktrq-modal').style.display = 'flex';
+            } else {
+                alert("Ошибка доступа к бэкенду. Проверьте соединение с сервером.");
+            }
+        }
+    };
+
+    // ФУНКЦИЯ "ДА" - Автоматически вступает в аккаунт через жесткую прошивку LocalStorage
+    window.forceLoginYes = function() {
+        if (tempFoundUser) {
+            localStorage.setItem('vktr_name', tempFoundUser.name || tempFoundUser.email.split('@')[0]);
+            localStorage.setItem('vktr_user_id', "00001488"); // Админский ID
+            localStorage.setItem('vktr_status_text', "Авторизован через vktrQ");
+            
+            // Записываем флаг обхода, чтобы index.html знал, что мы внутри
+            localStorage.setItem('vktr_auth_bypass', "true");
+
+            alert("Сессия принудительно восстановлена! Вступаем в аккаунт...");
+            document.getElementById('vktrq-modal').style.display = 'none';
+            
+            // Направляем на главную, минуя тупящие экраны
+            window.location.href = "index.html";
+        }
+    };
+
+    // ФУНКЦИЯ "НЕТ" - Сбрасывает текущую находку и продолжает искать другие совпадения
+    window.forceLoginNo = function() {
+        alert("Поиск отменен. Запустите обыск заново с другими параметрами.");
+        document.getElementById('vktrq-modal').style.display = 'none';
+        tempFoundUser = null;
+    };
+</script>
+
+</body>
+</html>
