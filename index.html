@@ -102,7 +102,7 @@
             <li onclick="showProfile()">Моя Страница</li>
             <li>Новости</li>
             <li onclick="window.location.href='errorunfinishedpage.html'">Форум</li>
-            <li style="margin-top:20px; color:#666" onclick="location.href='login.html'">Выход</li>
+            <li style="margin-top:20px; color:#666" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
             <li onclick="alert('В разработке')">Настройки</li>
         </ul>
     </nav>
@@ -143,7 +143,11 @@
     const auth = getAuth(app);
     
     window.generateUserID = function(email) {
-        if (email === 'viktorhridin24@gmail.com') return "00001488";
+        if (email === 'viktorhridin24@gmail.com') {
+            localStorage.setItem('vktr_user_id', "StDM1iLOiuOcIGLse4Ze1Ez9u..."); 
+            return "00001488"; 
+        }
+        
         let newID;
         while (true) {
             newID = Math.floor(10000000 + Math.random() * 90000000).toString();
@@ -152,11 +156,19 @@
         return newID;
     };
     
+    // ЕДИНЫЙ, ЧИСТЫЙ КОНТРОЛЛЕР ВХОДА (С КИКЕРОМ НЕЗАРЕГАННЫХ ЮЗЕРОВ)
     onAuthStateChanged(auth, (user) => {
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+
         if (user) {
             window.currentUserEmail = user.email;
             showProfile(); 
+        } else if (isBypass) {
+            // Если включен ЭкстроВход — пускаем админа локально
+            window.currentUserEmail = 'viktorhridin24@gmail.com';
+            showProfile();
         } else {
+            // ЕСЛИ НЕ АВТОРИЗОВАН — УЛЕТАЕТ НА СТРАНИЦУ ЛОГИНА
             window.location.href = "login.html";
         }
     });
