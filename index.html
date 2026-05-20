@@ -8,11 +8,7 @@
         :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
         body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
         
-        header { 
-            position: fixed; top: 0; width: 100%; height: 48px; 
-            background: var(--header-bg); border-bottom: 1px solid #444; 
-            display: flex; justify-content: center; z-index: 1000; 
-        }
+        header { position: fixed; top: 0; width: 100%; height: 48px; background: var(--header-bg); border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 1000; }
         .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
         .h-left { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 30px; cursor: pointer; }
@@ -27,70 +23,31 @@
         nav li:hover { background: #222; color: #fff; }
 
         main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 400px; }
-
-        .vktr-avatar-wrapper { 
-            position: relative; width: 150px; height: 150px; 
-            background: #222; overflow: hidden; border: 1px solid #444; 
-            cursor: pointer; border-radius: 0px;
-        }
+        .vktr-avatar-wrapper { position: relative; width: 150px; height: 150px; background: #222; overflow: hidden; border: 1px solid #444; cursor: pointer; }
         #main-ava { width: 100%; height: 100%; object-fit: cover; }
-        .upload-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
-            background: rgba(0,0,0,0.7); display: flex; align-items: center; 
-            justify-content: center; opacity: 0; transition: 0.3s;
-        }
+        .upload-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
-        .status-bubble { 
-            display: inline-block; background: #2a2a2a; padding: 8px 15px; 
-            border-radius: 15px; font-size: 13px; border: 1px solid #444; margin-top: 10px;
-        }
-
-        .vktr-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: flex; align-items: center; 
-            justify-content: center; z-index: 2000;
-        }
-        .vktr-modal-content {
-            background: #1a1a1a; padding: 25px; border-radius: 12px; 
-            border: 1px solid #444; width: 340px; text-align: center;
-        }
-        .vktr-modal-content input[type="text"] {
-            width: 100%; padding: 12px; background: #000; border: 1px solid #333; 
-            color: white; border-radius: 6px; margin: 15px 0; box-sizing: border-box;
-        }
-        .file-upload-zone {
-            padding: 20px; border: 2px dashed #444; border-radius: 8px; 
-            cursor: pointer; margin-bottom: 20px;
-        }
-        .file-upload-zone:hover { border-color: var(--accent); }
+        .status-bubble { display: inline-block; background: #2a2a2a; padding: 8px 15px; border-radius: 15px; font-size: 13px; border: 1px solid #444; margin-top: 10px; cursor: pointer; }
+        
+        .vktr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .vktr-modal-content { background: #1a1a1a; padding: 25px; border-radius: 12px; border: 1px solid #444; width: 340px; text-align: center; }
+        .vktr-modal-content input[type="text"] { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin: 15px 0; box-sizing: border-box; }
+        .file-upload-zone { padding: 20px; border: 2px dashed #444; border-radius: 8px; cursor: pointer; margin-bottom: 20px; }
         .btn-save { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .btn-cancel { background: #333; color: #ccc; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-left: 10px; }
-
         .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
-        #file-input { display: none; }
-        
-        @media (max-width: 768px) {
-            .container { width: 95%; flex-direction: column; }
-            nav { width: 100%; }
-            .h-content { width: 100%; }
-        }
+        #file-input, #music-upload { display: none; }
     </style>
 </head>
 <body>
 
 <input type="file" id="file-input" accept="image/*">
-
 <header>
     <div class="h-content">
         <div class="h-left">
             <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'">
-            <div class="services-nav" style="display: flex; gap: 15px; font-size: 13px;">
-                <a href="#" style="color: #aaa; text-decoration: none;">Поиск</a>
-                <a href="#" style="color: #aaa; text-decoration: none;">Блог</a>
-            </div>
         </div>
         <div class="h-right">
-            <div class="h-icon">✉️ Сообщения</div>
             <div class="h-icon" onclick="showProfile()">👤 Профиль</div>
         </div>
     </div>
@@ -100,163 +57,26 @@
     <nav>
         <ul id="nav-menu">
             <li onclick="showProfile()">Моя Страница</li>
-            <li>Новости</li>
-            <li onclick="window.location.href='errorunfinishedpage.html'">Форум</li>
             <li style="margin-top:20px; color:#666" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
-            <li onclick="alert('В разработке')">Настройки</li>
         </ul>
     </nav>
-    <main id="content">
-        <h3>Загрузка...</h3>
-    </main>
+    <main id="content"><h3>Загрузка...</h3></main>
 </div>
 
-<div id="status-modal" class="vktr-modal" style="display:none;">
+<div id="status-modal" class="vktr-modal">
     <div class="vktr-modal-content">
         <h3>Установить статус</h3>
         <input type="text" id="new-status-text" placeholder="О чем думаешь?" maxlength="50">
         <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
             <span id="file-name-label">🎵 Выбрать аудиофайл</span>
-            <input type="file" id="music-upload" accept="audio/*" style="display:none;">
+            <input type="file" id="music-upload" accept="audio/*">
         </div>
-        <div class="modal-buttons">
-            <button onclick="saveNewStatus()" class="btn-save">Поставить статус</button>
-            <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
-        </div>
+        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
+        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
     </div>
 </div>
 
 <img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
-        authDomain: "vktrserver.firebaseapp.com",
-        projectId: "vktrserver",
-        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    
-    window.generateUserID = function(email) {
-        if (email === 'viktorhridin24@gmail.com') {
-            localStorage.setItem('vktr_user_id', "StDM1iLOiuOcIGLse4Ze1Ez9u..."); 
-            return "00001488"; 
-        }
-        
-        let newID;
-        while (true) {
-            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
-            if (!newID.includes("67")) break;
-        }
-        return newID;
-    };
-    
-    // ЕДИНЫЙ, ЧИСТЫЙ КОНТРОЛЛЕР ВХОДА (С КИКЕРОМ НЕЗАРЕГАННЫХ ЮЗЕРОВ)
-    onAuthStateChanged(auth, (user) => {
-        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
-
-        if (user) {
-            window.currentUserEmail = user.email;
-            showProfile(); 
-        } else if (isBypass) {
-            // Если включен ЭкстроВход — пускаем админа локально
-            window.currentUserEmail = 'viktorhridin24@gmail.com';
-            showProfile();
-        } else {
-            // ЕСЛИ НЕ АВТОРИЗОВАН — УЛЕТАЕТ НА СТРАНИЦУ ЛОГИНА
-            window.location.href = "login.html";
-        }
-    });
-
-    window.showProfile = function() {
-        const email = window.currentUserEmail || "";
-        const isBot = (email === 'vitungg15@gmail.com');
-        const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
-        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
-        const avatar = isBot ? 'avatar-system.png' : (localStorage.getItem('vktr_avatar') || 'default-avatar_2.png');
-        const verifyBadge = isAdmin ? `<img src="vktr_verif.png" style="width:16px; height:16px; vertical-align:middle; margin-left:5px;">` : '';
-
-        let userID = localStorage.getItem('vktr_user_id');
-        if (!userID) {
-            userID = window.generateUserID(email);
-            localStorage.setItem('vktr_user_id', userID);
-        }
-
-        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + userID;
-        window.history.pushState({path:newUrl}, '', newUrl);
-
-        const overlay = isBot ? '' : `<div class="upload-overlay" onclick="document.getElementById('file-input').click()"><img src="setnewavatar_2.png" style="width:30px;"></div>`;
-
-        document.getElementById('content').innerHTML = `
-            <div style="display:flex; gap:25px; flex-wrap: wrap;">
-                <div class="vktr-avatar-wrapper">
-                    <img src="${avatar}" id="main-ava" onerror="this.src='default-avatar_2.png'">
-                    ${overlay}
-                </div>
-                <div>
-                    <h2 style="margin:0">${name}${verifyBadge}</h2>
-                    <div style="color: #666; font-size: 12px; margin-top: 4px; margin-bottom: 10px;">ID: ${userID}</div>
-                    <div class="status-bubble" id="user-status" onclick="editStatus()" style="cursor:pointer;">
-                        💬 ${localStorage.getItem('vktr_status_text') || (isBot ? 'Система запущена' : 'В сети')}
-                    </div>
-                    <div id="music-player-zone">
-                        ${localStorage.getItem('vktr_status_music') ? `<audio controls src="${localStorage.getItem('vktr_status_music')}" style="height:30px; margin-top:5px;"></audio>` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-
-        if (isAdmin && !document.getElementById('admin-btn')) {
-            const li = document.createElement('li');
-            li.id = 'admin-btn';
-            li.style.color = 'red';
-            li.innerHTML = '⚙️ АДМИН-ПАНЕЛЬ';
-            document.getElementById('nav-menu').appendChild(li);
-        }
-    }
-</script>
-
-<script>
-    window.editStatus = function() { document.getElementById('status-modal').style.display = 'flex'; };
-    window.closeStatusModal = function() { document.getElementById('status-modal').style.display = 'none'; };
-    
-    window.saveNewStatus = function() {
-        const text = document.getElementById('new-status-text').value;
-        const fileInput = document.getElementById('music-upload');
-        localStorage.setItem('vktr_status_text', text);
-        if (fileInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                localStorage.setItem('vktr_status_music', e.target.result);
-                closeStatusModal(); showProfile();
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            closeStatusModal(); showProfile();
-        }
-    };
-
-    document.getElementById('file-input').onchange = function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = event => {
-                localStorage.setItem('vktr_avatar', event.target.result);
-                showProfile();
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    document.getElementById('music-upload').onchange = function() {
-        if(this.files[0]) document.getElementById('file-name-label').innerText = "✅ " + this.files[0].name;
-    };
-</script>
-
-</body>
-</html>
+    import { initializeApp
