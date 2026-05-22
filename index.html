@@ -5,37 +5,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Portal</title>
     <style>
-        :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
-        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; }
+        /* Новая строго сбалансированная палитра */
+        :root { 
+            --accent: #ff0000;       /* Чистый ярко-красный для акцентов */
+            --bg: #000000;           /* Глубокий черный фон */
+            --card: #0a0a0a;         /* Очень темный серый для блоков, чтобы они не сливались */
+            --header-bg: #050505;    /* Почти черный для шапки */
+            --border: #1a1a1a;       /* Темная граница по умолчанию */
+            --text-main: #ffffff;    /* Белый текст */
+            --text-secondary: #888888; /* Серый текст для второстепенных данных */
+        }
+
+        body { 
+            background: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', Tahoma, sans-serif; /* Чуть обновил шрифт для современности */
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+        }
         
-        header { position: fixed; top: 0; width: 100%; height: 48px; background: var(--header-bg); border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 1000; }
+        header { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 48px; 
+            background: var(--header-bg); 
+            border-bottom: 1px solid var(--accent); /* Красная разделительная линия сверху */
+            display: flex; 
+            justify-content: center; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(255, 0, 0, 0.1); /* Легкое красное свечение */
+        }
         .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
         .h-left { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 30px; cursor: pointer; }
         .h-right { display: flex; align-items: center; gap: 20px; }
-        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; font-size: 14px; color: #fff; text-decoration: none; }
-        .h-icon:hover { opacity: 1; }
+        .h-icon { 
+            cursor: pointer; 
+            opacity: 0.8; 
+            transition: 0.3s; 
+            font-size: 14px; 
+            color: var(--text-main); 
+            text-decoration: none; 
+            font-weight: 500;
+        }
+        .h-icon:hover { opacity: 1; color: var(--accent); }
 
         .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
         nav { width: 180px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { padding: 7px 10px; color: #d1d1d1; cursor: pointer; font-size: 13px; border-radius: 4px; }
-        nav li:hover { background: #222; color: #fff; }
+        nav li { 
+            padding: 9px 12px; 
+            color: #b3b3b3; 
+            cursor: pointer; 
+            font-size: 13px; 
+            border-radius: 4px; 
+            transition: 0.2s;
+            border-left: 2px solid transparent;
+        }
+        nav li:hover { 
+            background: var(--card); 
+            color: var(--text-main); 
+            border-left: 2px solid var(--accent); /* Красный маркер активного пункта */
+        }
 
-        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 400px; }
-        .vktr-avatar-wrapper { position: relative; width: 150px; height: 150px; background: #222; overflow: hidden; border: 1px solid #444; cursor: pointer; }
-        #main-ava { width: 100%; height: 100%; object-fit: cover; }
-        .upload-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
-        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
-        .status-bubble { display: inline-block; background: #2a2a2a; padding: 8px 15px; border-radius: 15px; font-size: 13px; border: 1px solid #444; margin-top: 10px; cursor: pointer; }
+        main { 
+            flex-grow: 1; 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            padding: 25px; 
+            border-radius: 6px; 
+            min-height: 400px; 
+        }
         
-        .vktr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .vktr-modal-content { background: #1a1a1a; padding: 25px; border-radius: 12px; border: 1px solid #444; width: 340px; text-align: center; }
-        .vktr-modal-content input[type="text"] { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin: 15px 0; box-sizing: border-box; }
-        .file-upload-zone { padding: 20px; border: 2px dashed #444; border-radius: 8px; cursor: pointer; margin-bottom: 20px; }
-        .btn-save { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-cancel { background: #333; color: #ccc; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-left: 10px; }
-        .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; }
+        /* Стили профиля */
+        .vktr-avatar-wrapper { 
+            position: relative; 
+            width: 150px; 
+            height: 150px; 
+            background: #111; 
+            overflow: hidden; 
+            border: 2px solid var(--border); 
+            cursor: pointer; 
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        .vktr-avatar-wrapper:hover {
+            border-color: var(--accent); /* Подсветка аватара при наведении */
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
+        .upload-overlay { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 40px; 
+            background: rgba(255, 0, 0, 0.75); /* Полупрозрачный красный оверлей */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0; 
+            transition: 0.3s; 
+        }
+        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
+        
+        .status-bubble { 
+            display: inline-block; 
+            background: #111; 
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            border: 1px solid var(--border); 
+            margin-top: 12px; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .status-bubble:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Модальные окна */
+        .vktr-modal { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.9); /* Более плотный черный фон */
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 2000; 
+        }
+        .vktr-modal-content { 
+            background: var(--card); 
+            padding: 30px; 
+            border-radius: 8px; 
+            border: 1px solid var(--accent); /* Красная рамка для важных окон */
+            width: 340px; 
+            text-align: center; 
+            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.2);
+        }
+        .vktr-modal-content h3 { margin-top: 0; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .vktr-modal-content input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            background: var(--bg); 
+            border: 1px solid var(--border); 
+            color: white; 
+            border-radius: 4px; 
+            margin: 15px 0; 
+            box-sizing: border-box; 
+            transition: 0.3s;
+        }
+        .vktr-modal-content input[type="text"]:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        .file-upload-zone { 
+            padding: 20px; 
+            border: 2px dashed var(--border); 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-bottom: 25px; 
+            transition: 0.2s;
+            color: var(--text-secondary);
+        }
+        .file-upload-zone:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+        
+        /* Кнопки */
+        .btn-save { 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 11px 24px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+        }
+        .btn-save:hover {
+            background: #cc0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+        .btn-cancel { 
+            background: transparent; 
+            color: var(--text-secondary); 
+            border: 1px solid var(--border); 
+            padding: 11px 24px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-left: 10px; 
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+        .btn-cancel:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .hamster-helper { position: fixed; right: 20px; bottom: 20px; width: 90px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); }
         #file-input, #music-upload { display: none; }
     </style>
 </head>
@@ -57,7 +239,7 @@
     <nav>
         <ul id="nav-menu">
             <li onclick="showProfile()">Моя Страница</li>
-            <li style="margin-top:20px; color:#666" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
+            <li style="margin-top:20px; color:#ff3333;" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
         </ul>
     </nav>
     <main id="content"><h3>Загрузка...</h3></main>
@@ -148,10 +330,10 @@
                     <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:30px;"></div>
                 </div>
                 <div>
-                    <h2>${name} ${isAdmin ? '✅' : ''}</h2>
-                    <p>ID: ${userID}</p>
+                    <h2 style="margin: 0 0 10px 0; font-weight: 600;">${name} ${isAdmin ? '<span style="color:var(--accent);">✅</span>' : ''}</h2>
+                    <p style="color: var(--text-secondary); margin: 0 0 15px 0; font-size: 14px;">ID: ${userID}</p>
                     <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
-                        ${localStorage.getItem('vktr_status_text') || 'всё нормально'}
+                        ${localStorage.getItem('vktr_status_text') || 'Замечательный день, когда ты пьешь кофе и сидишь в vktr'}
                     </div>
                 </div>
             </div>`;
