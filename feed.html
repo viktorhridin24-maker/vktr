@@ -3,92 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Портал услуг</title>
+    <title>VKTR | Portal</title>
     <style>
-        :root { --accent: #e60000; --bg: #0a0a0a; --card: #161616; --header-bg: #222; }
-        body { background: var(--bg); color: white; font-family: tahoma, sans-serif; margin: 0; display: flex; justify-content: center; overflow-x: hidden; }
-        
-        header { position: fixed; top: 0; width: 100%; height: 48px; background: var(--header-bg); border-bottom: 1px solid #444; display: flex; justify-content: center; z-index: 1000; }
-        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; }
-        .logo-img { height: 30px; cursor: pointer; }
-        .h-right { display: flex; gap: 20px; font-size: 13px; }
-        .h-icon { cursor: pointer; opacity: 0.7; transition: 0.3s; }
-        .h-icon:hover { opacity: 1; }
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
 
-        .container { width: 1000px; margin-top: 65px; display: flex; gap: 20px; }
-        nav { width: 180px; }
+        :root {
+            --accent: #e60000;
+            --accent-light: #ff3333;
+            --accent-dim: #b30000;
+            --bg: #0a0a0a;
+            --card: rgba(12, 12, 12, 0.82);
+            --card-border: rgba(255,255,255,0.07);
+            --header-bg: rgba(10,10,10,0.92);
+            --text: #f0f0f0;
+            --text-muted: #999;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Jost', tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(230, 0, 0, 0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255, 60, 60, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 0, 0, 0.10) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle noise grain */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: var(--header-bg);
+            border-bottom: 1px solid rgba(230,0,0,0.25);
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(14px);
+        }
+
+        .h-content {
+            width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .h-left { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
+
+        /* Red accent line under logo */
+        .logo-wrap {
+            position: relative;
+            padding-bottom: 3px;
+        }
+        .logo-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px;
+        }
+
+        .h-right { display: flex; align-items: center; gap: 20px; }
+
+        .h-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.25s;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .h-icon:hover { color: var(--text); }
+
+        .container {
+            width: 1000px;
+            margin-top: 72px;
+            display: flex;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 40px;
+        }
+
+        nav { width: 190px; flex-shrink: 0; }
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { padding: 10px; color: #aaa; cursor: pointer; border-radius: 4px; font-size: 13px; }
-        nav li:hover { background: #222; color: #fff; }
-        nav li.active { background: #333; color: #fff; }
+        nav li {
+            padding: 9px 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            font-weight: 400;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            position: relative;
+        }
+        nav li:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+        }
+        nav li.active {
+            color: #fff;
+            background: rgba(230,0,0,0.15);
+            border-left: 2px solid var(--accent);
+            padding-left: 11px;
+        }
 
-        main { flex-grow: 1; background: var(--card); border: 1px solid #333; padding: 25px; border-radius: 4px; min-height: 80vh; }
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 12px 0;
+        }
 
-        /* Стили модального окна с Тодуком */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-card { background: #1a1a1a; padding: 25px; border-radius: 12px; width: 400px; border: 1px solid #444; text-align: center; }
-        .btn-ready { background: var(--accent); color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        main {
+            flex-grow: 1;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            border-radius: 10px;
+            min-height: 500px;
+            backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle red corner glow on card */
+        main::before {
+            content: '';
+            position: absolute;
+            top: -40px; left: -40px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
 
         /* Сетки услуг */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
-        .card { background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; transition: 0.3s; }
-        .card:hover { border-color: var(--accent); }
-        .price { color: var(--accent); font-weight: bold; margin: 10px 0; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; margin-top: 20px; }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            padding: 20px; 
+            border-radius: 8px; 
+            transition: 0.3s; 
+        }
+        .card:hover { 
+            border-color: rgba(230, 0, 0, 0.4); 
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .card h4 { margin: 0 0 8px 0; font-size: 16px; color: #fff; font-weight: 500; }
+        .price { color: var(--accent-light); font-weight: 600; margin: 14px 0; font-size: 15px; }
+        
+        /* Кнопки в карточках */
+        .card button, .btn-action {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .card button:hover, .btn-action:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* Единый стиль заголовков в контенте */
+        .content-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* Avatar */
+        .vktr-avatar-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            background: #1a1a1a;
+            overflow: hidden;
+            border: 2px solid rgba(230,0,0,0.35);
+            cursor: pointer;
+            border-radius: 6px;
+            flex-shrink: 0;
+            transition: border-color 0.3s;
+        }
+        .vktr-avatar-wrapper:hover { border-color: var(--accent); }
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
+
+        .upload-overlay {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 38px;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
+
+        /* Profile name */
+        .profile-name {
+            font-family: 'Bebas Neue', tahoma, sans-serif;
+            font-size: 34px;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin: 0 0 4px;
+            color: #fff;
+        }
+
+        .profile-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin: 0 0 14px;
+            font-weight: 300;
+        }
+
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(230,0,0,0.15);
+            border: 1px solid rgba(230,0,0,0.35);
+            color: #ff6666;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .status-bubble {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: border-color 0.25s, color 0.25s;
+        }
+        .status-bubble:hover {
+            border-color: rgba(230,0,0,0.4);
+            color: var(--text);
+        }
+
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        /* Modals */
+        .vktr-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(6px);
+        }
+
+        .vktr-modal-content {
+            background: #141414;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(230,0,0,0.2);
+            width: 380px;
+            text-align: center;
+            position: relative;
+        }
+
+        .vktr-modal-content h3 {
+            font-family: 'Bebas Neue', tahoma, sans-serif;
+            letter-spacing: 2px;
+            font-size: 24px;
+            margin: 0 0 12px;
+            color: #fff;
+        }
+
+        .vktr-modal-content input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: white;
+            border-radius: 6px;
+            margin: 0 0 16px;
+            font-family: 'Jost', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .vktr-modal-content input[type="text"]:focus {
+            border-color: rgba(230,0,0,0.5);
+        }
+
+        .file-upload-zone {
+            padding: 18px;
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .file-upload-zone:hover {
+            border-color: rgba(230,0,0,0.4);
+            color: var(--text);
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+        .btn-save:hover { background: var(--accent-light); }
+
+        .btn-cancel {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 8px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-cancel:hover { background: rgba(255,255,255,0.1); }
+
+        .hamster-helper {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 88px;
+            z-index: 10;
+            filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
+        }
+
+        #file-input, #music-upload { display: none; }
+        .profile-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 22px 0;
+        }
     </style>
 </head>
 <body>
 
-<div id="welcome-box" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-        <img src="welcomevktr.png" style="width: 100%; border-radius: 8px; margin-bottom: 15px;" alt="Welcome">
+<input type="file" id="file-input" accept="image/*">
+
+<!-- Тодук приветствие в новом стиле -->
+<div id="welcome-box" class="vktr-modal">
+    <div class="vktr-modal-content">
+        <img src="welcomevktr.png" style="width: 100%; border-radius: 8px; margin-bottom: 18px;" alt="Welcome">
         <h3>Добро пожаловать!</h3>
-        <p style="font-size: 13px; color: #999;">Желаем вам счастливого дня в vktr. Но сначала активируйте карточку с пузырями и добавьте Цветок Доверия вот здесь!</p>
-        <button class="btn-ready" onclick="closeWelcome()">Поехали!</button>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">Желаем вам счастливого дня в vktr. Но сначала активируйте карточку с пузырями и добавьте Цветок Доверия вот здесь!</p>
+        <button class="btn-save" style="width:100%; padding:12px;" onclick="closeWelcome()">Поехали!</button>
     </div>
 </div>
 
 <header>
     <div class="h-content">
-        <img src="WhiteLogoVKTR.png" class="logo-img" onclick="changeTab('feed')">
+        <div class="h-left">
+            <div class="logo-wrap">
+                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="changeTab('feed')">
+            </div>
+        </div>
         <div class="h-right">
-            <span class="h-icon" onclick="changeTab('feed')">🛒 Услуги</span>
-            <span class="h-icon" onclick="changeTab('profile')">👤 Кабинет</span>
+            <a class="h-icon" style="margin-right: 15px;" onclick="changeTab('feed')">🛒 Услуги</a>
+            <a class="h-icon" onclick="changeTab('profile')">👤 Кабинет</a>
         </div>
     </div>
 </header>
 
 <div class="container">
     <nav>
-        <ul>
-            <li id="nav-feed" onclick="changeTab('feed')">Лента услуг</li>
+        <ul id="nav-menu">
+            <li id="nav-feed" class="active" onclick="changeTab('feed')">Лента услуг</li>
             <li id="nav-profile" onclick="changeTab('profile')">Мой профиль</li>
             <li onclick="location.href='idea.html'">💡 Предложить идею</li>
-            <li style="margin-top: 20px; color: #555;" onclick="location.href='login.html'">Выход</li>
+            <div class="nav-divider"></div>
+            <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
         </ul>
     </nav>
-    <main id="main-content">
-        <h2 id="loading-text">Загрузка ленты...</h2>
+    <main id="content">
+        <h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка...</h3>
     </main>
 </div>
 
-<script>
-    // 1. Управление вкладками
-    function changeTab(tab) {
-        const content = document.getElementById('main-content');
+<!-- Модалка статуса -->
+<div id="status-modal" class="vktr-modal">
+    <div class="vktr-modal-content">
+        <h3>Установить статус</h3>
+        <input type="text" id="new-status-text" placeholder="О чём думаешь?" maxlength="50">
+        <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
+            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
+            <input type="file" id="music-upload" accept="audio/*">
+        </div>
+        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
+        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
+    </div>
+</div>
+
+<img src="hamster.png" class="hamster-helper" alt="helper">
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const app = initializeApp({
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    });
+    const auth = getAuth(app);
+
+    window.generateUserID = (email) => {
+        if (email === 'viktorhridin24@gmail.com') return "00001488";
+        let newID;
+        do {
+            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
+        } while (newID.includes("67"));
+        return newID;
+    };
+
+    const MY_ID = "00001488";
+    const IS_MAINTENANCE = true;
+    const currentUserID = localStorage.getItem('vktr_user_id');
+
+    if (IS_MAINTENANCE && currentUserID !== MY_ID) {
+        window.location.href = 'maintenance.html';
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+        if (user || isBypass) {
+            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
+            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
+            localStorage.setItem('vktr_user_id', userID);
+
+            if (IS_MAINTENANCE && userID !== MY_ID) {
+                window.location.href = 'maintenance.html';
+                return;
+            }
+
+            // Проверка первого визита (логика Тодука)
+            if (!localStorage.getItem('vktr_first_visit')) {
+                document.getElementById('welcome-box').style.display = 'flex';
+            }
+
+            window.changeTab('feed'); // По умолчанию открываем ленту
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // Управление вкладками
+    window.changeTab = (tab) => {
+        const content = document.getElementById('content');
         document.querySelectorAll('nav li').forEach(el => el.classList.remove('active'));
 
         if (tab === 'feed') {
             document.getElementById('nav-feed').classList.add('active');
             content.innerHTML = `
-                <h2 style="margin-top:0">Лента услуг</h2>
+                <h2 class="content-title">Лента услуг</h2>
                 
-                <div class="eurovision-banner" style="background: linear-gradient(135deg, #b30000, #e60000); color: white; padding: 20px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border: 1px solid #ff3333;">
+                <div class="eurovision-banner" style="background: linear-gradient(135deg, #b30000, #e60000); color: white; padding: 25px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(230,0,0,0.15);">
                     <div style="max-width: 60%; text-align: left;">
-                        <h3 style="margin: 0 0 10px 0; font-size: 20px; font-family: sans-serif;"><b>Евровидение закончилось! Кто ваш фаворит?</b></h3>
-                        <p style="margin: 0 0 15px 0; font-size: 13px; color: #fff; line-height: 1.4; opacity: 0.95;">
+                        <h3 style="margin: 0 0 10px 0; font-size: 20px; font-family: 'Jost', sans-serif; font-weight:600;">Евровидение закончилось! Кто ваш фаворит?</h3>
+                        <p style="margin: 0 0 18px 0; font-size: 13px; color: #fff; line-height: 1.4; opacity: 0.9;">
                             Поставьте музыку вашего любимого певца из Eurovision 2026. Это может быть Akylas, Satoshi, Leleka и остальные. Выделитесь среди евровидения!
                         </p>
-                        <button onclick="changeTab('profile')" style="background: white; color: #e60000; border: none; padding: 10px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s;">Перейти к профилю</button>
+                        <button onclick="changeTab('profile')" style="background: white; color: #e60000; border: none; padding: 10px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; font-family:'Jost', sans-serif; transition: 0.2s;">Перейти к профилю</button>
                     </div>
                     <div style="max-width: 35%;">
                         <img src="eurovisionend.png" alt="Eurovision End" style="width: 100%; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
@@ -98,43 +558,96 @@
                 <div class="services-grid">
                     <div class="card">
                         <h4>Премиум Meowl</h4>
-                        <p style="font-size:12px; color:#666">Эксклюзивные функции соцсети.</p>
+                        <p style="font-size:12px; color:var(--text-muted); margin:0;">Эксклюзивные функции соцсети.</p>
                         <div class="price">450 🫧</div>
-                        <button style="width:100%; cursor:pointer;">Купить</button>
+                        <button>Купить</button>
                     </div>
                     <div class="card">
                         <h4>Памидор</h4>
-                        <p style="font-size:12px; color:#666">Особый товар от Стёпы.</p>
+                        <p style="font-size:12px; color:var(--text-muted); margin:0;">Особый товар от Стёпы.</p>
                         <div class="price">10 🫧</div>
-                        <button style="width:100%; cursor:pointer;">Взять</button>
+                        <button>Взять</button>
                     </div>
                 </div>
             `;
         } else if (tab === 'profile') {
             document.getElementById('nav-profile').classList.add('active');
-            content.innerHTML = `
-                <h2>Личный кабинет</h2>
-                <div style="background:#111; padding:20px; border: 1px solid #333; border-radius:8px;">
-                    <p>Статус: <b>Магнат бейджиков</b> ✅</p>
-                    <p>Баланс: <span style="color:var(--accent)">150 🫧</span></p>
-                    <button style="padding:10px; cursor:pointer;">Активировать карту</button>
-                </div>
-            `;
+            window.showProfile();
         }
-    }
-
-    // 2. Логика первого входа (Тодук)
-    window.onload = function() {
-        if (!localStorage.getItem('vktr_first_visit')) {
-            document.getElementById('welcome-box').style.display = 'flex';
-        }
-        changeTab('feed'); // Загружаем услуги сразу после старта
     };
 
-    function closeWelcome() {
+    window.showProfile = () => {
+        const email = window.currentUserEmail || "";
+        const isBot = (email === 'vitungg15@gmail.com');
+        const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
+        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
+        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
+        const userID = localStorage.getItem('vktr_user_id');
+        const statusText = localStorage.getItem('vktr_status_text') || 'В сети';
+
+        document.getElementById('content').innerHTML = `
+            <h2 class="content-title">Личный кабинет</h2>
+            <div style="display:flex; gap:28px; align-items:flex-start; margin-bottom: 25px;">
+                <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
+                    <img src="${avatar}" id="main-ava">
+                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>
+                </div>
+                <div style="padding-top:6px; flex:1;">
+                    <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
+                        <span class="profile-name">${name}</span>
+                        ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
+                    </div>
+                    <p class="profile-id">ID: ${userID}</p>
+                    <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
+                        <span class="status-dot"></span>
+                        ${statusText}
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); padding:20px; border: 1px solid rgba(255,255,255,0.05); border-radius:8px; margin-bottom: 20px;">
+                <p style="margin: 0 0 10px 0; font-size:14px;">Статус: <b style="color:#fff">Магнат бейджиков</b> ✅</p>
+                <p style="margin: 0 0 15px 0; font-size:14px;">Баланс: <span style="color:var(--accent-light); font-weight:600;">150 🫧</span></p>
+                <button class="btn-action" style="max-width:200px;">Активировать карту</button>
+            </div>
+
+            <div class="profile-divider"></div>
+            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">Активность и публикации появятся здесь.</p>
+        `;
+    };
+
+    window.closeWelcome = () => {
         document.getElementById('welcome-box').style.display = 'none';
         localStorage.setItem('vktr_first_visit', 'done');
-    }
+    };
+
+    window.closeStatusModal = () => {
+        document.getElementById('status-modal').style.display = 'none';
+    };
+
+    window.saveNewStatus = () => {
+        localStorage.setItem('vktr_status_text', document.getElementById('new-status-text').value);
+        const file = document.getElementById('music-upload').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); window.showProfile(); };
+            reader.readAsDataURL(file);
+        } else {
+            window.showProfile();
+        }
+        document.getElementById('status-modal').style.display = 'none';
+    };
+
+    document.getElementById('file-input').onchange = (e) => {
+        const reader = new FileReader();
+        reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); window.showProfile(); };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    document.getElementById('music-upload').onchange = (e) => {
+        const name = e.target.files[0] ? e.target.files[0].name : "Выбрать аудиофайл";
+        document.getElementById('file-name-label').innerText = "🎵 " + name;
+    };
 </script>
 
 </body>
