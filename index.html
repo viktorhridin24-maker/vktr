@@ -191,13 +191,13 @@
             background: #1a1a1a;
             overflow: hidden;
             border: 2px solid rgba(230,0,0,0.35);
-            cursor: pointer;
             border-radius: 6px;
             flex-shrink: 0;
             transition: border-color 0.3s;
         }
  
-        .vktr-avatar-wrapper:hover { border-color: var(--accent); }
+        .vktr-avatar-wrapper.editable { cursor: pointer; }
+        .vktr-avatar-wrapper.editable:hover { border-color: var(--accent); }
  
         #main-ava { width: 100%; height: 100%; object-fit: cover; }
  
@@ -213,7 +213,7 @@
             transition: opacity 0.25s;
         }
  
-        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
+        .vktr-avatar-wrapper.editable:hover .upload-overlay { opacity: 1; }
  
         /* Profile name */
         .profile-name {
@@ -260,11 +260,11 @@
             border-radius: 20px;
             font-size: 13px;
             color: var(--text-muted);
-            cursor: pointer;
             transition: border-color 0.25s, color 0.25s;
         }
  
-        .status-bubble:hover {
+        .status-bubble.editable { cursor: pointer; }
+        .status-bubble.editable:hover {
             border-color: rgba(230,0,0,0.4);
             color: var(--text);
         }
@@ -412,7 +412,7 @@
             </div>
         </div>
         <div class="h-right">
-            <a class="h-icon" onclick="showProfile()">👤 Профиль</a>
+            <a class="h-icon" onclick="goToMyProfile()">👤 Профиль</a>
         </div>
     </div>
 </header>
@@ -420,7 +420,7 @@
 <div class="container">
     <nav>
         <ul id="nav-menu">
-            <li class="active" onclick="showProfile()">Моя Страница</li>
+            <li id="my-page-nav" class="active" onclick="goToMyProfile()">Моя Страница</li>
             <div class="nav-divider"></div>
             <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
         </ul>
@@ -489,21 +489,62 @@
             window.location.href = "login.html";
         }
     });
+
+    // Функция для гарантированного перехода на свой собственный профиль (очищает ID из URL)
+    window.goToMyProfile = () => {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('id')) {
+            url.searchParams.delete('id');
+            window.location.href = url.pathname;
+        } else {
+            window.showProfile();
+        }
+    };
  
     window.showProfile = () => {
-        const email = window.currentUserEmail || "";
-        const isBot = (email === 'vitungg15@gmail.com');
-        const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
-        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
-        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
-        const userID = localStorage.getItem('vktr_user_id');
-        const statusText = localStorage.getItem('vktr_status_text') || 'В сети';
- 
+        // Извлекаем id из параметров URL (?id=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrlID = urlParams.get('id');
+        const myUserID = localStorage.getItem('vktr_user_id');
+
+        // Определяем, чей профиль открываем: свой или чужой
+        const isMyOwnProfile = !targetUrlID || targetUrlID === myUserID;
+
+        let name, isAdmin, userID, avatar, statusText;
+
+        if (isMyOwnProfile) {
+            // Загружаем данные текущего пользователя
+            const email = window.currentUserEmail || "";
+            const isBot = (email === 'vitungg15@gmail.com');
+            isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
+            name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
+            avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
+            userID = myUserID;
+            statusText = localStorage.getItem('vktr_status_text') || 'В сети';
+            document.getElementById('my-page-nav').classList.add('active');
+        } else {
+            // Отображаем чужой профиль
+            userID = targetUrlID;
+            // Если заходим на профиль администратора по его ID
+            if (userID === "00001488") {
+                name = "Viktor";
+                isAdmin = true;
+            } else {
+                name = "Пользователь #" + userID.substring(0, 4);
+                isAdmin = false;
+            }
+            avatar = 'default-avatar_2.png';
+            statusText = 'Оффлайн';
+            document.getElementById('my-page-nav').classList.remove('active');
+        }
+
+        // Рендерим HTML с учетом прав (добавляем или убираем класс editable и события клика)
         document.getElementById('content').innerHTML = `
             <div style="display:flex; gap:28px; align-items:flex-start;">
-                <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
+                <div class="vktr-avatar-wrapper ${isMyOwnProfile ? 'editable' : ''}" 
+                     ${isMyOwnProfile ? 'onclick="document.getElementById(\'file-input\').click()"' : ''}>
                     <img src="${avatar}" id="main-ava">
-                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>
+                    ${isMyOwnProfile ? '<div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>' : ''}
                 </div>
                 <div style="padding-top:6px; flex:1;">
                     <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
@@ -511,14 +552,17 @@
                         ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
                     </div>
                     <p class="profile-id">ID: ${userID}</p>
-                    <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
-                        <span class="status-dot"></span>
+                    <div class="status-bubble ${isMyOwnProfile ? 'editable' : ''}" 
+                         ${isMyOwnProfile ? 'onclick="document.getElementById(\'status-modal\').style.display=\'flex\'"' : ''}>
+                        <span class="status-dot" style="${!isMyOwnProfile ? 'background:#666; animation:none;' : ''}"></span>
                         ${statusText}
                     </div>
                 </div>
             </div>
             <div class="profile-divider"></div>
-            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">Активность и публикации появятся здесь.</p>
+            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">
+                ${isMyOwnProfile ? 'Активность и публикации появятся здесь.' : 'У этого пользователя пока нет публикаций.'}
+            </p>
         `;
     };
  
