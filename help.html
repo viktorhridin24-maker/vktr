@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VKTR | Help Center</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --accent: #e60000;
+            --accent-light: #ff3333;
+            --accent-dim: #b30000;
+            --bg: #0a0a0a;
+            --card: rgba(12, 12, 12, 0.82);
+            --card-border: rgba(255,255,255,0.07);
+            --header-bg: rgba(10,10,10,0.92);
+            --text: #f0f0f0;
+            --text-muted: #999;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Jost', tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(230, 0, 0, 0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255, 60, 60, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 0, 0, 0.10) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle noise grain */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: var(--header-bg);
+            border-bottom: 1px solid rgba(230,0,0,0.25);
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(14px);
+        }
+
+        .h-content {
+            width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .h-left { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
+
+        .logo-wrap {
+            position: relative;
+            padding-bottom: 3px;
+        }
+        .logo-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px;
+        }
+
+        .h-right { display: flex; align-items: center; gap: 20px; }
+        .h-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.25s;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .h-icon:hover { color: var(--text); }
+
+        .container {
+            width: 1000px;
+            margin-top: 72px;
+            display: flex;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 40px;
+        }
+
+        nav { width: 190px; flex-shrink: 0; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li {
+            padding: 9px 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            font-weight: 400;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            position: relative;
+        }
+        nav li:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+        }
+        nav li.active {
+            color: #fff;
+            background: rgba(230,0,0,0.15);
+            border-left: 2px solid var(--accent);
+            padding-left: 11px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 12px 0;
+        }
+
+        main {
+            flex-grow: 1;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            border-radius: 10px;
+            min-height: 500px;
+            backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        main::before {
+            content: '';
+            position: absolute;
+            top: -40px; left: -40px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* --- Стили оригинального Профиля --- */
+        .vktr-avatar-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            background: #1a1a1a;
+            overflow: hidden;
+            border: 2px solid rgba(230,0,0,0.35);
+            cursor: pointer;
+            border-radius: 6px;
+            flex-shrink: 0;
+            transition: border-color 0.3s;
+        }
+        .vktr-avatar-wrapper:hover { border-color: var(--accent); }
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
+        .upload-overlay {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 38px;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
+        
+        .profile-name {
+            font-family: 'Bebas Neue', tahoma, sans-serif;
+            font-size: 34px;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin: 0 0 4px;
+            color: #fff;
+        }
+        .profile-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin: 0 0 14px;
+            font-weight: 300;
+        }
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(230,0,0,0.15);
+            border: 1px solid rgba(230,0,0,0.35);
+            color: #ff6666;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .status-bubble {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: border-color 0.25s, color 0.25s;
+        }
+        .status-bubble:hover {
+            border-color: rgba(230,0,0,0.4);
+            color: var(--text);
+        }
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+        .profile-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 22px 0;
+        }
+
+        /* --- Стили контента Справочного Центра --- */
+        .help-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 38px;
+            letter-spacing: 2px;
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+        .help-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+        
+        /* Поиск */
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Jost', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .search-input:focus {
+            border-color: rgba(230,0,0,0.5);
+            box-shadow: 0 0 15px rgba(230,0,0,0.1);
+        }
+
+        /* Категории (Плитка) */
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .help-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s, border-color 0.2s;
+        }
+        .help-card:hover {
+            background: rgba(230,0,0,0.04);
+            border-color: rgba(230,0,0,0.3);
+            transform: translateY(-2px);
+        }
+        .help-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 500;
+        }
+        .help-card p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Аккордеон (FAQ) */
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 5px;
+        }
+        .faq-trigger {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 16px 5px;
+            color: #fff;
+            font-family: 'Jost', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-trigger::after {
+            content: '＋';
+            font-size: 12px;
+            color: var(--accent);
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-trigger::after {
+            content: '－';
+        }
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-content p {
+            margin: 0;
+            padding: 0 5px 16px 5px;
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Форма тикетов */
+        .ticket-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-group label {
+            font-size: 13px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Jost', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: rgba(230,0,0,0.5);
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* --- Общие элементы UI из вашего скрипта --- */
+        .vktr-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(6px);
+        }
+        .vktr-modal-content {
+            background: #141414;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(230,0,0,0.2);
+            width: 360px;
+            text-align: center;
+            position: relative;
+        }
+        .vktr-modal-content h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            font-size: 22px;
+            margin: 0 0 18px;
+            color: #fff;
+        }
+        .vktr-modal-content input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: white;
+            border-radius: 6px;
+            margin: 0 0 16px;
+            font-family: 'Jost', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+        .vktr-modal-content input[type="text"]:focus { border-color: rgba(230,0,0,0.5); }
+        
+        .file-upload-zone {
+            padding: 18px;
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .file-upload-zone:hover { border-color: rgba(230,0,0,0.4); color: var(--text); }
+
+        .btn-save {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+        .btn-save:hover { background: var(--accent-light); }
+
+        .btn-cancel {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 8px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-cancel:hover { background: rgba(255,255,255,0.1); }
+
+        .hamster-helper {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 88px;
+            z-index: 10;
+            filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
+        }
+
+        #file-input, #music-upload { display: none; }
+    </style>
+</head>
+<body>
+
+<input type="file" id="file-input" accept="image/*">
+
+<header>
+    <div class="h-content">
+        <div class="h-left">
+            <div class="logo-wrap">
+                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="window.showHelpCenter()">
+            </div>
+        </div>
+        <div class="h-right">
+            <a class="h-icon" onclick="window.showProfile()">👤 Профиль</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <nav>
+        <ul id="nav-menu">
+            <li id="menu-profile" onclick="window.showProfile()">Моя Страница</li>
+            <li id="menu-help" class="active" onclick="window.showHelpCenter()">Справочный Центр</li>
+            <li id="menu-ticket" onclick="window.showTicketForm()">Создать Тикет</li>
+            <div class="nav-divider"></div>
+            <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
+        </ul>
+    </nav>
+    
+    <main id="content">
+        <!-- Сюда динамически рендерится контент -->
+        <h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка...</h3>
+    </main>
+</div>
+
+<!-- Модалка статуса -->
+<div id="status-modal" class="vktr-modal">
+    <div class="vktr-modal-content">
+        <h3>Установить статус</h3>
+        <input type="text" id="new-status-text" placeholder="О чём думаешь?" maxlength="50">
+        <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
+            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
+            <input type="file" id="music-upload" accept="audio/*">
+        </div>
+        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
+        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
+    </div>
+</div>
+
+<img src="hamster.png" class="hamster-helper" alt="helper">
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const app = initializeApp({
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    });
+    const auth = getAuth(app);
+
+    window.generateUserID = (email) => {
+        if (email === 'viktorhridin24@gmail.com') return "00001488";
+        let newID;
+        do {
+            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
+        } while (newID.includes("67"));
+        return newID;
+    };
+
+    const MY_ID = "00001488";
+    const IS_MAINTENANCE = true;
+    const currentUserID = localStorage.getItem('vktr_user_id');
+
+    if (IS_MAINTENANCE && currentUserID !== MY_ID) {
+        window.location.href = 'maintenance.html';
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+        if (user || isBypass) {
+            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
+            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
+            localStorage.setItem('vktr_user_id', userID);
+
+            if (IS_MAINTENANCE && userID !== MY_ID) {
+                window.location.href = 'maintenance.html';
+                return;
+            }
+
+            // По умолчанию открываем Справочный Центр
+            window.showHelpCenter();
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // Функция управления активными классами в боковом меню
+    function setMenuActive(id) {
+        document.querySelectorAll('#nav-menu li').forEach(li => li.classList.remove('active'));
+        const activeLi = document.getElementById(id);
+        if(activeLi) activeLi.classList.add('active');
+    }
+
+    // --- Логика Профиля ---
+    window.showProfile = () => {
+        setMenuActive('menu-profile');
+        const email = window.currentUserEmail || "";
+        const isBot = (email === 'vitungg15@gmail.com');
+        const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
+        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
+        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
+        const userID = localStorage.getItem('vktr_user_id');
+        const statusText = localStorage.getItem('vktr_status_text') || 'В сети';
+
+        document.getElementById('content').innerHTML = `
+            <div style="display:flex; gap:28px; align-items:flex-start;">
+                <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
+                    <img src="${avatar}" id="main-ava">
+                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>
+                </div>
+                <div style="padding-top:6px; flex:1;">
+                    <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
+                        <span class="profile-name">${name}</span>
+                        ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
+                    </div>
+                    <p class="profile-id">ID: ${userID}</p>
+                    <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
+                        <span class="status-dot"></span>
+                        ${statusText}
+                    </div>
+                </div>
+            </div>
+            <div class="profile-divider"></div>
+            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">Активность и публикации появятся здесь.</p>
+        `;
+    };
+
+    // --- Логика Справочного Центра ---
+    window.showHelpCenter = () => {
+        setMenuActive('menu-help');
+        
+        document.getElementById('content').innerHTML = `
+            <h2 class="help-title">СПРАВОЧНЫЙ ЦЕНТР</h2>
+            <p class="help-subtitle">База знаний VKTR Portal. Найдите ответы на технические и общие вопросы.</p>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="help-search" placeholder="Поиск по статьям и FAQ..." oninput="window.filterFAQ()">
+            </div>
+
+            <div class="help-grid">
+                <div class="help-card" onclick="window.searchPreset('Аккаунт')">
+                    <h4>Безопасность</h4>
+                    <p>Настройки приватности, смена пароля и ID токенов.</p>
+                </div>
+                <div class="help-card" onclick="window.searchPreset('Сервер')">
+                    <h4>Статус серверов</h4>
+                    <p>Профилактические работы, аптайм ядра Firebase и лимиты.</p>
+                </div>
+                <div class="help-card" onclick="window.searchPreset('Аудио')">
+                    <h4>Медиаплеер</h4>
+                    <p>Загрузка статусов, кастомные аудиофайлы и форматы.</p>
+                </div>
+            </div>
+
+            <div class="profile-divider"></div>
+
+            <h3 style="font-family:'Bebas Neue'; letter-spacing:1px; font-size:22px; margin-bottom:15px; color:#fff;">ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h3>
+            
+            <div id="faq-list">
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Как изменить уникальный VKTR ID?</button>
+                    <div class="faq-content">
+                        <p>Ваш ID генерируется криптографически стабильным алгоритмом на основе почты при первой сессии. Изменение ID вручную заблокировано для предотвращения коллизий в бэкенд-базе VKTR Server.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Почему отображается окно "Maintenance" (Технические работы)?</button>
+                    <div class="faq-content">
+                        <p>Если флаг IS_MAINTENANCE активен на сервере, доступ к порталу сохраняется исключительно за Администратором (ID 00001488). Все остальные сессии перенаправляются на шлюз обслуживания до завершения деплоя.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Какие лимиты установлены на загрузку аудио в статус?</button>
+                    <div class="faq-content">
+                        <p>Система поддерживает форматы .mp3, .ogg и .wav. Из-за архитектурных особенностей локального кэширования FileReader, рекомендуется загружать файлы размером до 5 мегабайт во избежание переполнения буфера браузера.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Как сбросить сессию авторизации?</button>
+                    <div class="faq-content">
+                        <p>Нажмите кнопку "Выход" в нижнем навигационном блоке. Это полностью очистит токен авторизации vktr_auth_bypass и перенаправит вас на защищенную форму login.html.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
+    // --- Логика Создания Тикетов ---
+    window.showTicketForm = () => {
+        setMenuActive('menu-ticket');
+        document.getElementById('content').innerHTML = `
+            <h2 class="help-title">СОЗДАТЬ ТИКЕТ</h2>
+            <p class="help-subtitle">Не нашли решение в базе знаний? Отправьте прямой запрос в технический департамент.</p>
+            
+            <form class="ticket-form" onsubmit="window.handleTicketSubmit(event)">
+                <div class="form-group">
+                    <label>Категория проблемы</label>
+                    <select class="form-control" style="background:#0d0d0d; color:#fff;" id="ticket-category">
+                        <option>Ошибка авторизации / Firebase Auth</option>
+                        <option>Проблема с профилем или аватаром</option>
+                        <option>Критический баг интерфейса</option>
+                        <option>Другой запрос</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Тема обращения</label>
+                    <input type="text" class="form-control" id="ticket-subject" required placeholder="Краткое описание...">
+                </div>
+                <div class="form-group">
+                    <label>Детальное описание</label>
+                    <textarea class="form-control" id="ticket-msg" required placeholder="Опишите ваши действия и шаги для воспроизведения ошибки..."></textarea>
+                </div>
+                <div style="margin-top:10px;">
+                    <button type="submit" class="btn-save">ОТПРАВИТЬ ТИКЕТ</button>
+                </div>
+            </form>
+        `;
+    };
+
+    // Функционал FAQ (Открыть/Закрыть)
+    window.toggleFAQ = (button) => {
+        const item = button.parentElement;
+        const content = button.nextElementSibling;
+        
+        if (item.classList.contains('active')) {
+            content.style.maxHeight = null;
+            item.classList.remove('active');
+        } else {
+            // Закрываем другие открытые элементы FAQ (необязательно, но красиво)
+            document.querySelectorAll('.faq-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.faq-content').style.maxHeight = null;
+            });
+            
+            item.classList.add('active');
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    };
+
+    // Фильтрация FAQ через строку поиска
+    window.filterFAQ = () => {
+        const query = document.getElementById('help-search').value.toLowerCase();
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const text = item.innerText.toLowerCase();
+            if(text.includes(query)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    };
+
+    // Поиск по клику на плитку категорий
+    window.searchPreset = (keyword) => {
+        const searchInput = document.getElementById('help-search');
+        if(searchInput) {
+            searchInput.value = keyword;
+            window.filterFAQ();
+            searchInput.focus();
+        }
+    };
+
+    // Отправка формы тикета
+    window.handleTicketSubmit = (e) => {
+        e.preventDefault();
+        const cat = document.getElementById('ticket-category').value;
+        const sub = document.getElementById('ticket-subject').value;
+        const msg = document.getElementById('ticket-msg').value;
+
+        alert(`Тикет успешно зарегистрирован!\nКатегория: ${cat}\nТема: ${sub}\n\nИнженеры VKTR свяжутся с вами.`);
+        window.showHelpCenter();
+    };
+
+    // --- Оригинальные методы модалки и аватара ---
+    window.closeStatusModal = () => {
+        document.getElementById('status-modal').style.display = 'none';
+    };
+
+    window.saveNewStatus = () => {
+        localStorage.setItem('vktr_status_text', document.getElementById('new-status-text').value);
+        const file = document.getElementById('music-upload').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); window.showProfile(); };
+            reader.readAsDataURL(file);
+        } else {
+            window.showProfile();
+        }
+        document.getElementById('status-modal').style.display = 'none';
+    };
+
+    document.getElementById('file-input').onchange = (e) => {
+        const reader = new FileReader();
+        reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); window.showProfile(); };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+</script>
+
+</body>
+</html>
