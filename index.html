@@ -6,41 +6,30 @@
     <title>VKTR | Portal</title>
     <style>
         :root { 
-            --bg: #050505; 
+            --accent-grad: linear-gradient(135deg, #ff0055, #e60000); 
+            --accent-color: #e60000;
+            --bg: #000000; 
             --card: #0d0d0d; 
-            --card-border: #1a1a1a;
-            --header-bg: rgba(10, 10, 10, 0.8); 
+            --header-bg: #0a0a0a; 
+            --border: #222222;
+            --border-hover: #444444;
             --text-main: #ffffff;
             --text-muted: #888888;
-            --gradient: linear-gradient(135deg, #ff0000 0%, #ff0055 100%);
-            --gradient-hover: linear-gradient(135deg, #ff1a1a 0%, #ff3377 100%);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes pulseBorder {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(255, 0, 85, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
         }
 
         body { 
             background: var(--bg); 
             color: var(--text-main); 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            font-family: 'Roboto', Tahoma, sans-serif; 
             margin: 0; 
             display: flex; 
-            justify-content: center;
-            overflow-x: hidden;
+            justify-content: center; 
+            opacity: 0;
+            animation: fadeInPage 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeInPage {
+            to { opacity: 1; }
         }
         
         header { 
@@ -49,96 +38,141 @@
             width: 100%; 
             height: 56px; 
             background: var(--header-bg); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--card-border); 
+            border-bottom: 1px solid var(--border); 
             display: flex; 
             justify-content: center; 
             z-index: 1000; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
-        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+
+        .h-content { 
+            width: 1000px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+        }
+
         .h-left { display: flex; align-items: center; gap: 20px; }
-        .logo-img { height: 26px; cursor: pointer; transition: transform 0.3s ease; }
+        .logo-img { height: 28px; cursor: pointer; transition: transform 0.2s ease; }
         .logo-img:hover { transform: scale(1.05); }
+
         .h-right { display: flex; align-items: center; gap: 20px; }
-        .h-icon { cursor: pointer; opacity: 0.8; transition: all 0.3s ease; font-size: 14px; color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 6px; }
-        .h-icon:hover { opacity: 1; background: rgba(255, 255, 255, 0.05); }
+        .h-icon { 
+            cursor: pointer; 
+            opacity: 0.8; 
+            transition: all 0.2s ease; 
+            font-size: 14px; 
+            color: var(--text-main); 
+            text-decoration: none; 
+            padding: 8px 16px;
+            border: 1px solid transparent;
+        }
+        .h-icon:hover { 
+            opacity: 1; 
+            background: rgba(255,255,255,0.05);
+            border-color: var(--border-hover);
+        }
 
         .container { width: 1000px; margin-top: 80px; display: flex; gap: 30px; padding: 0 20px; box-sizing: border-box; }
         nav { width: 200px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { padding: 10px 14px; color: #aaa; cursor: pointer; font-size: 14px; border-radius: 8px; transition: all 0.2s ease; margin-bottom: 4px; }
-        nav li:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateX(3px); }
+        nav li { 
+            padding: 10px 15px; 
+            color: var(--text-muted); 
+            cursor: pointer; 
+            font-size: 14px; 
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            margin-bottom: 4px;
+        }
+        nav li:hover { 
+            background: var(--card); 
+            color: var(--text-main); 
+            border-left-color: var(--accent-color);
+        }
 
         main { 
             flex-grow: 1; 
             background: var(--card); 
-            border: 1px solid var(--card-border); 
+            border: 1px solid var(--border); 
             padding: 30px; 
-            border-radius: 12px; 
             min-height: 400px; 
-            box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s ease-out forwards;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        main:hover {
+            border-color: var(--border-hover);
         }
 
-        /* Контейнер профиля */
-        .profile-container { display: flex; gap: 30px; animation: fadeIn 0.4s ease-out; }
+        /* Компоненты профиля с анимацией */
+        .profile-layout {
+            display: flex; 
+            gap: 30px;
+            animation: slideUp 0.4s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(15px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
         .vktr-avatar-wrapper { 
             position: relative; 
-            width: 140px; 
-            height: 140px; 
+            width: 160px; 
+            height: 160px; 
             background: #111; 
             overflow: hidden; 
-            border-radius: 50%;
-            border: 2px solid transparent; 
-            background-image: linear-gradient(var(--card), var(--card)), var(--gradient);
-            background-origin: border-box;
-            background-clip: content-box, border-box;
+            border: 1px solid var(--border); 
             cursor: pointer; 
-            transition: transform 0.3s ease;
-            animation: pulseBorder 2s infinite;
+            transition: border-color 0.3s ease;
         }
-        .vktr-avatar-wrapper:hover { transform: scale(1.03); }
-        #main-ava { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .vktr-avatar-wrapper:hover {
+            border-color: var(--accent-color);
+        }
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
         
         .upload-overlay { 
             position: absolute; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 44px; 
+            background: rgba(0,0,0,0.85); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             opacity: 0; 
-            transition: opacity 0.3s ease; 
+            transition: opacity 0.25s ease; 
         }
         .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
-        
-        .profile-info h2 { margin: 0 0 6px 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        .profile-info p { margin: 0 0 15px 0; color: var(--text-muted); font-size: 14px; }
 
         .status-bubble { 
             display: inline-block; 
-            background: #121212; 
-            padding: 8px 16px; 
-            border-radius: 20px; 
+            background: var(--bg); 
+            padding: 10px 20px; 
             font-size: 13px; 
-            color: #ddd;
-            border: 1px solid var(--card-border); 
+            border: 1px solid var(--border); 
+            margin-top: 15px; 
             cursor: pointer; 
-            transition: all 0.2s ease; 
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .status-bubble:hover { background: #1a1a1a; border-color: #333; transform: translateY(-1px); }
+        .status-bubble:hover { 
+            border-color: #ff0055;
+            background: rgba(255, 0, 85, 0.03);
+        }
         
-        /* Модальные окна */
+        /* Модальное окно (Google-style + Hard edges) */
         .vktr-modal { 
             position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
             background: rgba(0,0,0,0.8); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px);
             display: none; 
             align-items: center; 
             justify-content: center; 
@@ -146,84 +180,89 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .vktr-modal.show { opacity: 1; }
-        
+        .vktr-modal.active {
+            opacity: 1;
+        }
         .vktr-modal-content { 
-            background: #0d0d0d; 
+            background: var(--card); 
             padding: 30px; 
-            border-radius: 16px; 
-            border: 1px solid var(--card-border); 
+            border: 1px solid var(--border-hover); 
             width: 360px; 
             text-align: center; 
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.1, 1, 0.1, 1);
         }
-        .vktr-modal.show .vktr-modal-content { transform: scale(1); }
-        .vktr-modal-content h3 { margin-top: 0; font-size: 20px; }
+        .vktr-modal.active .vktr-modal-content {
+            transform: scale(1);
+        }
+
+        .vktr-modal-content h3 { margin-top: 0; font-weight: 400; letter-spacing: 0.5px; }
 
         .vktr-modal-content input[type="text"] { 
             width: 100%; 
-            padding: 12px 16px; 
-            background: #141414; 
-            border: 1px solid var(--card-border); 
+            padding: 12px; 
+            background: var(--bg); 
+            border: 1px solid var(--border); 
             color: white; 
-            border-radius: 8px; 
             margin: 20px 0; 
             box-sizing: border-box; 
-            outline: none;
+            font-family: inherit;
             transition: border-color 0.2s;
         }
-        .vktr-modal-content input[type="text"]:focus { border-color: #ff0055; }
+        .vktr-modal-content input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
 
         .file-upload-zone { 
-            padding: 24px; 
-            border: 2px dashed #262626; 
-            border-radius: 10px; 
+            padding: 25px; 
+            border: 1px dashed var(--border-hover); 
             cursor: pointer; 
-            margin-bottom: 24px; 
-            color: var(--text-muted);
-            font-size: 14px;
+            margin-bottom: 25px; 
+            background: var(--bg);
             transition: all 0.2s ease;
+            color: var(--text-muted);
         }
-        .file-upload-zone:hover { border-color: #ff0055; color: #fff; background: rgba(255, 0, 85, 0.02); }
-        
-        /* Кнопки */
+        .file-upload-zone:hover { 
+            border-color: #ff0055; 
+            color: var(--text-main);
+            background: rgba(255, 0, 85, 0.02);
+        }
+
+        /* Кнопки с красно-розовым градиентом */
         .btn-save { 
-            background: var(--gradient); 
+            background: var(--accent-grad); 
             color: white; 
             border: none; 
             padding: 12px 24px; 
-            border-radius: 8px; 
             cursor: pointer; 
-            font-weight: 600; 
-            font-size: 14px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.2);
+            font-weight: 500; 
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 13px;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 6px rgba(230, 0, 0, 0.3);
         }
-        .btn-save:hover { background: var(--gradient-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255, 0, 85, 0.3); }
-        .btn-save:active { transform: translateY(0); }
+        .btn-save:hover { opacity: 0.9; }
+        .btn-save:active { transform: scale(0.98); }
 
         .btn-cancel { 
-            background: #1a1a1a; 
-            color: #aaa; 
-            border: none; 
+            background: transparent; 
+            color: var(--text-muted); 
+            border: 1px solid var(--border); 
             padding: 12px 24px; 
-            border-radius: 8px; 
             cursor: pointer; 
-            font-size: 14px;
             margin-left: 10px; 
+            text-transform: uppercase;
+            font-size: 13px;
             transition: all 0.2s ease;
         }
-        .btn-cancel:hover { background: #262626; color: #fff; }
-        
-        .hamster-helper { 
-            position: fixed; 
-            right: 30px; 
-            bottom: 30px; 
-            width: 80px; 
-            animation: float 4s ease-in-out infinite;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-        }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text-main); border-color: var(--border-hover); }
+
+        .hamster-helper { position: fixed; right: 25px; bottom: 25px; width: 80px; opacity: 0.7; transition: all 0.3s ease; }
+        .hamster-helper:hover { opacity: 1; transform: translateY(-5px); }
+
         #file-input, #music-upload { display: none; }
     </style>
 </head>
@@ -318,7 +357,7 @@
         }
     });
 
-    // --- ФУНКЦИИ ИНТЕРФЕЙСА ---
+    // --- ОСТАЛЬНЫЕ ФУНКЦИИ ИНТЕРФЕЙСА ---
     window.showProfile = () => {
         const email = window.currentUserEmail || "";
         const isBot = (email === 'vitungg15@gmail.com');
@@ -328,14 +367,14 @@
         const userID = localStorage.getItem('vktr_user_id');
 
         document.getElementById('content').innerHTML = `
-            <div class="profile-container">
+            <div class="profile-layout">
                 <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
                     <img src="${avatar}" id="main-ava">
-                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px;"></div>
+                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:30px;"></div>
                 </div>
-                <div class="profile-info">
-                    <h2>${name} ${isAdmin ? '✅' : ''}</h2>
-                    <p>ID: ${userID}</p>
+                <div>
+                    <h2 style="margin-top:0; font-weight:400;">${name} ${isAdmin ? '✅' : ''}</h2>
+                    <p style="color:var(--text-muted); font-size:14px;">ID: ${userID}</p>
                     <div class="status-bubble" onclick="window.openStatusModal()">
                         💬 ${localStorage.getItem('vktr_status_text') || 'В сети'}
                     </div>
@@ -343,16 +382,16 @@
             </div>`;
     };
 
-    // Плавное открытие/закрытие модалки
+    // Плавное открытие/закрытие модального окна
     window.openStatusModal = () => {
         const modal = document.getElementById('status-modal');
         modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('show'), 10);
+        setTimeout(() => modal.classList.add('active'), 10);
     };
 
     window.closeStatusModal = () => {
         const modal = document.getElementById('status-modal');
-        modal.classList.remove('show');
+        modal.classList.remove('active');
         setTimeout(() => modal.style.display = 'none', 300);
     };
 
@@ -373,10 +412,11 @@
         reader.readAsDataURL(e.target.files[0]);
     };
 
-    // Слушатель изменения имени трека при выборе файла
+    // Слушатель для красивого отображения имени файла в модалке
     document.getElementById('music-upload').onchange = (e) => {
+        const label = document.getElementById('file-name-label');
         if(e.target.files[0]) {
-            document.getElementById('file-name-label').innerText = '🎵 ' + e.target.files[0].name;
+            label.textContent = `🎵 ${e.target.files[0].name}`;
         }
     };
 </script>
