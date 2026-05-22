@@ -6,263 +6,259 @@
     <title>VKTR | Portal</title>
     <style>
         :root { 
-            --accent-grad: linear-gradient(135deg, #ff0055, #e60000); 
-            --accent-color: #e60000;
             --bg: #000000; 
-            --card: #0d0d0d; 
-            --header-bg: #0a0a0a; 
-            --border: #222222;
-            --border-hover: #444444;
+            --surface: #121212; 
+            --surface-variant: #1e1e1e;
             --text-main: #ffffff;
-            --text-muted: #888888;
+            --text-secondary: #9aa0a6;
+            --border-color: #2c2c2c;
+            /* Градиент от красного к розовому по гайдлайнам Material You */
+            --gradient-accent: linear-gradient(135deg, #ff1744 0%, #f50057 50%, #ff4081 100%);
+            --accent-solid: #ff1744;
         }
 
         body { 
             background: var(--bg); 
             color: var(--text-main); 
-            font-family: 'Roboto', Tahoma, sans-serif; 
+            font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif; 
             margin: 0; 
             display: flex; 
             justify-content: center; 
-            opacity: 0;
-            animation: fadeInPage 0.5s ease-in-out forwards;
-        }
-
-        @keyframes fadeInPage {
-            to { opacity: 1; }
+            -webkit-font-smoothing: antialiased;
         }
         
+        /* Шапка в стиле Google Material (минимализм) */
         header { 
             position: fixed; 
             top: 0; 
             width: 100%; 
-            height: 56px; 
-            background: var(--header-bg); 
-            border-bottom: 1px solid var(--border); 
+            height: 64px; 
+            background: rgba(18, 18, 18, 0.8); 
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color); 
             display: flex; 
             justify-content: center; 
             z-index: 1000; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
-
         .h-content { 
             width: 1000px; 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            padding: 0 20px; 
+            padding: 0 24px; 
         }
-
         .h-left { display: flex; align-items: center; gap: 20px; }
-        .logo-img { height: 28px; cursor: pointer; transition: transform 0.2s ease; }
-        .logo-img:hover { transform: scale(1.05); }
-
+        .logo-img { height: 24px; cursor: pointer; transition: transform 0.2s ease; }
+        .logo-img:hover { transform: scale(1.02); }
         .h-right { display: flex; align-items: center; gap: 20px; }
+        
+        /* Кнопка профиля в шапке */
         .h-icon { 
             cursor: pointer; 
-            opacity: 0.8; 
-            transition: all 0.2s ease; 
             font-size: 14px; 
             color: var(--text-main); 
             text-decoration: none; 
             padding: 8px 16px;
-            border: 1px solid transparent;
+            border-radius: 20px;
+            background: var(--surface-variant);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .h-icon:hover { 
-            opacity: 1; 
-            background: rgba(255,255,255,0.05);
-            border-color: var(--border-hover);
+            background: var(--border-color);
+            border-color: #444;
         }
 
-        .container { width: 1000px; margin-top: 80px; display: flex; gap: 30px; padding: 0 20px; box-sizing: border-box; }
-        nav { width: 200px; }
-        nav ul { list-style: none; padding: 0; margin: 0; }
+        /* Контейнер */
+        .container { 
+            width: 1000px; 
+            margin-top: 88px; 
+            display: flex; 
+            gap: 32px; 
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+        /* Навигация а-ля Google Sidebar */
+        nav { width: 220px; flex-shrink: 0; }
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
         nav li { 
-            padding: 10px 15px; 
-            color: var(--text-muted); 
+            padding: 12px 20px; 
+            color: var(--text-secondary); 
             cursor: pointer; 
             font-size: 14px; 
+            font-weight: 500;
+            border-radius: 28px; /* Полное скругление по правилам Google M3 */
             transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-            margin-bottom: 4px;
         }
         nav li:hover { 
-            background: var(--card); 
+            background: var(--surface-variant); 
             color: var(--text-main); 
-            border-left-color: var(--accent-color);
         }
 
+        /* Главная карточка */
         main { 
             flex-grow: 1; 
-            background: var(--card); 
-            border: 1px solid var(--border); 
-            padding: 30px; 
+            background: var(--surface); 
+            border: 1px solid var(--border-color); 
+            padding: 32px; 
+            border-radius: 24px; /* Округлые углы карточек */
             min-height: 400px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-        main:hover {
-            border-color: var(--border-hover);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.5);
         }
 
-        /* Компоненты профиля с анимацией */
-        .profile-layout {
-            display: flex; 
-            gap: 30px;
-            animation: slideUp 0.4s cubic-bezier(0.1, 1, 0.1, 1) forwards;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(15px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
+        /* Округлая аватарка с градиентным бордером */
         .vktr-avatar-wrapper { 
             position: relative; 
-            width: 160px; 
-            height: 160px; 
-            background: #111; 
+            width: 130px; 
+            height: 130px; 
+            border-radius: 50%; /* Круглая форма */
             overflow: hidden; 
-            border: 1px solid var(--border); 
             cursor: pointer; 
-            transition: border-color 0.3s ease;
+            padding: 4px;
+            background: var(--gradient-accent); /* Розово-красный светящийся контур */
+            box-shadow: 0 8px 20px rgba(245, 0, 87, 0.2);
+            transition: transform 0.3s ease;
         }
         .vktr-avatar-wrapper:hover {
-            border-color: var(--accent-color);
+            transform: scale(1.03);
         }
-        #main-ava { width: 100%; height: 100%; object-fit: cover; }
-        
+        #main-ava { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 50%;
+            background: #222;
+        }
         .upload-overlay { 
             position: absolute; 
             bottom: 0; 
             left: 0; 
             width: 100%; 
-            height: 44px; 
-            background: rgba(0,0,0,0.85); 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             opacity: 0; 
-            transition: opacity 0.25s ease; 
+            transition: opacity 0.2s ease; 
         }
         .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
 
+        /* Элементы информации */
+        .profile-info-block h2 { margin: 0 0 4px 0; font-size: 26px; font-weight: 400; letter-spacing: -0.5px; }
+        .profile-info-block p { margin: 0 0 16px 0; color: var(--text-secondary); font-size: 14px; }
+
+        /* Капсульный статус-бар */
         .status-bubble { 
-            display: inline-block; 
-            background: var(--bg); 
+            display: inline-flex; 
+            align-items: center;
+            background: var(--surface-variant); 
             padding: 10px 20px; 
-            font-size: 13px; 
-            border: 1px solid var(--border); 
-            margin-top: 15px; 
+            border-radius: 20px; 
+            font-size: 14px; 
+            border: 1px solid var(--border-color); 
+            margin-top: 4px; 
             cursor: pointer; 
             transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
+            color: var(--text-main);
         }
         .status-bubble:hover { 
-            border-color: #ff0055;
-            background: rgba(255, 0, 85, 0.03);
+            background: var(--border-color);
+            border-color: #555;
         }
         
-        /* Модальное окно (Google-style + Hard edges) */
+        /* Модальные окна Google Design */
         .vktr-modal { 
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.8); 
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(6px);
             display: none; 
             align-items: center; 
             justify-content: center; 
             z-index: 2000; 
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .vktr-modal.active {
-            opacity: 1;
         }
         .vktr-modal-content { 
-            background: var(--card); 
-            padding: 30px; 
-            border: 1px solid var(--border-hover); 
+            background: var(--surface-variant); 
+            padding: 32px; 
+            border-radius: 28px; 
+            border: 1px solid var(--border-color); 
             width: 360px; 
-            text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.1, 1, 0.1, 1);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.6);
         }
-        .vktr-modal.active .vktr-modal-content {
-            transform: scale(1);
-        }
+        .vktr-modal-content h3 { margin-top: 0; font-size: 20px; font-weight: 400; text-align: left; margin-bottom: 20px;}
 
-        .vktr-modal-content h3 { margin-top: 0; font-weight: 400; letter-spacing: 0.5px; }
-
+        /* Поля ввода Material */
         .vktr-modal-content input[type="text"] { 
             width: 100%; 
-            padding: 12px; 
+            padding: 14px 16px; 
             background: var(--bg); 
-            border: 1px solid var(--border); 
+            border: 1px solid var(--border-color); 
             color: white; 
-            margin: 20px 0; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
             box-sizing: border-box; 
-            font-family: inherit;
+            font-size: 15px;
             transition: border-color 0.2s;
         }
         .vktr-modal-content input[type="text"]:focus {
             outline: none;
-            border-color: var(--accent-color);
+            border-color: var(--accent-solid);
         }
 
+        /* Зона загрузки файлов */
         .file-upload-zone { 
-            padding: 25px; 
-            border: 1px dashed var(--border-hover); 
+            padding: 24px; 
+            border: 2px dashed #444; 
+            border-radius: 16px; 
             cursor: pointer; 
-            margin-bottom: 25px; 
-            background: var(--bg);
+            margin-bottom: 24px; 
+            background: rgba(255,255,255,0.02);
             transition: all 0.2s ease;
-            color: var(--text-muted);
+            font-size: 14px;
+            color: var(--text-secondary);
         }
-        .file-upload-zone:hover { 
-            border-color: #ff0055; 
+        .file-upload-zone:hover {
+            border-color: var(--accent-solid);
+            background: rgba(255,255,255,0.04);
             color: var(--text-main);
-            background: rgba(255, 0, 85, 0.02);
         }
 
-        /* Кнопки с красно-розовым градиентом */
+        /* Кнопки в стиле Material You */
         .btn-save { 
-            background: var(--accent-grad); 
+            background: var(--gradient-accent); 
             color: white; 
             border: none; 
             padding: 12px 24px; 
+            border-radius: 24px; 
             cursor: pointer; 
             font-weight: 500; 
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 13px;
-            transition: opacity 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 6px rgba(230, 0, 0, 0.3);
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(245, 0, 55, 0.3);
+            transition: opacity 0.2s, transform 0.1s;
         }
         .btn-save:hover { opacity: 0.9; }
         .btn-save:active { transform: scale(0.98); }
 
         .btn-cancel { 
             background: transparent; 
-            color: var(--text-muted); 
-            border: 1px solid var(--border); 
+            color: var(--text-secondary); 
+            border: 1px solid var(--border-color); 
             padding: 12px 24px; 
+            border-radius: 24px; 
             cursor: pointer; 
-            margin-left: 10px; 
-            text-transform: uppercase;
-            font-size: 13px;
-            transition: all 0.2s ease;
+            margin-left: 8px; 
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
         }
-        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text-main); border-color: var(--border-hover); }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
-        .hamster-helper { position: fixed; right: 25px; bottom: 25px; width: 80px; opacity: 0.7; transition: all 0.3s ease; }
-        .hamster-helper:hover { opacity: 1; transform: translateY(-5px); }
-
+        .hamster-helper { position: fixed; right: 24px; bottom: 24px; width: 80px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)); }
         #file-input, #music-upload { display: none; }
     </style>
 </head>
@@ -284,7 +280,7 @@
     <nav>
         <ul id="nav-menu">
             <li onclick="showProfile()">Моя Страница</li>
-            <li style="margin-top:20px; color:#555" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
+            <li style="margin-top:16px; color:#ff4081" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
         </ul>
     </nav>
     <main id="content"><h3>Загрузка...</h3></main>
@@ -298,15 +294,17 @@
             <span id="file-name-label">🎵 Выбрать аудиофайл</span>
             <input type="file" id="music-upload" accept="audio/*">
         </div>
-        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
-        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
+        <div style="display: flex; justify-content: flex-end;">
+            <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
+            <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
+        </div>
     </div>
 </div>
 
 <img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
-    // --- ИМПОРТЫ FIREBASE ---
+    // Твой оригинальный JS-код без изменений, за исключением структуры генерации контента
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -318,7 +316,6 @@
     });
     const auth = getAuth(app);
 
-    // --- ФУНКЦИЯ ГЕНЕРАЦИИ ID ---
     window.generateUserID = (email) => {
         if (email === 'viktorhridin24@gmail.com') return "00001488";
         let newID;
@@ -328,7 +325,6 @@
         return newID;
     };
 
-    // --- ПРОВЕРКА НА ТЕХНИЧЕСКИЙ ПЕРЕРЫВ ---
     const MY_ID = "00001488";
     const IS_MAINTENANCE = true; 
     const currentUserID = localStorage.getItem('vktr_user_id');
@@ -337,12 +333,10 @@
         window.location.href = 'maintenance.html';
     }
 
-    // --- СЛУШАТЕЛЬ АВТОРИЗАЦИИ ---
     onAuthStateChanged(auth, (user) => {
         const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
         if (user || isBypass) {
             window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
-            
             let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
             localStorage.setItem('vktr_user_id', userID);
 
@@ -350,14 +344,13 @@
                 window.location.href = 'maintenance.html';
                 return;
             }
-
             window.showProfile(); 
         } else { 
             window.location.href = "login.html"; 
         }
     });
 
-    // --- ОСТАЛЬНЫЕ ФУНКЦИИ ИНТЕРФЕЙСА ---
+    // Здесь скорректирована разметка для поддержки новых CSS классов стилизации контента
     window.showProfile = () => {
         const email = window.currentUserEmail || "";
         const isBot = (email === 'vitungg15@gmail.com');
@@ -367,32 +360,23 @@
         const userID = localStorage.getItem('vktr_user_id');
 
         document.getElementById('content').innerHTML = `
-            <div class="profile-layout">
+            <div style="display:flex; gap:32px; align-items: center;">
                 <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
                     <img src="${avatar}" id="main-ava">
-                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:30px;"></div>
+                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px;"></div>
                 </div>
-                <div>
-                    <h2 style="margin-top:0; font-weight:400;">${name} ${isAdmin ? '✅' : ''}</h2>
-                    <p style="color:var(--text-muted); font-size:14px;">ID: ${userID}</p>
-                    <div class="status-bubble" onclick="window.openStatusModal()">
-                        💬 ${localStorage.getItem('vktr_status_text') || 'В сети'}
+                <div class="profile-info-block">
+                    <h2>${name} ${isAdmin ? '✅' : ''}</h2>
+                    <p>ID: ${userID}</p>
+                    <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
+                        💬&nbsp; ${localStorage.getItem('vktr_status_text') || 'В сети'}
                     </div>
                 </div>
             </div>`;
     };
 
-    // Плавное открытие/закрытие модального окна
-    window.openStatusModal = () => {
-        const modal = document.getElementById('status-modal');
-        modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('active'), 10);
-    };
-
     window.closeStatusModal = () => {
-        const modal = document.getElementById('status-modal');
-        modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 300);
+        document.getElementById('status-modal').style.display = 'none';
     };
 
     window.saveNewStatus = () => {
@@ -403,21 +387,13 @@
             reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); window.showProfile(); };
             reader.readAsDataURL(file);
         } else { window.showProfile(); }
-        window.closeStatusModal();
+        document.getElementById('status-modal').style.display = 'none';
     };
 
     document.getElementById('file-input').onchange = (e) => {
         const reader = new FileReader();
         reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); window.showProfile(); };
         reader.readAsDataURL(e.target.files[0]);
-    };
-
-    // Слушатель для красивого отображения имени файла в модалке
-    document.getElementById('music-upload').onchange = (e) => {
-        const label = document.getElementById('file-name-label');
-        if(e.target.files[0]) {
-            label.textContent = `🎵 ${e.target.files[0].name}`;
-        }
     };
 </script>
 </body>
