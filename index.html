@@ -151,7 +151,7 @@
                     <h2>${name} ${isAdmin ? '✅' : ''}</h2>
                     <p>ID: ${userID}</p>
                     <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
-                        💬 ${localStorage.getItem('vktr_status_text') || 'В сети'}
+                        ${localStorage.getItem('vktr_status_text') || 'всё нормально'}
                     </div>
                 </div>
             </div>`;
