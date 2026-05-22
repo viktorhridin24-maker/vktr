@@ -79,6 +79,7 @@
 <img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
+    // --- ИМПОРТЫ FIREBASE ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -89,30 +90,56 @@
         appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
     });
     const auth = getAuth(app);
-    
+
+    // --- ФУНКЦИЯ ГЕНЕРАЦИИ ID ---
     window.generateUserID = (email) => {
         if (email === 'viktorhridin24@gmail.com') return "00001488";
         let newID;
-        do { newID = Math.floor(10000000 + Math.random() * 90000000).toString(); } while (newID.includes("67"));
+        do { 
+            newID = Math.floor(10000000 + Math.random() * 90000000).toString(); 
+        } while (newID.includes("67"));
         return newID;
     };
 
+    // --- ПРОВЕРКА НА ТЕХНИЧЕСКИЙ ПЕРЕРЫВ ---
+    const MY_ID = "00001488";
+    const IS_MAINTENANCE = true; // Смени на false, когда захочешь всех пустить обратно
+    const currentUserID = localStorage.getItem('vktr_user_id');
+
+    if (IS_MAINTENANCE && currentUserID !== MY_ID) {
+        window.location.href = 'maintenance.html';
+    }
+
+    // --- СЛУШАТЕЛЬ АВТОРИЗАЦИИ ---
     onAuthStateChanged(auth, (user) => {
         const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
         if (user || isBypass) {
             window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
-            showProfile(); 
-        } else { window.location.href = "login.html"; }
+            
+            // Заранее генерируем ID и сохраняем, чтобы проверка выше работала при обновлении
+            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
+            localStorage.setItem('vktr_user_id', userID);
+
+            // Повторная проверка сразу после получения ID (на случай первого входа)
+            if (IS_MAINTENANCE && userID !== MY_ID) {
+                window.location.href = 'maintenance.html';
+                return;
+            }
+
+            window.showProfile(); 
+        } else { 
+            window.location.href = "login.html"; 
+        }
     });
 
+    // --- ОСТАЛЬНЫЕ ФУНКЦИИ ИНТЕРФЕЙСА ---
     window.showProfile = () => {
         const email = window.currentUserEmail || "";
         const isBot = (email === 'vitungg15@gmail.com');
         const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
         const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
         const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
-        let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(email);
-        localStorage.setItem('vktr_user_id', userID);
+        const userID = localStorage.getItem('vktr_user_id');
 
         document.getElementById('content').innerHTML = `
             <div style="display:flex; gap:25px;">
@@ -130,20 +157,24 @@
             </div>`;
     };
 
+    window.closeStatusModal = () => {
+        document.getElementById('status-modal').style.display = 'none';
+    };
+
     window.saveNewStatus = () => {
         localStorage.setItem('vktr_status_text', document.getElementById('new-status-text').value);
         const file = document.getElementById('music-upload').files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); showProfile(); };
+            reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); window.showProfile(); };
             reader.readAsDataURL(file);
-        } else { showProfile(); }
+        } else { window.showProfile(); }
         document.getElementById('status-modal').style.display = 'none';
     };
 
     document.getElementById('file-input').onchange = (e) => {
         const reader = new FileReader();
-        reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); showProfile(); };
+        reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); window.showProfile(); };
         reader.readAsDataURL(e.target.files[0]);
     };
 </script>
