@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKTR | Help Center</title>
+    <title>VKTR | Справочный центр</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
         
@@ -33,7 +33,7 @@
             overflow-x: hidden;
         }
 
-        /* Gradient background */
+        /* Задний фон-градиент */
         body::before {
             content: '';
             position: fixed;
@@ -46,7 +46,7 @@
             z-index: 0;
         }
 
-        /* Subtle noise grain */
+        /* Текстура шума */
         body::after {
             content: '';
             position: fixed;
@@ -116,41 +116,108 @@
             padding-bottom: 40px;
         }
 
-        nav { width: 190px; flex-shrink: 0; }
+        /* Стили боковой навигации в духе Chomikuj.pl Справочника */
+        nav { width: 240px; flex-shrink: 0; }
+        .nav-box {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chomik-nav-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            color: var(--accent-light);
+            border-bottom: 1px solid rgba(230, 0, 0, 0.2);
+            margin-bottom: 8px;
+        }
+
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li {
-            padding: 9px 13px;
+        
+        /* Главные категории */
+        nav li.chomik-cat {
+            font-weight: 500;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Подкатегории / Ссылки */
+        nav li.chomik-sub {
+            padding: 6px 10px 6px 22px;
             color: var(--text-muted);
             cursor: pointer;
             font-size: 13px;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.3px;
             font-weight: 400;
-            border-radius: 6px;
+            border-radius: 4px;
             transition: background 0.2s, color 0.2s;
             position: relative;
         }
-        nav li:hover {
-            background: rgba(255,255,255,0.05);
+        nav li.chomik-sub::before {
+            content: '•';
+            position: absolute;
+            left: 10px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        nav li.chomik-sub:hover {
+            background: rgba(255,255,255,0.04);
             color: var(--text);
         }
-        nav li.active {
+
+        nav li.chomik-sub.active {
             color: #fff;
-            background: rgba(230,0,0,0.15);
+            background: rgba(230,0,0,0.12);
             border-left: 2px solid var(--accent);
-            padding-left: 11px;
+            padding-left: 20px;
+        }
+        nav li.chomik-sub.active::before {
+            color: var(--accent-light);
         }
 
         .nav-divider {
             height: 1px;
             background: rgba(255,255,255,0.06);
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
+        /* Поисковая панель Справки */
+        .help-search-box {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .help-search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 6px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .help-search-box input:focus {
+            border-color: rgba(230,0,0,0.4);
+        }
+
+        /* Главный контейнер контента */
         main {
             flex-grow: 1;
             background: var(--card);
             border: 1px solid var(--card-border);
-            padding: 30px;
+            padding: 35px;
             border-radius: 10px;
             min-height: 500px;
             backdrop-filter: blur(18px);
@@ -167,327 +234,67 @@
             pointer-events: none;
         }
 
-        /* --- Стили оригинального Профиля --- */
-        .vktr-avatar-wrapper {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            background: #1a1a1a;
-            overflow: hidden;
-            border: 2px solid rgba(230,0,0,0.35);
-            cursor: pointer;
-            border-radius: 6px;
-            flex-shrink: 0;
-            transition: border-color 0.3s;
-        }
-        .vktr-avatar-wrapper:hover { border-color: var(--accent); }
-        #main-ava { width: 100%; height: 100%; object-fit: cover; }
-        .upload-overlay {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 38px;
-            background: rgba(0,0,0,0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.25s;
-        }
-        .vktr-avatar-wrapper:hover .upload-overlay { opacity: 1; }
-        
-        .profile-name {
-            font-family: 'Bebas Neue', tahoma, sans-serif;
-            font-size: 34px;
-            letter-spacing: 2px;
-            line-height: 1;
-            margin: 0 0 4px;
-            color: #fff;
-        }
-        .profile-id {
-            font-size: 12px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin: 0 0 14px;
-            font-weight: 300;
-        }
-        .admin-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(230,0,0,0.15);
-            border: 1px solid rgba(230,0,0,0.35);
-            color: #ff6666;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-        .status-bubble {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: border-color 0.25s, color 0.25s;
-        }
-        .status-bubble:hover {
-            border-color: rgba(230,0,0,0.4);
-            color: var(--text);
-        }
-        .status-dot {
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: var(--accent-light);
-            animation: pulse 2s infinite;
-            flex-shrink: 0;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.8); }
-        }
-        .profile-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 22px 0;
-        }
-
-        /* --- Стили контента Справочного Центра --- */
+        /* Оформление статей */
         .help-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 38px;
-            letter-spacing: 2px;
-            margin: 0 0 10px 0;
+            font-size: 32px;
+            letter-spacing: 1.5px;
             color: #fff;
+            margin: 0 0 8px 0;
         }
-        .help-subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
+        .help-path {
+            font-size: 12px;
+            color: var(--accent-light);
             margin-bottom: 25px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
-        
-        /* Поиск */
-        .search-container {
-            position: relative;
-            margin-bottom: 30px;
-        }
-        .search-input {
-            width: 100%;
-            padding: 14px 20px;
-            background: #0d0d0d;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: #fff;
-            font-family: 'Jost', sans-serif;
+        .help-content p {
             font-size: 15px;
-            outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            line-height: 1.6;
+            color: #ddd;
+            margin: 0 0 16px 0;
         }
-        .search-input:focus {
-            border-color: rgba(230,0,0,0.5);
-            box-shadow: 0 0 15px rgba(230,0,0,0.1);
+        .help-content h4 {
+            font-size: 17px;
+            color: #fff;
+            margin: 25px 0 12px 0;
+            font-weight: 500;
+            border-left: 2px solid var(--accent);
+            padding-left: 10px;
         }
 
-        /* Категории (Плитка) */
-        .help-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 30px;
-        }
-        .help-card {
+        /* Блок обратной связи (как в Chomikuj) */
+        .feedback-box {
+            margin-top: 40px;
+            padding: 20px;
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 20px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s, border-color 0.2s;
-        }
-        .help-card:hover {
-            background: rgba(230,0,0,0.04);
-            border-color: rgba(230,0,0,0.3);
-            transform: translateY(-2px);
-        }
-        .help-card h4 {
-            margin: 0 0 8px 0;
-            font-size: 16px;
-            color: #fff;
-            font-weight: 500;
-        }
-        .help-card p {
-            margin: 0;
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* Аккордеон (FAQ) */
-        .faq-item {
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            margin-bottom: 5px;
-        }
-        .faq-trigger {
-            width: 100%;
-            text-align: left;
-            background: transparent;
-            border: none;
-            padding: 16px 5px;
-            color: #fff;
-            font-family: 'Jost', sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .faq-trigger::after {
-            content: '＋';
-            font-size: 12px;
-            color: var(--accent);
-            transition: transform 0.3s;
-        }
-        .faq-item.active .faq-trigger::after {
-            content: '－';
-        }
-        .faq-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .faq-content p {
-            margin: 0;
-            padding: 0 5px 16px 5px;
-            font-size: 13.5px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* Форма тикетов */
-        .ticket-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .form-group label {
-            font-size: 13px;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px 14px;
-            background: #0d0d0d;
-            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 6px;
-            color: #fff;
-            font-family: 'Jost', sans-serif;
-            font-size: 14px;
-            outline: none;
-        }
-        .form-control:focus {
-            border-color: rgba(230,0,0,0.5);
-        }
-        textarea.form-control {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        /* --- Общие элементы UI из вашего скрипта --- */
-        .vktr-modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(6px);
-        }
-        .vktr-modal-content {
-            background: #141414;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid rgba(230,0,0,0.2);
-            width: 360px;
             text-align: center;
-            position: relative;
         }
-        .vktr-modal-content h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            font-size: 22px;
-            margin: 0 0 18px;
-            color: #fff;
-        }
-        .vktr-modal-content input[type="text"] {
-            width: 100%;
-            padding: 11px 14px;
-            background: #0d0d0d;
-            border: 1px solid rgba(255,255,255,0.12);
-            color: white;
-            border-radius: 6px;
-            margin: 0 0 16px;
-            font-family: 'Jost', sans-serif;
+        .feedback-box p {
             font-size: 14px;
-            outline: none;
+            color: var(--text-muted);
+            margin: 0 0 12px 0;
         }
-        .vktr-modal-content input[type="text"]:focus { border-color: rgba(230,0,0,0.5); }
         
-        .file-upload-zone {
-            padding: 18px;
-            border: 1px dashed rgba(255,255,255,0.15);
-            border-radius: 8px;
+        /* Кнопки */
+        .btn-action {
+            background: rgba(230, 0, 0, 0.15);
+            border: 1px solid rgba(230, 0, 0, 0.4);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 4px;
             cursor: pointer;
-            margin-bottom: 20px;
             font-size: 13px;
-            color: var(--text-muted);
-            transition: border-color 0.2s, color 0.2s;
+            font-family: 'Jost', sans-serif;
+            transition: all 0.2s;
         }
-        .file-upload-zone:hover { border-color: rgba(230,0,0,0.4); color: var(--text); }
-
-        .btn-save {
+        .btn-action:hover {
             background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            transition: background 0.2s;
+            border-color: var(--accent-light);
         }
-        .btn-save:hover { background: var(--accent-light); }
-
-        .btn-cancel {
-            background: rgba(255,255,255,0.06);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 10px 22px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-left: 8px;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-        .btn-cancel:hover { background: rgba(255,255,255,0.1); }
 
         .hamster-helper {
             position: fixed;
@@ -498,55 +305,67 @@
             filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
         }
 
-        #file-input, #music-upload { display: none; }
+        .profile-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 22px 0;
+        }
     </style>
 </head>
 <body>
-
-<input type="file" id="file-input" accept="image/*">
 
 <header>
     <div class="h-content">
         <div class="h-left">
             <div class="logo-wrap">
-                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="window.showHelpCenter()">
+                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'">
             </div>
         </div>
         <div class="h-right">
-            <a class="h-icon" onclick="window.showProfile()">👤 Профиль</a>
+            <a class="h-icon" onclick="location.href='profile.html'">👤 Личный кабинет</a>
         </div>
     </div>
 </header>
 
 <div class="container">
     <nav>
-        <ul id="nav-menu">
-            <li id="menu-profile" onclick="window.showProfile()">Моя Страница</li>
-            <li id="menu-help" class="active" onclick="window.showHelpCenter()">Справочный Центр</li>
-            <li id="menu-ticket" onclick="window.showTicketForm()">Создать Тикет</li>
-            <div class="nav-divider"></div>
-            <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
-        </ul>
-    </nav>
-    
-    <main id="content">
-        <!-- Сюда динамически рендерится контент -->
-        <h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка...</h3>
-    </main>
-</div>
-
-<!-- Модалка статуса -->
-<div id="status-modal" class="vktr-modal">
-    <div class="vktr-modal-content">
-        <h3>Установить статус</h3>
-        <input type="text" id="new-status-text" placeholder="О чём думаешь?" maxlength="50">
-        <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
-            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
-            <input type="file" id="music-upload" accept="audio/*">
+        <!-- Поиск по FAQ -->
+        <div class="help-search-box">
+            <input type="text" id="help-search" placeholder="Поиск проблемы..." onkeyup="searchHelp()">
         </div>
-        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
-        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
-    </div>
+
+        <!-- Древовидное меню а-ля Chomikuj -->
+        <div class="nav-box">
+            <div class="chomik-nav-title">Разделы помощи</div>
+            <ul id="nav-menu">
+                <li class="chomik-cat">1. Мой аккаунт</li>
+                <li class="chomik-sub active" onclick="loadArticle('reg')">Регистрация и вход</li>
+                <li class="chomik-sub" onclick="loadArticle('pass')">Смена пароля</li>
+                <li class="chomik-sub" onclick="loadArticle('edit')">Редактирование профиля</li>
+                
+                <div class="nav-divider"></div>
+                
+                <li class="chomik-cat">2. Файлы и Аудио</li>
+                <li class="chomik-sub" onclick="loadArticle('upload')">Загрузка треков</li>
+                <li class="chomik-sub" onclick="loadArticle('limits')">Лимиты и форматы</li>
+                
+                <div class="nav-divider"></div>
+                
+                <li class="chomik-cat">3. Безопасность</li>
+                <li class="chomik-sub" onclick="loadArticle('rules')">Правила платформы</li>
+                <li class="chomik-sub" onclick="loadArticle('ban')">Блокировки и спам</li>
+                
+                <div class="nav-divider"></div>
+                
+                <li class="chomik-sub" style="color:#e04040; padding-left:10px;" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход из системы</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Основной блок со статьями -->
+    <main id="content">
+        <h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка базы знаний...</h3>
+    </main>
 </div>
 
 <img src="hamster.png" class="hamster-helper" alt="helper">
@@ -555,6 +374,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+    // Инициализация Firebase из вашего исходника
     const app = initializeApp({
         apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
         authDomain: "vktrserver.firebaseapp.com",
@@ -562,15 +382,6 @@
         appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
     });
     const auth = getAuth(app);
-
-    window.generateUserID = (email) => {
-        if (email === 'viktorhridin24@gmail.com') return "00001488";
-        let newID;
-        do {
-            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
-        } while (newID.includes("67"));
-        return newID;
-    };
 
     const MY_ID = "00001488";
     const IS_MAINTENANCE = true;
@@ -584,230 +395,129 @@
         const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
         if (user || isBypass) {
             window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
-            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
-            localStorage.setItem('vktr_user_id', userID);
-
-            if (IS_MAINTENANCE && userID !== MY_ID) {
-                window.location.href = 'maintenance.html';
-                return;
-            }
-
-            // По умолчанию открываем Справочный Центр
-            window.showHelpCenter();
+            // Первичный рендер дефолтной статьи после проверки сессии
+            window.loadArticle('reg');
         } else {
             window.location.href = "login.html";
         }
     });
 
-    // Функция управления активными классами в боковом меню
-    function setMenuActive(id) {
-        document.querySelectorAll('#nav-menu li').forEach(li => li.classList.remove('active'));
-        const activeLi = document.getElementById(id);
-        if(activeLi) activeLi.classList.add('active');
-    }
-
-    // --- Логика Профиля ---
-    window.showProfile = () => {
-        setMenuActive('menu-profile');
-        const email = window.currentUserEmail || "";
-        const isBot = (email === 'vitungg15@gmail.com');
-        const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
-        const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
-        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
-        const userID = localStorage.getItem('vktr_user_id');
-        const statusText = localStorage.getItem('vktr_status_text') || 'В сети';
-
-        document.getElementById('content').innerHTML = `
-            <div style="display:flex; gap:28px; align-items:flex-start;">
-                <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
-                    <img src="${avatar}" id="main-ava">
-                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>
-                </div>
-                <div style="padding-top:6px; flex:1;">
-                    <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
-                        <span class="profile-name">${name}</span>
-                        ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
-                    </div>
-                    <p class="profile-id">ID: ${userID}</p>
-                    <div class="status-bubble" onclick="document.getElementById('status-modal').style.display='flex'">
-                        <span class="status-dot"></span>
-                        ${statusText}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-divider"></div>
-            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">Активность и публикации появятся здесь.</p>
-        `;
-    };
-
-    // --- Логика Справочного Центра ---
-    window.showHelpCenter = () => {
-        setMenuActive('menu-help');
-        
-        document.getElementById('content').innerHTML = `
-            <h2 class="help-title">СПРАВОЧНЫЙ ЦЕНТР</h2>
-            <p class="help-subtitle">База знаний VKTR Portal. Найдите ответы на технические и общие вопросы.</p>
-            
-            <div class="search-container">
-                <input type="text" class="search-input" id="help-search" placeholder="Поиск по статьям и FAQ..." oninput="window.filterFAQ()">
-            </div>
-
-            <div class="help-grid">
-                <div class="help-card" onclick="window.searchPreset('Аккаунт')">
-                    <h4>Безопасность</h4>
-                    <p>Настройки приватности, смена пароля и ID токенов.</p>
-                </div>
-                <div class="help-card" onclick="window.searchPreset('Сервер')">
-                    <h4>Статус серверов</h4>
-                    <p>Профилактические работы, аптайм ядра Firebase и лимиты.</p>
-                </div>
-                <div class="help-card" onclick="window.searchPreset('Аудио')">
-                    <h4>Медиаплеер</h4>
-                    <p>Загрузка статусов, кастомные аудиофайлы и форматы.</p>
-                </div>
-            </div>
-
-            <div class="profile-divider"></div>
-
-            <h3 style="font-family:'Bebas Neue'; letter-spacing:1px; font-size:22px; margin-bottom:15px; color:#fff;">ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h3>
-            
-            <div id="faq-list">
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Как изменить уникальный VKTR ID?</button>
-                    <div class="faq-content">
-                        <p>Ваш ID генерируется криптографически стабильным алгоритмом на основе почты при первой сессии. Изменение ID вручную заблокировано для предотвращения коллизий в бэкенд-базе VKTR Server.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Почему отображается окно "Maintenance" (Технические работы)?</button>
-                    <div class="faq-content">
-                        <p>Если флаг IS_MAINTENANCE активен на сервере, доступ к порталу сохраняется исключительно за Администратором (ID 00001488). Все остальные сессии перенаправляются на шлюз обслуживания до завершения деплоя.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Какие лимиты установлены на загрузку аудио в статус?</button>
-                    <div class="faq-content">
-                        <p>Система поддерживает форматы .mp3, .ogg и .wav. Из-за архитектурных особенностей локального кэширования FileReader, рекомендуется загружать файлы размером до 5 мегабайт во избежание переполнения буфера браузера.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="window.toggleFAQ(this)">Как сбросить сессию авторизации?</button>
-                    <div class="faq-content">
-                        <p>Нажмите кнопку "Выход" в нижнем навигационном блоке. Это полностью очистит токен авторизации vktr_auth_bypass и перенаправит вас на защищенную форму login.html.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-    };
-
-    // --- Логика Создания Тикетов ---
-    window.showTicketForm = () => {
-        setMenuActive('menu-ticket');
-        document.getElementById('content').innerHTML = `
-            <h2 class="help-title">СОЗДАТЬ ТИКЕТ</h2>
-            <p class="help-subtitle">Не нашли решение в базе знаний? Отправьте прямой запрос в технический департамент.</p>
-            
-            <form class="ticket-form" onsubmit="window.handleTicketSubmit(event)">
-                <div class="form-group">
-                    <label>Категория проблемы</label>
-                    <select class="form-control" style="background:#0d0d0d; color:#fff;" id="ticket-category">
-                        <option>Ошибка авторизации / Firebase Auth</option>
-                        <option>Проблема с профилем или аватаром</option>
-                        <option>Критический баг интерфейса</option>
-                        <option>Другой запрос</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Тема обращения</label>
-                    <input type="text" class="form-control" id="ticket-subject" required placeholder="Краткое описание...">
-                </div>
-                <div class="form-group">
-                    <label>Детальное описание</label>
-                    <textarea class="form-control" id="ticket-msg" required placeholder="Опишите ваши действия и шаги для воспроизведения ошибки..."></textarea>
-                </div>
-                <div style="margin-top:10px;">
-                    <button type="submit" class="btn-save">ОТПРАВИТЬ ТИКЕТ</button>
-                </div>
-            </form>
-        `;
-    };
-
-    // Функционал FAQ (Открыть/Закрыть)
-    window.toggleFAQ = (button) => {
-        const item = button.parentElement;
-        const content = button.nextElementSibling;
-        
-        if (item.classList.contains('active')) {
-            content.style.maxHeight = null;
-            item.classList.remove('active');
-        } else {
-            // Закрываем другие открытые элементы FAQ (необязательно, но красиво)
-            document.querySelectorAll('.faq-item').forEach(el => {
-                el.classList.remove('active');
-                el.querySelector('.faq-content').style.maxHeight = null;
-            });
-            
-            item.classList.add('active');
-            content.style.maxHeight = content.scrollHeight + "px";
+    // База данных статей центра помощи (Chomikuj style content)
+    const helpDatabase = {
+        reg: {
+            title: "Регистрация и авторизация на портале",
+            path: "Мой аккаунт > Регистрация и вход",
+            html: `
+                <p>Для доступа ко всем функциям портала VKTR вам необходима подтвержденная учетная запись. Вход осуществляется через единую форму авторизации.</p>
+                <h4>Возможные проблемы при входе:</h4>
+                <p>Если страница бесконечно пишет "Загрузка...", убедитесь, что ваш браузер поддерживает LocalStorage и у вас стабильное интернет-соединение.</p>
+                <p>В периоды технического обслуживания (Maintenance Mode) доступ к порталу может быть ограничен для всех пользователей, кроме технической администрации.</p>
+            `
+        },
+        pass: {
+            title: "Смена и восстановление пароля",
+            path: "Мой аккаунт > Смена пароля",
+            html: `
+                <p>Если вы забыли свой действующий пароль или хотите обновить его в целях безопасности, выполните следующие шаги:</p>
+                <h4>Инструкция по сбросу:</h4>
+                <p>1. На странице авторизации нажмите кнопку "Забыли пароль?".<br>2. Введите ваш регистрационный Email.<br>3. Перейдите по ссылке из системного письма от VKTR Server.</p>
+                <p><i>Примечание: Если письмо долго не приходит, проверьте папку "Спам" или вкладку "Оповещения".</i></p>
+            `
+        },
+        edit: {
+            title: "Редактирование личной страницы",
+            path: "Мой аккаунт > Редактирование профиля",
+            html: `
+                <p>Вы можете полностью кастомизировать свою карточку в системе. Изменения сохраняются локально и синхронизируются с сервером.</p>
+                <h4>Что можно изменить:</h4>
+                <p>• <b>Аватар:</b> Кликните на изображение вашего профиля, чтобы загрузить новую картинку с вашего устройства.<br>
+                • <b>Статус-сообщение:</b> Нажмите на овальный статус ("В сети" или ваш текст) для вызова модального окна настроек статуса.</p>
+            `
+        },
+        upload: {
+            title: "Загрузка и привязка аудиофайлов",
+            path: "Файлы и Аудио > Загрузка треков",
+            html: `
+                <p>На портале VKTR реализована интеграция медиапотоков прямо в статус вашей страницы. Вы можете делиться тем, что слушаете прямо сейчас.</p>
+                <h4>Как прикрепить трек к статусу:</h4>
+                <p>Откройте панель изменения статуса, нажмите на зону <b>"🎵 Выбрать аудиофайл"</b> и выберите аудиофайл из памяти вашего ПК или смартфона. После сохранения файл конвертируется в медиа-строку DataURL.</p>
+            `
+        },
+        limits: {
+            title: "Ограничения на форматы файлов",
+            path: "Файлы и Аудио > Лимиты и форматы",
+            html: `
+                <p>В целях оптимизации быстродействия распределенной базы данных vktrserver, установлены технические лимиты на медиаконтент:</p>
+                <p>• Изображения (Аватары): до 5 МБ в форматах JPEG, PNG, WEBP.<br>
+                • Аудио (Статусы): до 15 МБ, строго в формате MP3 или WAV.</p>
+                <p>Максимальная длина текстового статуса составляет <b>50 символов</b>.</p>
+            `
+        },
+        rules: {
+            title: "Условия использования и правила",
+            path: "Безопасность > Правила платформы",
+            html: `
+                <p>Каждый участник экосистемы VKTR обязуется соблюдать правила сетевого тона и регламент хранения информации.</p>
+                <h4>Запрещено:</h4>
+                <p>Загрузка вредоносного ПО, использование багов авторизации (Bypass уязвимостей), массовый спам-парсинг ID страниц с целью перегрузки серверов баз данных.</p>
+            `
+        },
+        ban: {
+            title: "Блокировки и системный спам-фильтр",
+            path: "Безопасность > Блокировки и спам",
+            html: `
+                <p>Система безопасности автоматически отслеживает подозрительную активность пользователей.</p>
+                <h4>Алгоритмы рандомизации ID:</h4>
+                <p>При обнаружении флуда или генерации подозрительных ID, содержащих запрещенные сочетания символов, сессия пользователя может быть аннулирована, а система перенаправит вас на экран <code>login.html</code>.</p>
+            `
         }
     };
 
-    // Фильтрация FAQ через строку поиска
-    window.filterFAQ = () => {
+    // Функция переключения контента разделов
+    window.loadArticle = (key) => {
+        const article = helpDatabase[key];
+        if (!article) return;
+
+        // Переключение активного класса в меню
+        document.querySelectorAll('.chomik-sub').forEach(el => el.classList.remove('active'));
+        const activeNavTarget = event?.currentTarget;
+        if(activeNavTarget) activeNavTarget.classList.add('active');
+
+        // Отрисовка контента
+        document.getElementById('content').innerHTML = `
+            <h2 class="help-title">${article.title}</h2>
+            <div class="help-path">${article.path}</div>
+            <div class="profile-divider"></div>
+            <div class="help-content">
+                ${article.html}
+            </div>
+            
+            <div class="feedback-box">
+                <p>Нашли ответ на свой вопрос?</p>
+                <button class="btn-action" onclick="alert('Спасибо за ваш отзыв!')">Да, помогло</button>
+                <button class="btn-action" style="margin-left:8px; background:transparent; border-color:rgba(255,255,255,0.15);" onclick="alert('Мы свяжемся с техподдержкой')">Нет, связаться с поддержкой</button>
+            </div>
+        `;
+    };
+
+    // Функция мгновенного поиска по FAQ
+    window.searchHelp = () => {
         const query = document.getElementById('help-search').value.toLowerCase();
-        document.querySelectorAll('.faq-item').forEach(item => {
-            const text = item.innerText.toLowerCase();
-            if(text.includes(query)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
+        if(!query) return;
+
+        for (const key in helpDatabase) {
+            const item = helpDatabase[key];
+            if (item.title.toLowerCase().includes(query) || item.html.toLowerCase().includes(query)) {
+                window.loadArticle(key);
+                // Находим нужный элемент в меню и подсвечиваем
+                document.querySelectorAll('.chomik-sub').forEach(el => {
+                    if(el.textContent.trim() === item.title || el.getAttribute('onclick').includes(key)) {
+                        el.classList.add('active');
+                    }
+                });
+                break;
             }
-        });
-    };
-
-    // Поиск по клику на плитку категорий
-    window.searchPreset = (keyword) => {
-        const searchInput = document.getElementById('help-search');
-        if(searchInput) {
-            searchInput.value = keyword;
-            window.filterFAQ();
-            searchInput.focus();
         }
-    };
-
-    // Отправка формы тикета
-    window.handleTicketSubmit = (e) => {
-        e.preventDefault();
-        const cat = document.getElementById('ticket-category').value;
-        const sub = document.getElementById('ticket-subject').value;
-        const msg = document.getElementById('ticket-msg').value;
-
-        alert(`Тикет успешно зарегистрирован!\nКатегория: ${cat}\nТема: ${sub}\n\nИнженеры VKTR свяжутся с вами.`);
-        window.showHelpCenter();
-    };
-
-    // --- Оригинальные методы модалки и аватара ---
-    window.closeStatusModal = () => {
-        document.getElementById('status-modal').style.display = 'none';
-    };
-
-    window.saveNewStatus = () => {
-        localStorage.setItem('vktr_status_text', document.getElementById('new-status-text').value);
-        const file = document.getElementById('music-upload').files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); window.showProfile(); };
-            reader.readAsDataURL(file);
-        } else {
-            window.showProfile();
-        }
-        document.getElementById('status-modal').style.display = 'none';
-    };
-
-    document.getElementById('file-input').onchange = (e) => {
-        const reader = new FileReader();
-        reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); window.showProfile(); };
-        reader.readAsDataURL(e.target.files[0]);
     };
 </script>
 
