@@ -1,594 +1,605 @@
 <!DOCTYPE html>
- 
+ 
 <html lang="ru">
- 
+ 
 <head>
- 
-    <meta charset="UTF-8">
- 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
-    <title>VKTR | Portal</title>
- 
-    <style>
- 
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
- 
-        :root {
-            --accent: #e60000;
-            --accent-light: #ff3333;
-            --accent-dim: #b30000;
-            --bg: #0a0a0a;
-            --card: rgba(12, 12, 12, 0.82);
-            --card-border: rgba(255,255,255,0.07);
-            --header-bg: rgba(10,10,10,0.92);
-            --text: #f0f0f0;
-            --text-muted: #999;
-        }
- 
-        * { box-sizing: border-box; }
- 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Jost', tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
- 
-        /* Gradient background */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(230, 0, 0, 0.28) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255, 60, 60, 0.18) 0%, transparent 55%),
-                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 0, 0, 0.10) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
- 
-        /* Subtle noise grain */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 0;
-        }
- 
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 52px;
-            background: var(--header-bg);
-            border-bottom: 1px solid rgba(230,0,0,0.25);
-            display: flex;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(14px);
-        }
- 
-        .h-content {
-            width: 1000px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
- 
-        .h-left { display: flex; align-items: center; gap: 20px; }
- 
-        .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
- 
-        /* Red accent line under logo */
-        .logo-wrap {
-            position: relative;
-            padding-bottom: 3px;
-        }
-        .logo-wrap::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, var(--accent), transparent);
-            border-radius: 2px;
-        }
- 
-        .h-right { display: flex; align-items: center; gap: 20px; }
- 
-        .h-icon {
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: color 0.25s;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-            text-decoration: none;
-        }
- 
-        .h-icon:hover { color: var(--text); }
- 
-        .container {
-            width: 1000px;
-            margin-top: 72px;
-            display: flex;
-            gap: 22px;
-            position: relative;
-            z-index: 1;
-            padding-bottom: 40px;
-        }
- 
-        nav { width: 190px; flex-shrink: 0; }
- 
-        nav ul { list-style: none; padding: 0; margin: 0; }
- 
-        nav li {
-            padding: 9px 13px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 13px;
-            letter-spacing: 0.4px;
-            font-weight: 400;
-            border-radius: 6px;
-            transition: background 0.2s, color 0.2s;
-            position: relative;
-        }
- 
-        nav li:hover {
-            background: rgba(255,255,255,0.05);
-            color: var(--text);
-        }
- 
-        nav li.active {
-            color: #fff;
-            background: rgba(230,0,0,0.15);
-            border-left: 2px solid var(--accent);
-            padding-left: 11px;
-        }
- 
-        .nav-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 12px 0;
-        }
- 
-        main {
-            flex-grow: 1;
-            background: var(--card);
-            border: 1px solid var(--card-border);
-            padding: 30px;
-            border-radius: 10px;
-            min-height: 400px;
-            backdrop-filter: blur(18px);
-            position: relative;
-            overflow: hidden;
-        }
- 
-        /* Subtle red corner glow on card */
-        main::before {
-            content: '';
-            position: absolute;
-            top: -40px; left: -40px;
-            width: 180px; height: 180px;
-            background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
- 
-        /* Avatar */
-        .vktr-avatar-wrapper {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            background: #1a1a1a;
-            overflow: hidden;
-            border: 2px solid rgba(230,0,0,0.35);
-            border-radius: 6px;
-            flex-shrink: 0;
-            transition: border-color 0.3s;
-        }
- 
-        .vktr-avatar-wrapper.editable { cursor: pointer; }
-        .vktr-avatar-wrapper.editable:hover { border-color: var(--accent); }
- 
-        #main-ava { width: 100%; height: 100%; object-fit: cover; }
- 
-        .upload-overlay {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 38px;
-            background: rgba(0,0,0,0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.25s;
-        }
- 
-        .vktr-avatar-wrapper.editable:hover .upload-overlay { opacity: 1; }
- 
-        /* Profile name */
-        .profile-name {
-            font-family: 'Bebas Neue', tahoma, sans-serif;
-            font-size: 34px;
-            letter-spacing: 2px;
-            line-height: 1;
-            margin: 0 0 4px;
-            color: #fff;
-        }
- 
-        .profile-id {
-            font-size: 12px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin: 0 0 14px;
-            font-weight: 300;
-        }
- 
-        .admin-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(230,0,0,0.15);
-            border: 1px solid rgba(230,0,0,0.35);
-            color: #ff6666;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
- 
-        .status-bubble {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: var(--text-muted);
-            transition: border-color 0.25s, color 0.25s;
-        }
- 
-        .status-bubble.editable { cursor: pointer; }
-        .status-bubble.editable:hover {
-            border-color: rgba(230,0,0,0.4);
-            color: var(--text);
-        }
- 
-        .status-dot {
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: var(--accent-light);
-            animation: pulse 2s infinite;
-            flex-shrink: 0;
-        }
- 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.8); }
-        }
- 
-        /* Modal */
-        .vktr-modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(6px);
-        }
- 
-        .vktr-modal-content {
-            background: #141414;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid rgba(230,0,0,0.2);
-            width: 360px;
-            text-align: center;
-            position: relative;
-        }
- 
-        .vktr-modal-content h3 {
-            font-family: 'Bebas Neue', tahoma, sans-serif;
-            letter-spacing: 2px;
-            font-size: 22px;
-            margin: 0 0 18px;
-            color: #fff;
-        }
- 
-        .vktr-modal-content input[type="text"] {
-            width: 100%;
-            padding: 11px 14px;
-            background: #0d0d0d;
-            border: 1px solid rgba(255,255,255,0.12);
-            color: white;
-            border-radius: 6px;
-            margin: 0 0 16px;
-            font-family: 'Jost', sans-serif;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
- 
-        .vktr-modal-content input[type="text"]:focus {
-            border-color: rgba(230,0,0,0.5);
-        }
- 
-        .file-upload-zone {
-            padding: 18px;
-            border: 1px dashed rgba(255,255,255,0.15);
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: var(--text-muted);
-            transition: border-color 0.2s, color 0.2s;
-        }
- 
-        .file-upload-zone:hover {
-            border-color: rgba(230,0,0,0.4);
-            color: var(--text);
-        }
- 
-        .btn-save {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            transition: background 0.2s;
-        }
- 
-        .btn-save:hover { background: var(--accent-light); }
- 
-        .btn-cancel {
-            background: rgba(255,255,255,0.06);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 10px 22px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-left: 8px;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
- 
-        .btn-cancel:hover { background: rgba(255,255,255,0.1); }
- 
-        .hamster-helper {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 88px;
-            z-index: 10;
-            filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
-        }
- 
-        #file-input, #music-upload { display: none; }
- 
-        /* Divider inside profile */
-        .profile-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 22px 0;
-        }
- 
-    </style>
- 
+ 
+    <meta charset="UTF-8">
+ 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <title>VKTR | Portal</title>
+ 
+    <style>
+ 
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
+ 
+        :root {
+            --accent: #e60000;
+            --accent-light: #ff3333;
+            --accent-dim: #b30000;
+            --bg: #0a0a0a;
+            --card: rgba(12, 12, 12, 0.82);
+            --card-border: rgba(255,255,255,0.07);
+            --header-bg: rgba(10,10,10,0.92);
+            --text: #f0f0f0;
+            --text-muted: #999;
+        }
+ 
+        * { box-sizing: border-box; }
+ 
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Jost', tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+ 
+        /* Gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(230, 0, 0, 0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255, 60, 60, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 0, 0, 0.10) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+ 
+        /* Subtle noise grain */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+ 
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: var(--header-bg);
+            border-bottom: 1px solid rgba(230,0,0,0.25);
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(14px);
+        }
+ 
+        .h-content {
+            width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+ 
+        .h-left { display: flex; align-items: center; gap: 20px; }
+ 
+        .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
+ 
+        /* Red accent line under logo */
+        .logo-wrap {
+            position: relative;
+            padding-bottom: 3px;
+        }
+        .logo-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px;
+        }
+ 
+        .h-right { display: flex; align-items: center; gap: 20px; }
+ 
+        .h-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.25s;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+ 
+        .h-icon:hover { color: var(--text); }
+ 
+        .container {
+            width: 1000px;
+            margin-top: 72px;
+            display: flex;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 40px;
+        }
+ 
+        nav { width: 190px; flex-shrink: 0; }
+ 
+        nav ul { list-style: none; padding: 0; margin: 0; }
+ 
+        nav li {
+            padding: 9px 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            font-weight: 400;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            position: relative;
+        }
+ 
+        nav li:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+        }
+ 
+        nav li.active {
+            color: #fff;
+            background: rgba(230,0,0,0.15);
+            border-left: 2px solid var(--accent);
+            padding-left: 11px;
+        }
+ 
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 12px 0;
+        }
+ 
+        main {
+            flex-grow: 1;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            border-radius: 10px;
+            min-height: 400px;
+            backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        /* Subtle red corner glow on card */
+        main::before {
+            content: '';
+            position: absolute;
+            top: -40px; left: -40px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+ 
+        /* Avatar */
+        .vktr-avatar-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            background: #1a1a1a;
+            overflow: hidden;
+            border: 2px solid rgba(230,0,0,0.35);
+            border-radius: 6px;
+            flex-shrink: 0;
+            transition: border-color 0.3s;
+        }
+ 
+        .vktr-avatar-wrapper.editable { cursor: pointer; }
+        .vktr-avatar-wrapper.editable:hover { border-color: var(--accent); }
+ 
+        #main-ava { width: 100%; height: 100%; object-fit: cover; }
+ 
+        .upload-overlay {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 38px;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+ 
+        .vktr-avatar-wrapper.editable:hover .upload-overlay { opacity: 1; }
+ 
+        /* Profile name */
+        .profile-name {
+            font-family: 'Bebas Neue', tahoma, sans-serif;
+            font-size: 34px;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin: 0 0 4px;
+            color: #fff;
+        }
+ 
+        .profile-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin: 0 0 14px;
+            font-weight: 300;
+        }
+ 
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(230,0,0,0.15);
+            border: 1px solid rgba(230,0,0,0.35);
+            color: #ff6666;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+ 
+        .status-bubble {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: border-color 0.25s, color 0.25s;
+        }
+ 
+        .status-bubble.editable { cursor: pointer; }
+        .status-bubble.editable:hover {
+            border-color: rgba(230,0,0,0.4);
+            color: var(--text);
+        }
+ 
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+ 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+ 
+        /* Modal */
+        .vktr-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(6px);
+        }
+ 
+        .vktr-modal-content {
+            background: #141414;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(230,0,0,0.2);
+            width: 360px;
+            text-align: center;
+            position: relative;
+        }
+ 
+        .vktr-modal-content h3 {
+            font-family: 'Bebas Neue', tahoma, sans-serif;
+            letter-spacing: 2px;
+            font-size: 22px;
+            margin: 0 0 18px;
+            color: #fff;
+        }
+ 
+        .vktr-modal-content input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: white;
+            border-radius: 6px;
+            margin: 0 0 16px;
+            font-family: 'Jost', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+ 
+        .vktr-modal-content input[type="text"]:focus {
+            border-color: rgba(230,0,0,0.5);
+        }
+ 
+        .file-upload-zone {
+            padding: 18px;
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: border-color 0.2s, color 0.2s;
+        }
+ 
+        .file-upload-zone:hover {
+            border-color: rgba(230,0,0,0.4);
+            color: var(--text);
+        }
+ 
+        .btn-save {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+ 
+        .btn-save:hover { background: var(--accent-light); }
+ 
+        .btn-cancel {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 8px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+ 
+        .btn-cancel:hover { background: rgba(255,255,255,0.1); }
+ 
+        .hamster-helper {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 88px;
+            z-index: 10;
+            filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
+        }
+ 
+        #file-input, #music-upload { display: none; }
+ 
+        /* Divider inside profile */
+        .profile-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 22px 0;
+        }
+ 
+    </style>
+ 
 </head>
- 
+ 
 <body>
- 
+ 
 <input type="file" id="file-input" accept="image/*">
- 
+ 
 <header>
-    <div class="h-content">
-        <div class="h-left">
-            <div class="logo-wrap">
-                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'">
-            </div>
-        </div>
-        <div class="h-right">
-            <a class="h-icon" onclick="goToMyProfile()">👤 Профиль</a>
-        </div>
-    </div>
+    <div class="h-content">
+        <div class="h-left">
+            <div class="logo-wrap">
+                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'">
+            </div>
+        </div>
+        <div class="h-right">
+            <a class="h-icon" onclick="goToMyProfile()">👤 Профиль</a>
+        </div>
+    </div>
 </header>
- 
+ 
 <div class="container">
-    <nav>
-        <ul id="nav-menu">
-            <li id="my-page-nav" class="active" onclick="goToMyProfile()">Моя Страница</li>
-            <div class="nav-divider"></div>
-            <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
-        </ul>
-    </nav>
-    <main id="content"><h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка...</h3></main>
+    <nav>
+        <ul id="nav-menu">
+            <li id="my-page-nav" class="active" onclick="goToMyProfile()">Моя Страница</li>
+            <div class="nav-divider"></div>
+            <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
+        </ul>
+    </nav>
+    <main id="content"><h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка...</h3></main>
 </div>
- 
+ 
 <div id="status-modal" class="vktr-modal">
-    <div class="vktr-modal-content">
-        <h3>Установить статус</h3>
-        <input type="text" id="new-status-text" placeholder="О чём думаешь?" maxlength="50">
-        <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
-            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
-            <input type="file" id="music-upload" accept="audio/*">
-        </div>
-        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
-        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
-    </div>
+    <div class="vktr-modal-content">
+        <h3>Установить статус</h3>
+        <input type="text" id="new-status-text" placeholder="О чём думаешь?" maxlength="50">
+        <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
+            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
+            <input type="file" id="music-upload" accept="audio/*">
+        </div>
+        <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
+        <button onclick="closeStatusModal()" class="btn-cancel">Отмена</button>
+    </div>
 </div>
- 
+ 
 <img src="hamster.png" class="hamster-helper" alt="helper">
- 
+ 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
- 
-    const app = initializeApp({
-        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
-        authDomain: "vktrserver.firebaseapp.com",
-        projectId: "vktrserver",
-        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
-    });
-    const auth = getAuth(app);
- 
-    window.generateUserID = (email) => {
-        if (email === 'viktorhridin24@gmail.com') return "00001488";
-        let newID;
-        do {
-            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
-        } while (newID.includes("67"));
-        return newID;
-    };
- 
-    const MY_ID = "00001488";
-    const IS_MAINTENANCE = false;
-    const currentUserID = localStorage.getItem('vktr_user_id');
- 
-    if (IS_MAINTENANCE && currentUserID !== MY_ID) {
-        window.location.href = 'maintenance.html';
-    }
- 
-    onAuthStateChanged(auth, (user) => {
-        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
-        if (user || isBypass) {
-            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
-            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
-            localStorage.setItem('vktr_user_id', userID);
- 
-            if (IS_MAINTENANCE && userID !== MY_ID) {
-                window.location.href = 'maintenance.html';
-                return;
-            }
- 
-            window.showProfile();
-        } else {
-            window.location.href = "login.html";
-        }
-    });
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+ 
+    const app = initializeApp({
+        apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    });
+    const auth = getAuth(app);
+ 
+    window.generateUserID = (email) => {
+        if (email === 'viktorhridin24@gmail.com') return "00001488";
+        let newID;
+        do {
+            newID = Math.floor(10000000 + Math.random() * 90000000).toString();
+        } while (newID.includes("67"));
+        return newID;
+    };
+ 
+    const MY_ID = "00001488";
+    const IS_MAINTENANCE = false;
+ 
+    onAuthStateChanged(auth, (user) => {
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+        if (user || isBypass) {
+            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
+            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
+            localStorage.setItem('vktr_user_id', userID);
+ 
+            if (IS_MAINTENANCE && userID !== MY_ID) {
+                window.location.href = 'maintenance.html';
+                return;
+            }
+ 
+            // Первичный рендер после авторизации
+            window.showProfile();
+        } else {
+            window.location.href = "login.html";
+        }
+    });
 
-    // Функция для гарантированного перехода на свой собственный профиль (очищает ID из URL)
-    window.goToMyProfile = () => {
-        const url = new URL(window.location.href);
-        if (url.searchParams.has('id')) {
-            url.searchParams.delete('id');
-            window.location.href = url.pathname;
-        } else {
-            window.showProfile();
-        }
-    };
- 
-    window.showProfile = () => {
-        // Извлекаем id из параметров URL (?id=...)
-        const urlParams = new URLSearchParams(window.location.search);
-        const targetUrlID = urlParams.get('id');
-        const myUserID = localStorage.getItem('vktr_user_id');
+    // Переход на свой профиль (с очисткой URL параметров)
+    window.goToMyProfile = () => {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('id')) {
+            window.history.pushState({}, '', url.pathname);
+        }
+        window.showProfile();
+    };
+ 
+    window.showProfile = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrlID = urlParams.get('id');
+        const myUserID = localStorage.getItem('vktr_user_id');
 
-        // Определяем, чей профиль открываем: свой или чужой
-        const isMyOwnProfile = !targetUrlID || targetUrlID === myUserID;
+        // Если id в URL нет или он совпадает с нашим, открываем СВОЙ профиль
+        const isMyOwnProfile = !targetUrlID || targetUrlID === myUserID;
 
-        let name, isAdmin, userID, avatar, statusText;
+        let name, isAdmin, userID, avatar, statusText;
 
-        if (isMyOwnProfile) {
-            // Загружаем данные текущего пользователя
-            const email = window.currentUserEmail || "";
-            const isBot = (email === 'vitungg15@gmail.com');
-            isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
-            name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
-            avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
-            userID = myUserID;
-            statusText = localStorage.getItem('vktr_status_text') || 'В сети';
-            document.getElementById('my-page-nav').classList.add('active');
-        } else {
-            // Отображаем чужой профиль
-            userID = targetUrlID;
-            // Если заходим на профиль администратора по его ID
-            if (userID === "00001488") {
-                name = "Viktor";
-                isAdmin = true;
-            } else {
-                name = "Пользователь #" + userID.substring(0, 4);
-                isAdmin = false;
-            }
-            avatar = 'default-avatar_2.png';
-            statusText = 'Оффлайн';
-            document.getElementById('my-page-nav').classList.remove('active');
-        }
+        if (isMyOwnProfile) {
+            const email = window.currentUserEmail || "";
+            const isBot = (email === 'vitungg15@gmail.com');
+            isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
+            name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
+            avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
+            userID = myUserID || '...';
+            statusText = localStorage.getItem('vktr_status_text') || 'В сети';
+            
+            const navElement = document.getElementById('my-page-nav');
+            if (navElement) navElement.classList.add('active');
+        } else {
+            userID = targetUrlID;
+            if (userID === "00001488") {
+                name = "Viktor";
+                isAdmin = true;
+            } else {
+                name = "Пользователь #" + userID.substring(0, 4);
+                isAdmin = false;
+            }
+            avatar = 'default-avatar_2.png';
+            statusText = 'В сети (просмотр)';
+            
+            const navElement = document.getElementById('my-page-nav');
+            if (navElement) navElement.classList.remove('active');
+        }
 
-        // Рендерим HTML с учетом прав (добавляем или убираем класс editable и события клика)
-        document.getElementById('content').innerHTML = `
-            <div style="display:flex; gap:28px; align-items:flex-start;">
-                <div class="vktr-avatar-wrapper ${isMyOwnProfile ? 'editable' : ''}" 
-                     ${isMyOwnProfile ? 'onclick="document.getElementById(\'file-input\').click()"' : ''}>
-                    <img src="${avatar}" id="main-ava">
-                    ${isMyOwnProfile ? '<div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>' : ''}
-                </div>
-                <div style="padding-top:6px; flex:1;">
-                    <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
-                        <span class="profile-name">${name}</span>
-                        ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
-                    </div>
-                    <p class="profile-id">ID: ${userID}</p>
-                    <div class="status-bubble ${isMyOwnProfile ? 'editable' : ''}" 
-                         ${isMyOwnProfile ? 'onclick="document.getElementById(\'status-modal\').style.display=\'flex\'"' : ''}>
-                        <span class="status-dot" style="${!isMyOwnProfile ? 'background:#666; animation:none;' : ''}"></span>
-                        ${statusText}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-divider"></div>
-            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">
-                ${isMyOwnProfile ? 'Активность и публикации появятся здесь.' : 'У этого пользователя пока нет публикаций.'}
-            </p>
-        `;
-    };
- 
-    window.closeStatusModal = () => {
-        document.getElementById('status-modal').style.display = 'none';
-    };
- 
-    window.saveNewStatus = () => {
-        localStorage.setItem('vktr_status_text', document.getElementById('new-status-text').value);
-        const file = document.getElementById('music-upload').files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = e => { localStorage.setItem('vktr_status_music', e.target.result); window.showProfile(); };
-            reader.readAsDataURL(file);
-        } else {
-            window.showProfile();
-        }
-        document.getElementById('status-modal').style.display = 'none';
-    };
- 
-    document.getElementById('file-input').onchange = (e) => {
-        const reader = new FileReader();
-        reader.onload = ev => { localStorage.setItem('vktr_avatar', ev.target.result); window.showProfile(); };
-        reader.readAsDataURL(e.target.files[0]);
-    };
+        const contentBlock = document.getElementById('content');
+        if (!contentBlock) return;
+
+        contentBlock.innerHTML = `
+            <div style="display:flex; gap:28px; align-items:flex-start;">
+                <div class="vktr-avatar-wrapper ${isMyOwnProfile ? 'editable' : ''}" 
+                     ${isMyOwnProfile ? 'onclick="document.getElementById(\'file-input\').click()"' : ''}>
+                    <img src="${avatar}" id="main-ava">
+                    ${isMyOwnProfile ? '<div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>' : ''}
+                </div>
+                <div style="padding-top:6px; flex:1;">
+                    <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
+                        <span class="profile-name">${name}</span>
+                        ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
+                    </div>
+                    <p class="profile-id">ID: ${userID}</p>
+                    <div class="status-bubble ${isMyOwnProfile ? 'editable' : ''}" 
+                         ${isMyMyOwnProfile ? 'onclick="document.getElementById(\'status-modal\').style.display=\'flex\'"' : ''}>
+                        <span class="status-dot" style="${!isMyOwnProfile ? 'background:#39ff14;' : ''}"></span>
+                        ${statusText}
+                    </div>
+                </div>
+            </div>
+            <div class="profile-divider"></div>
+            <p style="font-size:13px; color:var(--text-muted); margin:0; letter-spacing:0.3px;">
+                ${isMyOwnProfile ? 'Активность и публикации появятся здесь.' : 'У этого пользователя пока нет публикаций.'}
+            </p>
+        `;
+    };
+ 
+    // Слушаем изменения истории (если переключение идет назад/вперед в браузере)
+    window.addEventListener('popstate', () => {
+        window.showProfile();
+    });
+
+    window.closeStatusModal = () => {
+        document.getElementById('status-modal').style.display = 'none';
+    };
+ 
+    window.saveNewStatus = () => {
+        const input = document.getElementById('new-status-text');
+        if (input) localStorage.setItem('vktr_status_text', input.value);
+        
+        const fileInput = document.getElementById('music-upload');
+        const file = fileInput ? fileInput.files[0] : null;
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => { 
+                localStorage.setItem('vktr_status_music', e.target.result); 
+                window.showProfile(); 
+            };
+            reader.readAsDataURL(file);
+        } else {
+            window.showProfile();
+        }
+        document.getElementById('status-modal').style.display = 'none';
+    };
+ 
+    document.getElementById('file-input').onchange = (e) => {
+        const reader = new FileReader();
+        reader.onload = ev => { 
+            localStorage.setItem('vktr_avatar', ev.target.result); 
+            window.showProfile(); 
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
 </script>
- 
+ 
 </body>
 </html>
+вот такой код я нужен думаю
