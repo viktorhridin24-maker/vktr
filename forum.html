@@ -95,7 +95,8 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    // Добавляем сюда initializeFirestore
+    import { getFirestore, initializeFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -106,15 +107,13 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    let userMail = "";
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) { userMail = user.email; } 
-        else { window.location.href = "login.html"; }
+    
+    // Теперь база инициализируется без кэша и через правильный импорт
+    const db = initializeFirestore(app, {
+      localCache: null 
     });
+
+    const auth = getAuth(app);
 
     // ПУБЛИКАЦИЯ
     document.getElementById('btn-publish').onclick = async () => {
