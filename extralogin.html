@@ -167,36 +167,33 @@
 <img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
-   // --- ВСТАВЛЯТЬ С ЭТОГО МЕСТА ---
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { initializeFirestore, memoryLocalCache, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { setLogLevel } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { initializeFirestore, memoryLocalCache } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getAuth, setPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { setLogLevel } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
-// Твой конфиг
-const firebaseConfig = { 
-    apiKey: "AIzaSyAVeL6QJH-Qheb8EISSy-jirt_Z8TLUoEU",
-    authDomain: "vktrserver.firebaseapp.com",
-    projectId: "vktrserver",
-    appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
-};
+    // Твой конфиг остается прежним
+    const firebaseConfig = { 
+        apiKey: "AIzaSyAVeL6QJH-Qheb8EISSy-jirt_Z8TLUoEU",
+        authDomain: "vktrserver.firebaseapp.com",
+        projectId: "vktrserver",
+        appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+    };
 
-// 1. Инициализация приложения
-const app = initializeApp(firebaseConfig);
+    // 1. Инициализация
+    const app = initializeApp(firebaseConfig);
 
-// 2. Убираем шум в консоли (никаких ошибок IndexedDB)
-setLogLevel('error');
+    // 2. ГЛУХОЕ молчание (silent) — даже ошибки не пустим в консоль
+    setLogLevel('silent'); 
 
-// 3. Firestore: работаем только в оперативной памяти (без IndexedDB)
-const db = initializeFirestore(app, {
-    localCache: memoryLocalCache() 
-});
+    // 3. Firestore: строго в памяти
+    const db = initializeFirestore(app, {
+        localCache: memoryLocalCache()
+    });
 
-// 4. Auth: работаем через сессию (browserSessionPersistence)
-const auth = getAuth(app);
-setPersistence(auth, browserSessionPersistence).catch((err) => console.error("Persistence error:", err));
-
-let tempFoundUser = null;
+    // 4. Auth: строго в памяти, никакой записи в браузер
+    const auth = getAuth(app);
+    setPersistence(auth, inMemoryPersistence);
     
     window.startExtraSearch = async function() {
         const emailInput = document.getElementById('search-email').value.trim();
