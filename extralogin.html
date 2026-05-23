@@ -167,24 +167,37 @@
 <img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
-    // ОДИН раз импортируем всё необходимое
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { initializeFirestore, collection, query, where, getDocs, addDoc, ... } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+   // --- ВСТАВЛЯТЬ С ЭТОГО МЕСТА ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeFirestore, memoryLocalCache, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { setLogLevel } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
-    // Дальше — настройка Firebase
-    const firebaseConfig = { ... };
-    const app = initializeApp(firebaseConfig);
+// Твой конфиг
+const firebaseConfig = { 
+    apiKey: "AIzaSyAVeL6QJH-Qheb8EISSy-jirt_Z8TLUoEU",
+    authDomain: "vktrserver.firebaseapp.com",
+    projectId: "vktrserver",
+    appId: "1:305612049380:web:c0d6decb5d2448ad5195f1"
+};
 
-    // Инициализация БЕЗ кэша — это «броня» от IndexedDB
-    const db = initializeFirestore(app, {
-        localCache: null 
-    });
+// 1. Инициализация приложения
+const app = initializeApp(firebaseConfig);
 
-    const auth = getAuth(app);
+// 2. Убираем шум в консоли (никаких ошибок IndexedDB)
+setLogLevel('error');
 
-    let tempFoundUser = null;
+// 3. Firestore: работаем только в оперативной памяти (без IndexedDB)
+const db = initializeFirestore(app, {
+    localCache: memoryLocalCache() 
+});
 
+// 4. Auth: работаем через сессию (browserSessionPersistence)
+const auth = getAuth(app);
+setPersistence(auth, browserSessionPersistence).catch((err) => console.error("Persistence error:", err));
+
+let tempFoundUser = null;
+    
     window.startExtraSearch = async function() {
         const emailInput = document.getElementById('search-email').value.trim();
         const passwordInput = document.getElementById('search-password').value;
