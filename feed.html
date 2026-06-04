@@ -33,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* Gradient background */
         body::before {
             content: '';
             position: fixed;
@@ -46,7 +45,6 @@
             z-index: 0;
         }
 
-        /* Subtle noise grain */
         body::after {
             content: '';
             position: fixed;
@@ -81,7 +79,6 @@
         .h-left { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
 
-        /* Red accent line under logo */
         .logo-wrap {
             position: relative;
             padding-bottom: 3px;
@@ -160,7 +157,6 @@
             overflow: hidden;
         }
 
-        /* Subtle red corner glow on card */
         main::before {
             content: '';
             position: absolute;
@@ -168,6 +164,147 @@
             width: 180px; height: 180px;
             background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
             pointer-events: none;
+        }
+
+        /* ── Баннер ── */
+        .eurovision-banner {
+            background: linear-gradient(135deg, #b30000, #e60000);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(230,0,0,0.15);
+        }
+
+        /* ── Секция услуг ── */
+        .services-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .services-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.4px;
+        }
+        .bubble-balance {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .bubble-balance span.amount {
+            color: #fff;
+            font-weight: 600;
+        }
+        .bubble-icon { font-size: 16px; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card:hover {
+            border-color: rgba(230,0,0,0.45);
+            background: rgba(230,0,0,0.07);
+            transform: translateY(-2px);
+        }
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .service-card:hover::after { opacity: 1; }
+
+        .service-emoji { font-size: 26px; line-height: 1; }
+        .service-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.3;
+        }
+        .service-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        .service-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+        .service-price {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .service-price .bubble-coin { font-size: 15px; }
+        .service-price .price-muted { color: var(--text-muted); font-weight: 400; }
+
+        .btn-buy {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 13px;
+            font-size: 12px;
+            font-family: 'Jost', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-buy:hover { background: var(--accent-light); }
+
+        .service-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: rgba(230,0,0,0.85);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 24px 0;
         }
     </style>
 </head>
@@ -243,11 +380,131 @@
         }
     });
 
+    /* ── Баланс пузырей (заглушка, замени на реальный Firestore) ── */
+    window.getBubbleBalance = () => {
+        return parseInt(localStorage.getItem('vktr_bubbles') || '0');
+    };
+
+    /* ── Услуги ── */
+    const SERVICES = [
+        {
+            id: 'role_color',
+            emoji: '🎨',
+            name: 'Цветная роль',
+            desc: 'Уникальный цвет ника на сервере. Задай своё настроение.',
+            price: 50,
+            badge: null,
+        },
+        {
+            id: 'pin_message',
+            emoji: '📌',
+            name: 'Закрепить сообщение',
+            desc: 'Закрепи любое своё сообщение в нужном канале на 7 дней.',
+            price: 30,
+            badge: null,
+        },
+        {
+            id: 'rename_channel',
+            emoji: '✏️',
+            name: 'Переименовать канал',
+            desc: 'Придумай своё название для одного из каналов сервера на 24 часа.',
+            price: 80,
+            badge: '🔥 ХИТ',
+        },
+        {
+            id: 'vip_access',
+            emoji: '⭐',
+            name: 'VIP доступ',
+            desc: 'Временный доступ в закрытые каналы vktr team на 3 дня.',
+            price: 120,
+            badge: null,
+        },
+        {
+            id: 'custom_emoji',
+            emoji: '😎',
+            name: 'Свой эмодзи',
+            desc: 'Добавь один свой эмодзи на сервер сроком на 14 дней.',
+            price: 200,
+            badge: '✨ НОВОЕ',
+        },
+        {
+            id: 'shoutout',
+            emoji: '📣',
+            name: 'Шаутаут',
+            desc: 'Твоё объявление/событие в общем канале от имени команды.',
+            price: 60,
+            badge: null,
+        },
+    ];
+
+    window.renderFeed = () => {
+        const balance = window.getBubbleBalance();
+
+        const banner = `
+        <div class="eurovision-banner">
+            <div style="max-width: 60%; text-align: left;">
+                <h3 style="margin: 0 0 10px 0; font-size: 20px; font-family: 'Jost', sans-serif; font-weight:600;">Скоро будет Цитрусовые Скидки!</h3>
+                <p style="margin: 0 0 18px 0; font-size: 13px; color: #fff; line-height: 1.4; opacity: 0.9;">А именно, ООпельсины и Ультриматиум. ООпельсины — это счёт, созданный специально для участников vktr team и других активных пользователей, будьте первыми!</p>
+                <button onclick="changeTab('profile')" style="background: white; color: #e60000; border: none; padding: 10px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; font-family:'Jost', sans-serif; transition: 0.2s;">Погнали!</button>
+            </div>
+            <div style="max-width: 35%;">
+                <img src="oopelsinyvktr.png" alt="Citrusing, ya!" style="width: 100%; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+            </div>
+        </div>`;
+
+        const serviceCards = SERVICES.map(s => `
+        <div class="service-card" onclick="handleBuy('${s.id}')">
+            ${s.badge ? `<div class="service-badge">${s.badge}</div>` : ''}
+            <div class="service-emoji">${s.emoji}</div>
+            <div class="service-name">${s.name}</div>
+            <div class="service-desc">${s.desc}</div>
+            <div class="service-footer">
+                <div class="service-price">
+                    <span class="bubble-coin">🫧</span>
+                    <span>${s.price}</span>
+                    <span class="price-muted">пузырей</span>
+                </div>
+                <button class="btn-buy" onclick="event.stopPropagation(); handleBuy('${s.id}')">Купить</button>
+            </div>
+        </div>`).join('');
+
+        document.getElementById('content').innerHTML = `
+            ${banner}
+            <div class="services-header">
+                <div class="services-title">Лента услуг</div>
+                <div class="bubble-balance">
+                    <span class="bubble-icon">🫧</span>
+                    <span>Баланс:</span>
+                    <span class="amount">${balance}</span>
+                    <span style="color:var(--text-muted)">пузырей</span>
+                </div>
+            </div>
+            <div class="services-grid">
+                ${serviceCards}
+            </div>
+        `;
+    };
+
+    window.handleBuy = (serviceId) => {
+        const service = SERVICES.find(s => s.id === serviceId);
+        if (!service) return;
+        const balance = window.getBubbleBalance();
+        if (balance < service.price) {
+            alert(`Недостаточно пузырей! Нужно: ${service.price} 🫧, у тебя: ${balance} 🫧`);
+            return;
+        }
+        if (confirm(`Купить «${service.name}» за ${service.price} 🫧 пузырей?`)) {
+            localStorage.setItem('vktr_bubbles', balance - service.price);
+            alert(`✅ Куплено: ${service.name}! Ожидай подтверждения от команды.`);
+            window.renderFeed();
+        }
+    };
+
     window.changeTab = (tab) => {
         document.querySelectorAll('nav li').forEach(el => el.classList.remove('active'));
         if (tab === 'feed') {
             document.getElementById('nav-feed').classList.add('active');
-            document.getElementById('content').innerHTML = '<h2 style="color:#fff;">Лента услуг</h2>';
+            window.renderFeed();
         } else {
             document.getElementById('nav-profile').classList.add('active');
             document.getElementById('content').innerHTML = '<h2 style="color:#fff;">Профиль</h2>';
