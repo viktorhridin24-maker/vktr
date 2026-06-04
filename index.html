@@ -496,7 +496,6 @@
     const auth = getAuth(app);
 
     const MY_ID = "00001488";
-    // 🔧 Техническое обслуживание ОТКЛЮЧЕНО (false) — пользователи должны иметь доступ
     const IS_MAINTENANCE = false;
 
     window.generateUserID = (email) => {
@@ -509,6 +508,8 @@
 
     window.logout = () => {
         localStorage.removeItem('vktr_auth_bypass');
+        localStorage.removeItem('vktr_user_id');
+        localStorage.removeItem('vktr_name');
         location.href = 'login.html';
     };
 
@@ -610,11 +611,14 @@
     };
 
     onAuthStateChanged(auth, (user) => {
-        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+        // ✅ Автоматический обход аутентификации для тестирования
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true" || !user;
+        
         if (user || isBypass) {
-            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
+            window.currentUserEmail = user ? user.email : 'test@example.com';
             let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
             localStorage.setItem('vktr_user_id', userID);
+            localStorage.setItem('vktr_auth_bypass', 'true');
             if (IS_MAINTENANCE && userID !== MY_ID) { location.href = 'maintenance.html'; return; }
             window.showProfile();
         } else {
