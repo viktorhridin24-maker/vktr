@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Справочный центр</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
+        
         :root {
             --accent: #e60000;
+            --accent-light: #ff3333;
+            --accent-dim: #b30000;
             --bg: #0a0a0a;
             --card: rgba(12, 12, 12, 0.82);
             --card-border: rgba(255,255,255,0.07);
@@ -14,40 +18,258 @@
             --text: #f0f0f0;
             --text-muted: #999;
         }
-        body { background: var(--bg); color: var(--text); font-family: 'Jost', sans-serif; margin: 0; min-height: 100vh; position: relative; }
-        header { position: fixed; top: 0; width: 100%; height: 52px; background: var(--header-bg); border-bottom: 1px solid rgba(230,0,0,0.25); display: flex; justify-content: center; z-index: 1000; backdrop-filter: blur(14px); }
-        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        .logo-img { height: 28px; cursor: pointer; }
-        .container { width: 1000px; margin: 72px auto; display: flex; gap: 22px; }
-        nav { width: 240px; }
-        main { flex-grow: 1; background: var(--card); border: 1px solid var(--card-border); padding: 35px; border-radius: 10px; }
-        h2 { font-size: 32px; margin: 0 0 20px 0; }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Jost', tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Задний фон-градиент */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(230, 0, 0, 0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255, 60, 60, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 0, 0, 0.10) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: var(--header-bg);
+            border-bottom: 1px solid rgba(230,0,0,0.25);
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(14px);
+        }
+
+        .h-content {
+            width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .h-left { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
+
+        .logo-wrap {
+            position: relative;
+            padding-bottom: 3px;
+        }
+        .logo-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px;
+        }
+
+        .h-right { display: flex; align-items: center; gap: 20px; }
+        .h-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.25s;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .h-icon:hover { color: var(--text); }
+
+        .container {
+            width: 1000px;
+            margin-top: 72px;
+            display: flex;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 40px;
+        }
+
+        nav { width: 240px; flex-shrink: 0; }
+        .nav-box {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chomik-nav-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            color: var(--accent-light);
+            border-bottom: 1px solid rgba(230, 0, 0, 0.2);
+            margin-bottom: 8px;
+        }
+
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        
+        nav li.chomik-cat {
+            font-weight: 500;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 10px;
+            letter-spacing: 0.5px;
+        }
+
+        nav li.chomik-sub {
+            padding: 6px 10px 6px 22px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            font-weight: 400;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+            position: relative;
+        }
+        nav li.chomik-sub::before {
+            content: '•';
+            position: absolute;
+            left: 10px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        nav li.chomik-sub:hover {
+            background: rgba(255,255,255,0.04);
+            color: var(--text);
+        }
+
+        nav li.chomik-sub.active {
+            color: #fff;
+            background: rgba(230,0,0,0.12);
+            border-left: 2px solid var(--accent);
+            padding-left: 20px;
+        }
+        nav li.chomik-sub.active::before {
+            color: var(--accent-light);
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 10px 0;
+        }
+
+        main {
+            flex-grow: 1;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            padding: 35px;
+            border-radius: 10px;
+            min-height: 500px;
+            backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        main::before {
+            content: '';
+            position: absolute;
+            top: -40px; left: -40px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .help-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 1.5px;
+            color: #fff;
+            margin: 0 0 8px 0;
+        }
+        .help-path {
+            font-size: 12px;
+            color: var(--accent-light);
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .help-content p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #ddd;
+            margin: 0 0 16px 0;
+        }
+        .help-content h4 {
+            font-size: 17px;
+            color: #fff;
+            margin: 25px 0 12px 0;
+            font-weight: 500;
+            border-left: 2px solid var(--accent);
+            padding-left: 10px;
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="h-content">
-        <div style="font-weight: bold; font-size: 18px;">VKTR Справка</div>
-        <a href="feed.html" style="color: #999; text-decoration: none;">← Назад</a>
+        <div class="h-left">
+            <div class="logo-wrap">
+                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'" onerror="this.style.display='none'">
+            </div>
+        </div>
+        <div class="h-right">
+            <a class="h-icon" onclick="location.href='profile.html'">👤 Кабинет</a>
+        </div>
     </div>
 </header>
 
 <div class="container">
     <nav>
-        <div style="background: var(--card); border: 1px solid var(--card-border); padding: 10px; border-radius: 8px;">
-            <div style="color: #ff3333; font-weight: bold; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.06);">Разделы</div>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="padding: 10px; cursor: pointer; color: #999;">Регистрация</li>
-                <li style="padding: 10px; cursor: pointer; color: #999;">Безопасность</li>
-                <li style="padding: 10px; cursor: pointer; color: #999;">Профиль</li>
+        <div class="nav-box">
+            <div class="chomik-nav-title">Разделы помощи</div>
+            <ul id="nav-menu">
+                <li class="chomik-cat">1. Мой аккаунт</li>
+                <li class="chomik-sub active" onclick="loadArticle('reg')">Регистрация и вход</li>
+                <li class="chomik-sub" onclick="loadArticle('pass')">Смена пароля</li>
+                <li class="chomik-sub" onclick="loadArticle('edit')">Редактирование профиля</li>
+                
+                <div class="nav-divider"></div>
+                
+                <li class="chomik-cat">2. Файлы и Аудио</li>
+                <li class="chomik-sub" onclick="loadArticle('upload')">Загрузка треков</li>
+                <li class="chomik-sub" onclick="loadArticle('limits')">Лимиты и форматы</li>
+                
+                <div class="nav-divider"></div>
+                
+                <li class="chomik-cat">3. Безопасность</li>
+                <li class="chomik-sub" onclick="loadArticle('rules')">Правила платформы</li>
+                <li class="chomik-sub" onclick="loadArticle('ban')">Блокировки и спам</li>
+                
+                <div class="nav-divider"></div>
+                
+                <li class="chomik-sub" style="color:#e04040; padding-left:10px;" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход из системы</li>
             </ul>
         </div>
     </nav>
 
-    <main>
-        <h2>Справочный центр</h2>
-        <p>Добро пожаловать в справочный центр VKTR.</p>
+    <main id="content">
+        <h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка базы знаний...</h3>
     </main>
 </div>
 
@@ -63,16 +285,75 @@
     });
     const auth = getAuth(app);
 
+    const MY_ID = "00001488";
     const IS_MAINTENANCE = false;
+    const currentUserID = localStorage.getItem('vktr_user_id');
+
+    if (IS_MAINTENANCE && currentUserID !== MY_ID) {
+        window.location.href = 'maintenance.html';
+    }
 
     onAuthStateChanged(auth, (user) => {
         const isBypass = localStorage.getItem('vktr_auth_bypass') === "true" || !user;
         if (user || isBypass) {
+            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
             localStorage.setItem('vktr_auth_bypass', 'true');
+            window.loadArticle('reg');
         } else {
             window.location.href = "login.html";
         }
     });
+
+    const helpDatabase = {
+        reg: {
+            title: "Регистрация и авторизация на портале",
+            path: "Мой аккаунт > Регистрация и вход",
+            html: `<p>Для доступа ко всем функциям портала VKTR вам необходима подтвержденная учетная запись.</p>`
+        },
+        pass: {
+            title: "Смена пароля",
+            path: "Мой аккаунт > Смена пароля",
+            html: `<p>Если вы забыли свой пароль, выполните процедуру восстановления.</p>`
+        },
+        edit: {
+            title: "Редактирование профиля",
+            path: "Мой аккаунт > Редактирование профиля",
+            html: `<p>Вы можете полностью кастомизировать свою карточку в системе.</p>`
+        },
+        upload: {
+            title: "Загрузка аудиофайлов",
+            path: "Файлы и Аудио > Загрузка треков",
+            html: `<p>На портале реализована интеграция медиапотоков в статус вашей страницы.</p>`
+        },
+        limits: {
+            title: "Ограничения на форматы файлов",
+            path: "Файлы и Аудио > Лимиты и форматы",
+            html: `<p>Изображения: до 5 МБ, Аудио: до 15 МБ.</p>`
+        },
+        rules: {
+            title: "Правила платформы",
+            path: "Безопасность > Правила платформы",
+            html: `<p>Каждый участник обязуется соблюдать правила сетевого тона.</p>`
+        },
+        ban: {
+            title: "Блокировки и спам-фильтр",
+            path: "Безопасность > Блокировки и спам",
+            html: `<p>Система безопасности отслеживает подозрительную активность.</p>`
+        }
+    };
+
+    window.loadArticle = (key) => {
+        const article = helpDatabase[key];
+        if (!article) return;
+        document.querySelectorAll('.chomik-sub').forEach(el => el.classList.remove('active'));
+        if(event?.currentTarget) event.currentTarget.classList.add('active');
+        document.getElementById('content').innerHTML = `
+            <h2 class="help-title">${article.title}</h2>
+            <div class="help-path">${article.path}</div>
+            <div style="height: 1px; background: rgba(255,255,255,0.06); margin: 22px 0;"></div>
+            <div class="help-content">${article.html}</div>
+        `;
+    };
 </script>
 
 </body>

@@ -33,6 +33,7 @@
             overflow-x: hidden;
         }
 
+        /* Gradient background */
         body::before {
             content: '';
             position: fixed;
@@ -45,6 +46,7 @@
             z-index: 0;
         }
 
+        /* Subtle noise grain */
         body::after {
             content: '';
             position: fixed;
@@ -79,6 +81,7 @@
         .h-left { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
 
+        /* Red accent line under logo */
         .logo-wrap {
             position: relative;
             padding-bottom: 3px;
@@ -157,6 +160,7 @@
             overflow: hidden;
         }
 
+        /* Subtle red corner glow on card */
         main::before {
             content: '';
             position: absolute;
@@ -185,10 +189,10 @@
 <div class="container">
     <nav>
         <ul id="nav-menu">
-            <li id="nav-feed" class="active" onclick="loadFeed()">Лента</li>
-            <li id="nav-profile" onclick="loadProfile()">Профиль</li>
+            <li id="nav-feed" class="active" onclick="changeTab('feed')">Лента</li>
+            <li id="nav-profile" onclick="changeTab('profile')">Профиль</li>
             <div class="nav-divider"></div>
-            <li style="color:#e04040" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход</li>
+            <li style="color:#e04040" onclick="logout()">Выход</li>
         </ul>
     </nav>
     <main id="content">
@@ -223,32 +227,36 @@
     onAuthStateChanged(auth, (user) => {
         const isBypass = localStorage.getItem('vktr_auth_bypass') === "true" || !user;
         if (user || isBypass) {
-            window.currentUserEmail = user ? user.email : 'test@example.com';
+            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
             let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
             localStorage.setItem('vktr_user_id', userID);
             localStorage.setItem('vktr_auth_bypass', 'true');
-            
+
             if (IS_MAINTENANCE && userID !== MY_ID) {
                 window.location.href = 'maintenance.html';
                 return;
             }
 
-            window.loadFeed();
+            window.changeTab('feed');
         } else {
             window.location.href = "login.html";
         }
     });
 
-    window.loadFeed = () => {
-        document.getElementById('nav-feed').classList.add('active');
-        document.getElementById('nav-profile').classList.remove('active');
-        document.getElementById('content').innerHTML = '<h2 style="color:#fff; font-family:Bebas Neue, sans-serif; font-size:32px; letter-spacing:1.5px;">Лента услуг</h2><p>Содержимое ленты...</p>';
+    window.changeTab = (tab) => {
+        document.querySelectorAll('nav li').forEach(el => el.classList.remove('active'));
+        if (tab === 'feed') {
+            document.getElementById('nav-feed').classList.add('active');
+            document.getElementById('content').innerHTML = '<h2 style="color:#fff;">Лента услуг</h2>';
+        } else {
+            document.getElementById('nav-profile').classList.add('active');
+            document.getElementById('content').innerHTML = '<h2 style="color:#fff;">Профиль</h2>';
+        }
     };
 
-    window.loadProfile = () => {
-        document.getElementById('nav-profile').classList.add('active');
-        document.getElementById('nav-feed').classList.remove('active');
-        document.getElementById('content').innerHTML = '<h2 style="color:#fff; font-family:Bebas Neue, sans-serif; font-size:32px; letter-spacing:1.5px;">Профиль</h2><p>Содержимое профиля...</p>';
+    window.logout = () => {
+        localStorage.removeItem('vktr_auth_bypass');
+        window.location.href = 'login.html';
     };
 </script>
 
