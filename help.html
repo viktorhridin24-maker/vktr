@@ -5,12 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VKTR | Справочный центр</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap');
-        
         :root {
             --accent: #e60000;
-            --accent-light: #ff3333;
-            --accent-dim: #b30000;
             --bg: #0a0a0a;
             --card: rgba(12, 12, 12, 0.82);
             --card-border: rgba(255,255,255,0.07);
@@ -18,363 +14,47 @@
             --text: #f0f0f0;
             --text-muted: #999;
         }
-
-        * { box-sizing: border-box; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Jost', tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Задний фон-градиент */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(230, 0, 0, 0.28) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255, 60, 60, 0.18) 0%, transparent 55%),
-                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 0, 0, 0.10) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Текстура шума */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 52px;
-            background: var(--header-bg);
-            border-bottom: 1px solid rgba(230,0,0,0.25);
-            display: flex;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(14px);
-        }
-
-        .h-content {
-            width: 1000px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-
-        .h-left { display: flex; align-items: center; gap: 20px; }
-        .logo-img { height: 28px; cursor: pointer; filter: brightness(1.05); }
-
-        .logo-wrap {
-            position: relative;
-            padding-bottom: 3px;
-        }
-        .logo-wrap::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, var(--accent), transparent);
-            border-radius: 2px;
-        }
-
-        .h-right { display: flex; align-items: center; gap: 20px; }
-        .h-icon {
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: color 0.25s;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-            text-decoration: none;
-        }
-        .h-icon:hover { color: var(--text); }
-
-        .container {
-            width: 1000px;
-            margin-top: 72px;
-            display: flex;
-            gap: 22px;
-            position: relative;
-            z-index: 1;
-            padding-bottom: 40px;
-        }
-
-        /* Стили боковой навигации в духе Chomikuj.pl Справочника */
-        nav { width: 240px; flex-shrink: 0; }
-        .nav-box {
-            background: var(--card);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 10px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .chomik-nav-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 18px;
-            letter-spacing: 1px;
-            padding: 5px 10px;
-            color: var(--accent-light);
-            border-bottom: 1px solid rgba(230, 0, 0, 0.2);
-            margin-bottom: 8px;
-        }
-
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        
-        /* Главные категории */
-        nav li.chomik-cat {
-            font-weight: 500;
-            color: #fff;
-            font-size: 14px;
-            padding: 8px 10px;
-            letter-spacing: 0.5px;
-        }
-
-        /* Подкатегории / Ссылки */
-        nav li.chomik-sub {
-            padding: 6px 10px 6px 22px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 13px;
-            letter-spacing: 0.3px;
-            font-weight: 400;
-            border-radius: 4px;
-            transition: background 0.2s, color 0.2s;
-            position: relative;
-        }
-        nav li.chomik-sub::before {
-            content: '•';
-            position: absolute;
-            left: 10px;
-            color: rgba(255,255,255,0.2);
-        }
-
-        nav li.chomik-sub:hover {
-            background: rgba(255,255,255,0.04);
-            color: var(--text);
-        }
-
-        nav li.chomik-sub.active {
-            color: #fff;
-            background: rgba(230,0,0,0.12);
-            border-left: 2px solid var(--accent);
-            padding-left: 20px;
-        }
-        nav li.chomik-sub.active::before {
-            color: var(--accent-light);
-        }
-
-        .nav-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 10px 0;
-        }
-
-        /* Поисковая панель Справки */
-        .help-search-box {
-            background: var(--card);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            backdrop-filter: blur(10px);
-        }
-        .help-search-box input {
-            width: 100%;
-            padding: 10px 14px;
-            background: #0d0d0d;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            border-radius: 6px;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .help-search-box input:focus {
-            border-color: rgba(230,0,0,0.4);
-        }
-
-        /* Главный контейнер контента */
-        main {
-            flex-grow: 1;
-            background: var(--card);
-            border: 1px solid var(--card-border);
-            padding: 35px;
-            border-radius: 10px;
-            min-height: 500px;
-            backdrop-filter: blur(18px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        main::before {
-            content: '';
-            position: absolute;
-            top: -40px; left: -40px;
-            width: 180px; height: 180px;
-            background: radial-gradient(circle, rgba(230,0,0,0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        /* Оформление статей */
-        .help-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 32px;
-            letter-spacing: 1.5px;
-            color: #fff;
-            margin: 0 0 8px 0;
-        }
-        .help-path {
-            font-size: 12px;
-            color: var(--accent-light);
-            margin-bottom: 25px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-        .help-content p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #ddd;
-            margin: 0 0 16px 0;
-        }
-        .help-content h4 {
-            font-size: 17px;
-            color: #fff;
-            margin: 25px 0 12px 0;
-            font-weight: 500;
-            border-left: 2px solid var(--accent);
-            padding-left: 10px;
-        }
-
-        /* Блок обратной связи (как в Chomikuj) */
-        .feedback-box {
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 6px;
-            text-align: center;
-        }
-        .feedback-box p {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin: 0 0 12px 0;
-        }
-        
-        /* Кнопки */
-        .btn-action {
-            background: rgba(230, 0, 0, 0.15);
-            border: 1px solid rgba(230, 0, 0, 0.4);
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            font-family: 'Jost', sans-serif;
-            transition: all 0.2s;
-        }
-        .btn-action:hover {
-            background: var(--accent);
-            border-color: var(--accent-light);
-        }
-
-        .hamster-helper {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 88px;
-            z-index: 10;
-            filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
-        }
-
-        .profile-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 22px 0;
-        }
+        body { background: var(--bg); color: var(--text); font-family: 'Jost', sans-serif; margin: 0; min-height: 100vh; position: relative; }
+        header { position: fixed; top: 0; width: 100%; height: 52px; background: var(--header-bg); border-bottom: 1px solid rgba(230,0,0,0.25); display: flex; justify-content: center; z-index: 1000; backdrop-filter: blur(14px); }
+        .h-content { width: 1000px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+        .logo-img { height: 28px; cursor: pointer; }
+        .container { width: 1000px; margin: 72px auto; display: flex; gap: 22px; }
+        nav { width: 240px; }
+        main { flex-grow: 1; background: var(--card); border: 1px solid var(--card-border); padding: 35px; border-radius: 10px; }
+        h2 { font-size: 32px; margin: 0 0 20px 0; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="h-content">
-        <div class="h-left">
-            <div class="logo-wrap">
-                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img" onclick="location.href='feed.html'">
-            </div>
-        </div>
-        <div class="h-right">
-            <a class="h-icon" onclick="location.href='profile.html'">👤 Личный кабинет</a>
-        </div>
+        <div style="font-weight: bold; font-size: 18px;">VKTR Справка</div>
+        <a href="feed.html" style="color: #999; text-decoration: none;">← Назад</a>
     </div>
 </header>
 
 <div class="container">
     <nav>
-        <!-- Поиск по FAQ -->
-        <div class="help-search-box">
-            <input type="text" id="help-search" placeholder="Поиск проблемы..." onkeyup="searchHelp()">
-        </div>
-
-        <!-- Древовидное меню а-ля Chomikuj -->
-        <div class="nav-box">
-            <div class="chomik-nav-title">Разделы помощи</div>
-            <ul id="nav-menu">
-                <li class="chomik-cat">1. Мой аккаунт</li>
-                <li class="chomik-sub active" onclick="loadArticle('reg')">Регистрация и вход</li>
-                <li class="chomik-sub" onclick="loadArticle('pass')">Смена пароля</li>
-                <li class="chomik-sub" onclick="loadArticle('edit')">Редактирование профиля</li>
-                
-                <div class="nav-divider"></div>
-                
-                <li class="chomik-cat">2. Файлы и Аудио</li>
-                <li class="chomik-sub" onclick="loadArticle('upload')">Загрузка треков</li>
-                <li class="chomik-sub" onclick="loadArticle('limits')">Лимиты и форматы</li>
-                
-                <div class="nav-divider"></div>
-                
-                <li class="chomik-cat">3. Безопасность</li>
-                <li class="chomik-sub" onclick="loadArticle('rules')">Правила платформы</li>
-                <li class="chomik-sub" onclick="loadArticle('ban')">Блокировки и спам</li>
-                
-                <div class="nav-divider"></div>
-                
-                <li class="chomik-sub" style="color:#e04040; padding-left:10px;" onclick="localStorage.removeItem('vktr_auth_bypass'); location.href='login.html'">Выход из системы</li>
+        <div style="background: var(--card); border: 1px solid var(--card-border); padding: 10px; border-radius: 8px;">
+            <div style="color: #ff3333; font-weight: bold; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.06);">Разделы</div>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 10px; cursor: pointer; color: #999;">Регистрация</li>
+                <li style="padding: 10px; cursor: pointer; color: #999;">Безопасность</li>
+                <li style="padding: 10px; cursor: pointer; color: #999;">Профиль</li>
             </ul>
         </div>
     </nav>
 
-    <!-- Основной блок со статьями -->
-    <main id="content">
-        <h3 style="color:var(--text-muted); font-weight:300; letter-spacing:1px;">Загрузка базы знаний...</h3>
+    <main>
+        <h2>Справочный центр</h2>
+        <p>Добро пожаловать в справочный центр VKTR.</p>
     </main>
 </div>
-
-<img src="hamster.png" class="hamster-helper" alt="helper">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // Инициализация Firebase из вашего исходника
     const app = initializeApp({
         apiKey: "AIzaSyAvEL6OJH-Qheb8EISsY-jirt_Z8TLUoEU",
         authDomain: "vktrserver.firebaseapp.com",
@@ -383,142 +63,16 @@
     });
     const auth = getAuth(app);
 
-    const MY_ID = "00001488";
-    const IS_MAINTENANCE = true;
-    const currentUserID = localStorage.getItem('vktr_user_id');
-
-    if (IS_MAINTENANCE && currentUserID !== MY_ID) {
-        window.location.href = 'maintenance.html';
-    }
+    const IS_MAINTENANCE = false;
 
     onAuthStateChanged(auth, (user) => {
-        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true" || !user;
         if (user || isBypass) {
-            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
-            // Первичный рендер дефолтной статьи после проверки сессии
-            window.loadArticle('reg');
+            localStorage.setItem('vktr_auth_bypass', 'true');
         } else {
             window.location.href = "login.html";
         }
     });
-
-    // База данных статей центра помощи (Chomikuj style content)
-    const helpDatabase = {
-        reg: {
-            title: "Регистрация и авторизация на портале",
-            path: "Мой аккаунт > Регистрация и вход",
-            html: `
-                <p>Для доступа ко всем функциям портала VKTR вам необходима подтвержденная учетная запись. Вход осуществляется через единую форму авторизации.</p>
-                <h4>Возможные проблемы при входе:</h4>
-                <p>Если страница бесконечно пишет "Загрузка...", убедитесь, что ваш браузер поддерживает LocalStorage и у вас стабильное интернет-соединение.</p>
-                <p>В периоды технического обслуживания (Maintenance Mode) доступ к порталу может быть ограничен для всех пользователей, кроме технической администрации.</p>
-            `
-        },
-        pass: {
-            title: "Смена и восстановление пароля",
-            path: "Мой аккаунт > Смена пароля",
-            html: `
-                <p>Если вы забыли свой действующий пароль или хотите обновить его в целях безопасности, выполните следующие шаги:</p>
-                <h4>Инструкция по сбросу:</h4>
-                <p>1. На странице авторизации нажмите кнопку "Забыли пароль?".<br>2. Введите ваш регистрационный Email.<br>3. Перейдите по ссылке из системного письма от VKTR Server.</p>
-                <p><i>Примечание: Если письмо долго не приходит, проверьте папку "Спам" или вкладку "Оповещения".</i></p>
-            `
-        },
-        edit: {
-            title: "Редактирование личной страницы",
-            path: "Мой аккаунт > Редактирование профиля",
-            html: `
-                <p>Вы можете полностью кастомизировать свою карточку в системе. Изменения сохраняются локально и синхронизируются с сервером.</p>
-                <h4>Что можно изменить:</h4>
-                <p>• <b>Аватар:</b> Кликните на изображение вашего профиля, чтобы загрузить новую картинку с вашего устройства.<br>
-                • <b>Статус-сообщение:</b> Нажмите на овальный статус ("В сети" или ваш текст) для вызова модального окна настроек статуса.</p>
-            `
-        },
-        upload: {
-            title: "Загрузка и привязка аудиофайлов",
-            path: "Файлы и Аудио > Загрузка треков",
-            html: `
-                <p>На портале VKTR реализована интеграция медиапотоков прямо в статус вашей страницы. Вы можете делиться тем, что слушаете прямо сейчас.</p>
-                <h4>Как прикрепить трек к статусу:</h4>
-                <p>Откройте панель изменения статуса, нажмите на зону <b>"🎵 Выбрать аудиофайл"</b> и выберите аудиофайл из памяти вашего ПК или смартфона. После сохранения файл конвертируется в медиа-строку DataURL.</p>
-            `
-        },
-        limits: {
-            title: "Ограничения на форматы файлов",
-            path: "Файлы и Аудио > Лимиты и форматы",
-            html: `
-                <p>В целях оптимизации быстродействия распределенной базы данных vktrserver, установлены технические лимиты на медиаконтент:</p>
-                <p>• Изображения (Аватары): до 5 МБ в форматах JPEG, PNG, WEBP.<br>
-                • Аудио (Статусы): до 15 МБ, строго в формате MP3 или WAV.</p>
-                <p>Максимальная длина текстового статуса составляет <b>50 символов</b>.</p>
-            `
-        },
-        rules: {
-            title: "Условия использования и правила",
-            path: "Безопасность > Правила платформы",
-            html: `
-                <p>Каждый участник экосистемы VKTR обязуется соблюдать правила сетевого тона и регламент хранения информации.</p>
-                <h4>Запрещено:</h4>
-                <p>Загрузка вредоносного ПО, использование багов авторизации (Bypass уязвимостей), массовый спам-парсинг ID страниц с целью перегрузки серверов баз данных.</p>
-            `
-        },
-        ban: {
-            title: "Блокировки и системный спам-фильтр",
-            path: "Безопасность > Блокировки и спам",
-            html: `
-                <p>Система безопасности автоматически отслеживает подозрительную активность пользователей.</p>
-                <h4>Алгоритмы рандомизации ID:</h4>
-                <p>При обнаружении флуда или генерации подозрительных ID, содержащих запрещенные сочетания символов, сессия пользователя может быть аннулирована, а система перенаправит вас на экран <code>login.html</code>.</p>
-            `
-        }
-    };
-
-    // Функция переключения контента разделов
-    window.loadArticle = (key) => {
-        const article = helpDatabase[key];
-        if (!article) return;
-
-        // Переключение активного класса в меню
-        document.querySelectorAll('.chomik-sub').forEach(el => el.classList.remove('active'));
-        const activeNavTarget = event?.currentTarget;
-        if(activeNavTarget) activeNavTarget.classList.add('active');
-
-        // Отрисовка контента
-        document.getElementById('content').innerHTML = `
-            <h2 class="help-title">${article.title}</h2>
-            <div class="help-path">${article.path}</div>
-            <div class="profile-divider"></div>
-            <div class="help-content">
-                ${article.html}
-            </div>
-            
-            <div class="feedback-box">
-                <p>Нашли ответ на свой вопрос?</p>
-                <button class="btn-action" onclick="alert('Спасибо за ваш отзыв!')">Да, помогло</button>
-                <button class="btn-action" style="margin-left:8px; background:transparent; border-color:rgba(255,255,255,0.15);" onclick="alert('Мы свяжемся с техподдержкой')">Нет, связаться с поддержкой</button>
-            </div>
-        `;
-    };
-
-    // Функция мгновенного поиска по FAQ
-    window.searchHelp = () => {
-        const query = document.getElementById('help-search').value.toLowerCase();
-        if(!query) return;
-
-        for (const key in helpDatabase) {
-            const item = helpDatabase[key];
-            if (item.title.toLowerCase().includes(query) || item.html.toLowerCase().includes(query)) {
-                window.loadArticle(key);
-                // Находим нужный элемент в меню и подсвечиваем
-                document.querySelectorAll('.chomik-sub').forEach(el => {
-                    if(el.textContent.trim() === item.title || el.getAttribute('onclick').includes(key)) {
-                        el.classList.add('active');
-                    }
-                });
-                break;
-            }
-        }
-    };
 </script>
 
 </body>
