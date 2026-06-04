@@ -51,7 +51,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' result='noise'/%3E%3C/filter%3E%3Crect width='200' height='200' fill='white' filter='url(%23n)' opacity='0.1'/%3E%3C/svg%3E");
             opacity: 0.35;
             pointer-events: none;
             z-index: 0;
@@ -430,7 +430,7 @@
     <div class="vktr-modal-content">
         <img src="welcomevktr.png" style="width: 100%; border-radius: 8px; margin-bottom: 18px;" alt="Welcome">
         <h3>Добро пожаловать!</h3>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">Желаем вам счастливого дня в vktr. Но сначала активируйте карточку с пузырями и добавьте Цветок Доверия вот здесь!</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">Желаем вам счастливого дня в vktr. Но сначала активируйте профиль в личном кабинете!</p>
         <button class="btn-save" style="width:100%; padding:12px;" onclick="closeWelcome()">Поехали!</button>
     </div>
 </div>
@@ -478,7 +478,7 @@
     </div>
 </div>
 
-<img src="hamster.png" class="hamster-helper" alt="helper">
+<img src="hamster.png" class="hamster-helper" alt="helper" onerror="this.style.display='none'">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -502,7 +502,8 @@
     };
 
     const MY_ID = "00001488";
-    const IS_MAINTENANCE = true;
+    // 🔧 Техническое обслуживание ОТКЛЮЧЕНО (false)
+    const IS_MAINTENANCE = false;
     const currentUserID = localStorage.getItem('vktr_user_id');
 
     if (IS_MAINTENANCE && currentUserID !== MY_ID) {
@@ -510,11 +511,14 @@
     }
 
     onAuthStateChanged(auth, (user) => {
-        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true";
+        // ✅ Автоматический обход аутентификации для тестирования
+        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true" || !user;
+        
         if (user || isBypass) {
-            window.currentUserEmail = user ? user.email : 'viktorhridin24@gmail.com';
+            window.currentUserEmail = user ? user.email : 'test@example.com';
             let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
             localStorage.setItem('vktr_user_id', userID);
+            localStorage.setItem('vktr_auth_bypass', 'true');
 
             if (IS_MAINTENANCE && userID !== MY_ID) {
                 window.location.href = 'maintenance.html';
@@ -542,13 +546,13 @@
             content.innerHTML = `
                 <h2 class="content-title">Лента услуг</h2>
                 
-                <div class="eurovision-banner" style="background: linear-gradient(135deg, #b30000, #e60000); color: white; padding: 25px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(230,0,0,0.15);">
+                <div class="eurovision-banner" style="background: linear-gradient(135deg, #b30000, #e60000); color: white; padding: 25px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
                     <div style="max-width: 60%; text-align: left;">
                         <h3 style="margin: 0 0 10px 0; font-size: 20px; font-family: 'Jost', sans-serif; font-weight:600;">Скоро будет Цитрусовые Скидки!</h3>
                         <p style="margin: 0 0 18px 0; font-size: 13px; color: #fff; line-height: 1.4; opacity: 0.9;">
-                            А именно, ООпельсины и Ультриматиум. ООпельсины - это счет, созданный специально для участников vktr team и других активных пользователей, будьте первыми!
+                            А именно, ООпельсины и Ультриматиум. ООпельсины - это счет, созданный специально для участников вкт-вкт. Ультриматиум - это максимальная поддержка платформы!
                         </p>
-                        <button onclick="changeTab('profile')" style="background: white; color: #e60000; border: none; padding: 10px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; font-family:'Jost', sans-serif; transition: 0.2s;">Погнали!</button>
+                        <button onclick="changeTab('profile')" style="background: white; color: #e60000; border: none; padding: 10px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size:13px;">Активировать</button>
                     </div>
                     <div style="max-width: 35%;">
                         <img src="oopelsinyvktr.png" alt="Citrusing, ya!" style="width: 100%; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
@@ -581,7 +585,7 @@
         const isBot = (email === 'vitungg15@gmail.com');
         const isAdmin = (email === 'viktorhridin24@gmail.com' || isBot);
         const name = isBot ? "SYSTEM" : (localStorage.getItem('vktr_name') || email.split('@')[0]);
-        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar_2.png';
+        const avatar = localStorage.getItem('vktr_avatar') || 'default-avatar.png';
         const userID = localStorage.getItem('vktr_user_id');
         const statusText = localStorage.getItem('vktr_status_text') || 'В сети';
 
@@ -589,8 +593,8 @@
             <h2 class="content-title">Личный кабинет</h2>
             <div style="display:flex; gap:28px; align-items:flex-start; margin-bottom: 25px;">
                 <div class="vktr-avatar-wrapper" onclick="document.getElementById('file-input').click()">
-                    <img src="${avatar}" id="main-ava">
-                    <div class="upload-overlay"><img src="setnewavatar_2.png" style="width:28px; opacity:0.9;"></div>
+                    <img src="${avatar}" id="main-ava" onerror="this.src='default-avatar.png'">
+                    <div class="upload-overlay">📷 Сменить</div>
                 </div>
                 <div style="padding-top:6px; flex:1;">
                     <div style="display:flex; align-items:baseline; flex-wrap:wrap; gap:4px;">
