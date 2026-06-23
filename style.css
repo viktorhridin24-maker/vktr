@@ -335,7 +335,7 @@
         .file-upload-zone {
             padding: 18px;
             border: 1px dashed rgba(255,255,255,0.15);
-            border-radius: 8px;
+            border-radius: 20px 0 20px 0;
             cursor: pointer;
             margin-bottom: 20px;
             font-size: 13px;
@@ -348,36 +348,41 @@
             color: var(--text);
         }
 
-        .btn-save {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            transition: background 0.2s;
-        }
+.btn-save, .btn-cancel {
+    padding: 10px 22px;
+    border-radius: 20px 0 20px 0;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    transition: background 0.2s, transform 0.2s; 
+    transform: skew(6deg);
+}
 
-        .btn-save:hover { background: var(--accent-light); }
+/* Стили btn-save */
+.btn-save {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
 
-        .btn-cancel {
-            background: rgba(255,255,255,0.06);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 10px 22px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-left: 8px;
-            font-family: 'Jost', sans-serif;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
+.btn-save:hover {
+    background: var(--accent-light);
+    transform: skew(6deg) scale(1.05);
+}
 
-        .btn-cancel:hover { background: rgba(255,255,255,0.1); }
+/* Стили btn-cancel */
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: 8px;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: skew(6deg) scale(1.05);
+}
 
         .hamster-helper {
             position: fixed;
