@@ -44,7 +44,7 @@
         <h3>Установить статус</h3>
         <input type="text" id="new-status-text" placeholder="О чём думаешь?" maxlength="50">
         <div class="file-upload-zone" onclick="document.getElementById('music-upload').click()">
-            <span id="file-name-label">🎵 Выбрать аудиофайл</span>
+            <span id="file-name-label">Выбрать аудиофайл</span>
             <input type="file" id="music-upload" accept="audio/*">
         </div>
         <button onclick="saveNewStatus()" class="btn-save">Поставить</button>
@@ -125,12 +125,11 @@
                 <div class="vktr-avatar-wrapper ${isMyOwnProfile ? 'editable' : ''}"
                      ${isMyOwnProfile ? "onclick=\"document.getElementById('file-input').click()\"" : ''}>
                     ${avatarHTML}
-                    ${isMyOwnProfile ? `<div class="upload-overlay">📷 Сменить фото</div>` : ''}
+                    ${isMyOwnProfile ? `<div class="upload-overlay">Сменить фото</div>` : ''}
                 </div>
                 <div class="profile-info">
                     <div class="profile-name-row">
                         <span class="profile-name">${name}</span>
-                        ${isAdmin ? '<span class="admin-badge">✦ Admin</span>' : ''}
                     </div>
                     <p class="profile-id">ID: ${userID}</p>
                     <div class="status-bubble ${isMyOwnProfile ? 'editable' : ''}"
