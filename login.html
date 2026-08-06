@@ -8,25 +8,13 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
+            background-color: #a8171b;
             color: #fff;
             font-family: sans-serif;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 300px;
             overflow: hidden;
-        }
-
-        /* Видео из твоего промо на фон */
-        #bg-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            filter: brightness(35%);
-            object-fit: cover;
         }
 
         header {
@@ -34,8 +22,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid #333;
+            backround-effects: blur(1.5);
         }
 
         .logo { font-weight: bold; font-size: 1.5rem; color: #ff0000; text-transform: uppercase; }
@@ -44,10 +31,8 @@
 
         .auth-bar input {
             background: #111;
-            border: 1px solid #ff0000;
             color: #fff;
             padding: 8px 12px;
-            border-radius: 4px;
             outline: none;
         }
 
@@ -73,14 +58,6 @@
             text-align: center;
         }
 
-        .vktr-box {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 50px;
-            border: 2px solid #ff0000;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
-        }
-
         h2 { margin-bottom: 25px; letter-spacing: 2px; }
 
         .reg-link {
@@ -96,27 +73,40 @@
 </head>
 <body>
 
-    <video autoplay muted loop id="bg-video">
-        <source src="video_2026-04-30_20-33-28.mp4" type="video/mp4">
-    </video>
-
     <header>
-        <div class="logo">vktr system</div>
+        <div class="logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" viewBox="0,0,317.75402,270.97323"><defs><linearGradient x1="161.12299" y1="180" x2="478.87701" y2="180" gradientUnits="userSpaceOnUse" id="color-1"><stop offset="0" stop-color="#ff3838"/><stop offset="1" stop-color="#f20f44"/></linearGradient></defs><g transform="translate(-161.12299,-44.51338)"><g fill="url(#color-1)" stroke="none" stroke-width="0" stroke-miterlimit="10"><path d="M254.58702,315.48662v-34.03514l-24.06646,24.06649l-59.42893,-59.42893l24.06646,-24.06646h-34.0351v-84.04517h34.0351l-24.06646,-24.06646l59.42893,-59.42893l24.06646,24.06649v-34.03514h84.04517v34.03514l24.06646,-24.06649l52.06631,52.06631h-5.96075l-9.99822,30.6842l-0.74484,0.74484h0.50214l-24.45499,75.05154l-29.9103,-106.48058h-73.10357l67.53776,186.20592v22.73235zM422.12758,113.91096l-23.32159,23.32159l-0.2427,0.74484h33.53296v82.36951l46.78075,-113.79859h-64.11201zM432.09622,222.02258h-0.68884l0.68884,-1.67566zM398.06112,222.02258l23.63166,23.63166l9.7146,-23.63166zM422.12758,246.08904l-1.04174,1.04174l0.60698,-1.47654zM362.69865,305.51797l-24.06646,-24.06649v11.30278l8.13611,22.43177l46.28033,0.14787l28.03721,-68.20311z"/></g></g></svg><!--rotationCenter:158.8770104583561:135.4866160960961--></div>
         <div class="auth-bar">
             <input type="email" id="email" placeholder="Почта">
-            <input type="password" id="pass" placeholder="Ваш ID (Пароль)">
+            <input type="password" id="pass" placeholder="Пароль">
+            <input type="password" id="vktrid" placeholder="Ваш vID Key">
             <button class="btn-login" onclick="handleAuth('login')">ВХОД</button>
         </div>
     </header>
 
-    <main>
         <div class="vktr-box">
-            <h2>ДОБРО ПОЖАЛОВАТЬ В VKTR</h2>
-            <p>Нажми кнопку входа сверху или создай новый аккаунт ниже</p>
-            <span class="reg-link" onclick="handleAuth('register')">У меня еще нет аккаунта (Регистрация)</span>
+            <h2>Привет!</h2>
+            <p>это портал услуг vktr - ваше верное рабочее место с услугами и работой над документами.</p>
+            <span class="reg-link" onclick="handleAuth('register')">Зарегестрироватся</span>
         </div>
-    </main>
 
+        <h3>что это за продукт?</h3>
+        <p>vktr отлично подходит для работы или покупок услуг. Вы правильно поняли, vktr - это портал услуг, в котором будут vДокументы, своя подпись и прочее! А ещё в скором времени будет vID с ключом.</p>
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <h3>Можно ли соиденять сервисы?</h3>
+        <p>Да (пока нет), но оффициально добавленые. Например Meowl.Social, оно соидено в систему, и с помощью этого можно войти в аккаунт соц сети.</p>
+                <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+        <!---- ----->
+
+        
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
