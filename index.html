@@ -17,11 +17,7 @@
     <div class="h-content">
         <div class="h-left">
             <div class="logo-wrap">
-                <!-- Если картинки нет — показывается текстовый логотип -->
-                <img src="WhiteLogoVKTR.png" alt="VKTR" class="logo-img"
-                     onclick="goToMyProfile()"
-                     onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block'">
-                <span id="logo-fallback" class="logo-text" onclick="goToMyProfile()" style="display:none;"><span>VK</span>TR</span>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" viewBox="0,0,317.75402,270.97323"><defs><linearGradient x1="161.12299" y1="180" x2="478.87701" y2="180" gradientUnits="userSpaceOnUse" id="color-1"><stop offset="0" stop-color="#ff3838"/><stop offset="1" stop-color="#f20f44"/></linearGradient></defs><g transform="translate(-161.12299,-44.51338)"><g fill="url(#color-1)" stroke="none" stroke-width="0" stroke-miterlimit="10"><path d="M254.58702,315.48662v-34.03514l-24.06646,24.06649l-59.42893,-59.42893l24.06646,-24.06646h-34.0351v-84.04517h34.0351l-24.06646,-24.06646l59.42893,-59.42893l24.06646,24.06649v-34.03514h84.04517v34.03514l24.06646,-24.06649l52.06631,52.06631h-5.96075l-9.99822,30.6842l-0.74484,0.74484h0.50214l-24.45499,75.05154l-29.9103,-106.48058h-73.10357l67.53776,186.20592v22.73235zM422.12758,113.91096l-23.32159,23.32159l-0.2427,0.74484h33.53296v82.36951l46.78075,-113.79859h-64.11201zM432.09622,222.02258h-0.68884l0.68884,-1.67566zM398.06112,222.02258l23.63166,23.63166l9.7146,-23.63166zM422.12758,246.08904l-1.04174,1.04174l0.60698,-1.47654zM362.69865,305.51797l-24.06646,-24.06649v11.30278l8.13611,22.43177l46.28033,0.14787l28.03721,-68.20311z"/></g></g></svg><!--rotationCenter:158.8770104583561:135.4866160960961-->
             </div>
         </div>
         <div class="h-right">
@@ -56,6 +52,9 @@
     </div>
 </div>
 
+<!-- Хомяк — замени на свою картинку -->
+<img src="hamster.png" class="hamster-helper" alt="helper"
+     onerror="this.style.display='none'">
 <!-- Хомяк — замени на свою картинку -->
 <img src="hamster.png" class="hamster-helper" alt="helper"
      onerror="this.style.display='none'">
@@ -187,21 +186,20 @@
         if (name) document.getElementById('file-name-label').textContent = '🎵 ' + name;
     };
 
-    onAuthStateChanged(auth, (user) => {
-        // ✅ Автоматический обход аутентификации для тестирования
-        const isBypass = localStorage.getItem('vktr_auth_bypass') === "true" || !user;
-        
-        if (user || isBypass) {
-            window.currentUserEmail = user ? user.email : 'test@example.com';
-            let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
-            localStorage.setItem('vktr_user_id', userID);
-            localStorage.setItem('vktr_auth_bypass', 'true');
-            if (IS_MAINTENANCE && userID !== MY_ID) { location.href = 'maintenance.html'; return; }
-            window.showProfile();
-        } else {
-            location.href = "login.html";
-        }
-    });
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.currentUserEmail = user.email;
+        let userID = localStorage.getItem('vktr_user_id') || window.generateUserID(window.currentUserEmail);
+        localStorage.setItem('vktr_user_id', userID);
+        if (IS_MAINTENANCE && userID !== MY_ID) { location.href = 'maintenance.html'; return; }
+        window.showProfile();
+    } else {
+        localStorage.removeItem('vktr_user_id');
+        localStorage.removeItem('vktr_name');
+        localStorage.removeItem('vktr_avatar');
+        location.href = "login.html";
+    }
+});
 
     window.addEventListener('popstate', () => window.showProfile());
 </script>
