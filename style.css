@@ -1,6 +1,6 @@
 body {
   background-color: #4d0505;
-    color: var(--text);
+    color: #fff;
     font-family: 'Jost', tahoma, sans-serif;
 }
 
@@ -131,10 +131,8 @@ main::before {
     width: 140px; height: 140px;
     background: #1a1a1a;
     overflow: hidden;
-    border: 2px solid rgba(230,0,0,0.35);
-    border-radius: 6px;
+    border-radius: 0;
     flex-shrink: 0;
-    transition: border-color 0.3s;
 }
 
 .vktr-avatar-wrapper.editable { cursor: pointer; }
@@ -237,13 +235,5 @@ main::before {
     margin-left: 8px;
 }
 .btn-cancel:hover { background: rgba(255, 255, 255, 0.1); transform: skew(6deg) scale(1.05); }
-
-.hamster-helper {
-    position: fixed;
-    right: 20px; bottom: 20px;
-    width: 88px;
-    z-index: 10;
-    filter: drop-shadow(0 0 12px rgba(230,0,0,0.3));
-}
 
 #file-input, #music-upload { display: none; }
